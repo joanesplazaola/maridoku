@@ -46,10 +46,16 @@ uv run pytest -q
 
 Con OR-Tools instalado debe pasar la suite completa.
 
+Smoke completo:
+
+```bash
+./scripts/bootstrap.sh
+```
+
 ## Benchmark de escalado CP-SAT
 
 ```bash
-uv run murdoku-v2 scale-benchmark --sizes 6 8 10 12 --solver ortools --repetitions 3
+uv run murdoku-v2 scale-benchmark --sizes 10 13 --solver ortools --repetitions 2
 ```
 
 ## Validar un caso con CP-SAT

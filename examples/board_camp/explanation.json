@@ -30,8 +30,8 @@
       "character": "alicia",
       "type": "alone_in_room",
       "family": "room_population",
-      "clue_text": "Alicia estaba sola en el cabaña de Ana.",
-      "explanation": "Al aplicar «Alicia estaba sola en el cabaña de Ana.» se descartan 63 posibilidades entre 6 personajes.",
+      "clue_text": "Alicia estaba sola en la cabaña de Ana.",
+      "explanation": "Al aplicar «Alicia estaba sola en la cabaña de Ana.» se descartan 63 posibilidades entre 6 personajes.",
       "candidate_count_before": 216,
       "candidate_count_after": 153,
       "removed": {

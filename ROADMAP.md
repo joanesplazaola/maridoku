@@ -22,8 +22,8 @@
 4. Tests deben cubrir propiedades, no enumeración.
    La suite normal debe seguir barata: unicidad, solución esperada, exclusiones y escalado sintético.
 
-5. Datos históricos con nombres legacy.
-   Los JSON generados antiguos aún contienen campos `backtracking_*`. No rompen ejecución, pero confunden reportes.
+5. Fixtures actuales regenerados.
+   `examples/` y `generated/` usan `exact_validation` y diagnostics CP-SAT; los informes V2-alpha/beta quedan como historia.
 
 ## Próximos pasos
 
@@ -42,5 +42,5 @@
 5. Medir casos reales grandes.
    Añadir benchmarks de generación 8x8, 10x10 y 13x13 cuando el selector CP-SAT sustituya las máscaras.
 
-6. Regenerar fixtures.
-   Crear ejemplos frescos con `exact_validation` y borrar campos históricos `backtracking_*` de salidas versionadas.
+6. Preparar paquete de prueba.
+   Mantener `scripts/bootstrap.*` como smoke reproducible: sync, tests, generación editorial y generación 13x13.

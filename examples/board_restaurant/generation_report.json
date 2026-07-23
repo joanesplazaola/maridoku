@@ -3,7 +3,7 @@
   "board": "board_restaurant",
   "seed": 5003,
   "selection_profile": "any",
-  "max_target_attempts": 8,
+  "max_target_attempts": 24,
   "accepted_target_index": 34122,
   "targets": [
     {
@@ -44,7 +44,53 @@
           "relative_column_distance": 2
         }
       },
-      "solutions_without_victim_card": 2
+      "solutions_without_victim_card": 2,
+      "cpsat_candidate_probe_sample": {
+        "sample_per_subject": 1,
+        "tested": 5,
+        "by_subject": {
+          "alicia": [
+            {
+              "candidate": "alicia:in_room_corner:character=alicia",
+              "numpy_solution_count_cap2": 2,
+              "cpsat_solution_count_cap2": 2,
+              "target_valid": true
+            }
+          ],
+          "carla": [
+            {
+              "candidate": "carla:in_room_corner:character=carla",
+              "numpy_solution_count_cap2": 2,
+              "cpsat_solution_count_cap2": 2,
+              "target_valid": true
+            }
+          ],
+          "diego": [
+            {
+              "candidate": "diego:in_room_corner:character=diego",
+              "numpy_solution_count_cap2": 2,
+              "cpsat_solution_count_cap2": 2,
+              "target_valid": true
+            }
+          ],
+          "elena": [
+            {
+              "candidate": "elena:in_room_corner:character=elena",
+              "numpy_solution_count_cap2": 2,
+              "cpsat_solution_count_cap2": 2,
+              "target_valid": true
+            }
+          ],
+          "fabio": [
+            {
+              "candidate": "fabio:in_room_corner:character=fabio",
+              "numpy_solution_count_cap2": 2,
+              "cpsat_solution_count_cap2": 2,
+              "target_valid": true
+            }
+          ]
+        }
+      }
     }
   ],
   "summary": {

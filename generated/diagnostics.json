@@ -346,6 +346,52 @@
       "relative_column_distance": 1
     }
   },
+  "cpsat_candidate_probe_sample": {
+    "sample_per_subject": 1,
+    "tested": 5,
+    "by_subject": {
+      "alicia": [
+        {
+          "candidate": "alicia:in_room_corner:character=alicia",
+          "numpy_solution_count_cap2": 2,
+          "cpsat_solution_count_cap2": 2,
+          "target_valid": true
+        }
+      ],
+      "bruno": [
+        {
+          "candidate": "bruno:in_room_corner:character=bruno",
+          "numpy_solution_count_cap2": 2,
+          "cpsat_solution_count_cap2": 2,
+          "target_valid": true
+        }
+      ],
+      "carla": [
+        {
+          "candidate": "carla:in_room_corner:character=carla",
+          "numpy_solution_count_cap2": 2,
+          "cpsat_solution_count_cap2": 2,
+          "target_valid": true
+        }
+      ],
+      "diego": [
+        {
+          "candidate": "diego:in_room_corner:character=diego",
+          "numpy_solution_count_cap2": 2,
+          "cpsat_solution_count_cap2": 2,
+          "target_valid": true
+        }
+      ],
+      "elena": [
+        {
+          "candidate": "elena:room_population:character=elena,count=1",
+          "numpy_solution_count_cap2": 2,
+          "cpsat_solution_count_cap2": 2,
+          "target_valid": true
+        }
+      ]
+    }
+  },
   "card_dependency_graph": {
     "definition": "A→B cuando B gana información marginal al conocer previamente A.",
     "application_order": [
@@ -520,29 +566,35 @@
   },
   "human_solver_step_count": 18,
   "human_solver_matches_solution": true,
-  "backtracking_validation": {
+  "exact_validation": {
     "unique": true,
     "matches_solution": true,
     "stats": {
-      "solver": "backtracking",
-      "nodes": 42,
-      "backtracks": 19,
-      "pruned": 17,
+      "solver": "ortools-cp-sat",
+      "nodes": 0,
+      "backtracks": 0,
+      "pruned": 0,
       "constraint_checks": 6,
-      "max_depth": 6,
-      "elapsed_ms": 6.1559640002997185,
+      "max_depth": 0,
+      "elapsed_ms": 14.515339999888965,
       "metadata": {
-        "initial_domain_sizes": {
-          "alicia": 2,
-          "bruno": 31,
-          "carla": 4,
-          "diego": 31,
-          "elena": 31,
-          "fabio": 31
-        },
-        "constraint_graph_edges": 6,
-        "constraint_graph_density": 0.4,
-        "limit": 2
+        "backend": "Google OR-Tools CP-SAT",
+        "ortools_version": "9.15.6755",
+        "model_build_ms": 1.3915909994466347,
+        "solve_calls_ms": [
+          8.024363000004087,
+          4.70439700075076
+        ],
+        "first_solution_ms": 8.024363000004087,
+        "uniqueness_check_ms": 4.70439700075076,
+        "statuses": [
+          "OPTIMAL",
+          "INFEASIBLE"
+        ],
+        "num_search_workers": 1,
+        "solver_wall_seconds": 0.012558129000000001,
+        "variable_count": 35,
+        "constraint_count": 49
       }
     }
   }

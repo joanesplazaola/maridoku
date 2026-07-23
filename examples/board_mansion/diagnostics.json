@@ -346,6 +346,52 @@
       "relative_row_order": 1
     }
   },
+  "cpsat_candidate_probe_sample": {
+    "sample_per_subject": 1,
+    "tested": 5,
+    "by_subject": {
+      "alicia": [
+        {
+          "candidate": "alicia:in_room_corner:character=alicia",
+          "numpy_solution_count_cap2": 2,
+          "cpsat_solution_count_cap2": 2,
+          "target_valid": true
+        }
+      ],
+      "bruno": [
+        {
+          "candidate": "bruno:in_room_corner:character=bruno",
+          "numpy_solution_count_cap2": 2,
+          "cpsat_solution_count_cap2": 2,
+          "target_valid": true
+        }
+      ],
+      "carla": [
+        {
+          "candidate": "carla:in_room_corner:character=carla",
+          "numpy_solution_count_cap2": 2,
+          "cpsat_solution_count_cap2": 2,
+          "target_valid": true
+        }
+      ],
+      "diego": [
+        {
+          "candidate": "diego:in_room_corner:character=diego",
+          "numpy_solution_count_cap2": 2,
+          "cpsat_solution_count_cap2": 2,
+          "target_valid": true
+        }
+      ],
+      "elena": [
+        {
+          "candidate": "elena:in_room_corner:character=elena",
+          "numpy_solution_count_cap2": 2,
+          "cpsat_solution_count_cap2": 2,
+          "target_valid": true
+        }
+      ]
+    }
+  },
   "card_dependency_graph": {
     "definition": "A→B cuando B gana información marginal al conocer previamente A.",
     "application_order": [
@@ -463,5 +509,37 @@
     "calibration_status": "provisional"
   },
   "human_solver_step_count": 12,
-  "human_solver_matches_solution": true
+  "human_solver_matches_solution": true,
+  "exact_validation": {
+    "unique": true,
+    "matches_solution": true,
+    "stats": {
+      "solver": "ortools-cp-sat",
+      "nodes": 0,
+      "backtracks": 0,
+      "pruned": 0,
+      "constraint_checks": 6,
+      "max_depth": 0,
+      "elapsed_ms": 6.079375999433978,
+      "metadata": {
+        "backend": "Google OR-Tools CP-SAT",
+        "ortools_version": "9.15.6755",
+        "model_build_ms": 1.8986129998666001,
+        "solve_calls_ms": [
+          2.260887000375078,
+          1.5696620002927375
+        ],
+        "first_solution_ms": 2.260887000375078,
+        "uniqueness_check_ms": 1.5696620002927375,
+        "statuses": [
+          "OPTIMAL",
+          "INFEASIBLE"
+        ],
+        "num_search_workers": 1,
+        "solver_wall_seconds": 0.003692471,
+        "variable_count": 40,
+        "constraint_count": 60
+      }
+    }
+  }
 }

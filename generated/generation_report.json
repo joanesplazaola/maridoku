@@ -43,7 +43,53 @@
           "relative_column_distance": 1
         }
       },
-      "solutions_without_victim_card": 9
+      "solutions_without_victim_card": 9,
+      "cpsat_candidate_probe_sample": {
+        "sample_per_subject": 1,
+        "tested": 5,
+        "by_subject": {
+          "alicia": [
+            {
+              "candidate": "alicia:in_room_corner:character=alicia",
+              "numpy_solution_count_cap2": 2,
+              "cpsat_solution_count_cap2": 2,
+              "target_valid": true
+            }
+          ],
+          "bruno": [
+            {
+              "candidate": "bruno:in_room_corner:character=bruno",
+              "numpy_solution_count_cap2": 2,
+              "cpsat_solution_count_cap2": 2,
+              "target_valid": true
+            }
+          ],
+          "carla": [
+            {
+              "candidate": "carla:in_room_corner:character=carla",
+              "numpy_solution_count_cap2": 2,
+              "cpsat_solution_count_cap2": 2,
+              "target_valid": true
+            }
+          ],
+          "diego": [
+            {
+              "candidate": "diego:in_room_corner:character=diego",
+              "numpy_solution_count_cap2": 2,
+              "cpsat_solution_count_cap2": 2,
+              "target_valid": true
+            }
+          ],
+          "elena": [
+            {
+              "candidate": "elena:room_population:character=elena,count=1",
+              "numpy_solution_count_cap2": 2,
+              "cpsat_solution_count_cap2": 2,
+              "target_valid": true
+            }
+          ]
+        }
+      }
     }
   ],
   "summary": {

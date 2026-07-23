@@ -44,7 +44,7 @@ uv run pytest -q
 Resultado esperado con OR-Tools instalado:
 
 ```text
-17 passed
+22 passed
 ```
 
 Las pruebas CP-SAT validan:
@@ -63,6 +63,12 @@ Para una prueba rápida:
 
 ```bash
 uv run murdoku-v2 scale-benchmark --sizes 10 --solver ortools --repetitions 1
+```
+
+Smoke completo:
+
+```bash
+./scripts/bootstrap.sh
 ```
 
 ## 5. Datos que conviene compartir
