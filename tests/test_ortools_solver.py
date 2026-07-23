@@ -55,3 +55,21 @@ def test_cpsat_card_and_statement_exclusions_are_consistent():
                 for other_statement in other_card["statements"]
                 if other_statement["id"] != statement_id
             )
+
+
+@pytest.mark.skipif(not ORToolsSolver.is_available(), reason="OR-Tools no está instalado")
+def test_cpsat_accepts_candidate_statements_without_mutating_cards():
+    puzzle = json.loads((ROOT / "examples" / "board_restaurant" / "puzzle.json").read_text(encoding="utf-8"))
+    relaxed = ORToolsSolver(num_search_workers=1).solve(puzzle, limit=2, exclude_card_id="card-fabio")
+    assert not relaxed.unique
+
+    candidate = puzzle["cards"][-1]["statements"][0]
+    tightened = ORToolsSolver(num_search_workers=1).solve(
+        puzzle,
+        limit=2,
+        exclude_card_id="card-fabio",
+        extra_statements=(candidate,),
+    )
+    assert tightened.available
+    assert tightened.stats.constraint_checks == relaxed.stats.constraint_checks + 1
+    assert tightened.solutions

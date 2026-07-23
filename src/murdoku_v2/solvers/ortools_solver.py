@@ -54,6 +54,7 @@ class ORToolsSolver:
         limit: int = 2,
         exclude_card_id: str | None = None,
         exclude_statement_id: str | None = None,
+        extra_statements: tuple[dict[str, Any], ...] = (),
     ) -> SolverResult:
         started = time.perf_counter()
         stats = SolverStats(solver=self.name)
@@ -76,6 +77,7 @@ class ORToolsSolver:
             cp_model,
             exclude_card_id=exclude_card_id,
             exclude_statement_id=exclude_statement_id,
+            extra_statements=extra_statements,
         )
         build_ms = (time.perf_counter() - build_started) * 1000
 
@@ -120,7 +122,7 @@ class ORToolsSolver:
 
         stats.nodes = total_branches
         stats.backtracks = total_conflicts
-        stats.constraint_checks = len(active_statements(puzzle, exclude_card_id, exclude_statement_id))
+        stats.constraint_checks = len(active_statements(puzzle, exclude_card_id, exclude_statement_id, extra_statements))
         stats.elapsed_ms = (time.perf_counter() - started) * 1000
         stats.metadata = {
             "backend": "Google OR-Tools CP-SAT",
@@ -191,6 +193,7 @@ class ORToolsSolver:
         *,
         exclude_card_id: str | None,
         exclude_statement_id: str | None,
+        extra_statements: tuple[dict[str, Any], ...],
     ) -> _CpSatContext:
         validate_puzzle(puzzle)
         board = puzzle["board"]
@@ -251,7 +254,7 @@ class ORToolsSolver:
             n=n,
             puzzle=puzzle,
         )
-        for statement in active_statements(puzzle, exclude_card_id, exclude_statement_id):
+        for statement in active_statements(puzzle, exclude_card_id, exclude_statement_id, extra_statements):
             self._add_statement(ctx, statement)
         return ctx
 

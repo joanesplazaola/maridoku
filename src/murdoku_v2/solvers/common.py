@@ -44,14 +44,17 @@ def active_statements(
     puzzle: dict[str, Any],
     exclude_card_id: str | None = None,
     exclude_statement_id: str | None = None,
+    extra_statements: Iterable[dict[str, Any]] = (),
 ) -> list[dict[str, Any]]:
-    return [
+    statements = [
         statement
         for card in puzzle["cards"]
         if card["id"] != exclude_card_id
         for statement in card["statements"]
         if statement["id"] != exclude_statement_id
     ]
+    statements.extend(extra_statements)
+    return statements
 
 
 def build_context(
