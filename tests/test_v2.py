@@ -406,8 +406,11 @@ def test_render_writes_printable_html(tmp_path: Path) -> None:
     output = tmp_path / "puzzle.html"
     render_file(PROJECT / "examples/board_restaurant/puzzle.json", output)
     html = output.read_text(encoding="utf-8")
-    assert "<table>" in html
+    assert 'class="sheet"' in html
+    assert '<table aria-label="Tablero" style="--cols:' in html
     assert "<main>" in html
+    assert 'class="card victim"' in html
+    assert 'class="legend"' in html
     assert "case-board_restaurant" in html
 
 
