@@ -86,6 +86,12 @@ uv run murdoku-v2 generate \
   --output generated_local
 ```
 
+Para generar un caso escalable sintético validado con CP-SAT:
+
+```bash
+uv run murdoku-v2 generate-scale --size 10 --seed 6201 --output generated_scale
+```
+
 ## Objetivo inmediato
 
 La siguiente fase es sustituir el universo exhaustivo y las máscaras NumPy por

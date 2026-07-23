@@ -5,11 +5,11 @@
 - CP-SAT (`ortools`) es el motor exacto principal.
 - `exhaustive` queda solo como oráculo 6x6.
 - El antiguo solver artesanal se retiró en Git.
-- El benchmark sintético CP-SAT pasa 10x10, 12x12 y 13x13.
+- El generador sintético CP-SAT escribe casos 10x10+ con `generate-scale`.
 
 ## Gaps principales
 
-1. Generación limitada a 6 personajes.
+1. Generación editorial limitada a 6 personajes.
    `engine.py` usa `CHARACTERS` fijo y exige `rows == len(CHARACTERS)`.
 
 2. Selector basado en universo enumerado.

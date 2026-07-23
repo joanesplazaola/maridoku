@@ -199,6 +199,17 @@ def test_ortools_scales_to_twelve_characters() -> None:
         assert result.solutions[0] == expected_scaling_solution(size)
 
 
+def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
+    from murdoku_v2.scaling import generate_scaling_case
+
+    result = generate_scaling_case(10, 9001, tmp_path)
+    assert result["puzzle"]["board"]["rows"] == 10
+    assert result["diagnostics"]["exact_validation"]["unique"] is True
+    assert result["solution"]["murderer"] == "person_02"
+    assert (tmp_path / "puzzle.json").exists()
+    assert (tmp_path / "generation_report.json").exists()
+
+
 def test_pydantic_contract_rejects_a_card_with_the_wrong_subject() -> None:
     import copy
     import json

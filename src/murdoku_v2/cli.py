@@ -11,7 +11,7 @@ from .benchmark import run_benchmark, run_benchmark_suite
 from .clue_catalog import catalog_json
 from .engine import generate
 from .human_solver import analyze_puzzle
-from .scaling import run_scaling_benchmark
+from .scaling import generate_scaling_case, run_scaling_benchmark
 from .solver_benchmark import compare_solvers
 from .solvers.registry import availability, get_solver
 from .targeted import generate_targeted
@@ -66,6 +66,11 @@ def main() -> None:
     generate_parser.add_argument("--max-attempts", type=int, default=16)
     generate_parser.add_argument("--strict", action="store_true")
     generate_parser.add_argument("--target-attempts", type=int, default=24)
+
+    generate_scale_parser = subparsers.add_parser("generate-scale", help="Genera un caso escalable CP-SAT")
+    generate_scale_parser.add_argument("--size", type=int, default=10)
+    generate_scale_parser.add_argument("--seed", type=int, default=12345)
+    generate_scale_parser.add_argument("--output", type=Path, default=Path("generated_scale"))
 
     validate_parser = subparsers.add_parser("validate", help="Valida un caso con el motor elegido")
     validate_parser.add_argument("--puzzle", type=Path, default=Path("generated/puzzle.json"))
@@ -126,6 +131,16 @@ def main() -> None:
             "final_solutions": diagnostics["final_solution_count"],
             "difficulty": diagnostics["human_difficulty"]["label"],
             "exact": diagnostics["exact_validation"],
+        })
+    elif args.command == "generate-scale":
+        result = generate_scaling_case(args.size, args.seed, args.output)
+        _json({
+            "puzzle": result["puzzle"]["id"],
+            "seed": result["puzzle"]["seed"],
+            "size": args.size,
+            "victim": result["solution"]["victim_name"],
+            "murderer": result["solution"]["murderer_name"],
+            "exact": result["diagnostics"]["exact_validation"],
         })
     elif args.command == "validate":
         _json(_validate_with_solver(args.puzzle, args.solution, args.solver))

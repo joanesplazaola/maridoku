@@ -131,6 +131,80 @@ def expected_scaling_solution(size: int) -> dict[str, tuple[int, int]]:
     return {f"person_{index + 1:02d}": (index, index) for index in range(size)}
 
 
+def generate_scaling_case(size: int, seed: int, output: Path) -> dict[str, Any]:
+    puzzle = make_scaling_puzzle(size, seed)
+    expected = expected_scaling_solution(size)
+    solver = get_solver("ortools")
+    started = time.perf_counter()
+    result = solver.solve(puzzle, limit=2)
+    elapsed_ms = (time.perf_counter() - started) * 1000
+    if not result.available or not result.unique or result.solutions[0] != expected:
+        raise RuntimeError("CP-SAT no validó el caso escalable generado.")
+
+    room_at = {
+        tuple(cell): room["id"]
+        for room in puzzle["board"]["rooms"]
+        for cell in room["cells"]
+    }
+    solution = {
+        "puzzle_id": puzzle["id"],
+        "victim": "person_01",
+        "victim_name": puzzle["characters"][0]["name"],
+        "positions": {
+            character["id"]: {
+                "row": row,
+                "column": column,
+                "room": room_at[(row, column)],
+            }
+            for character, (row, column) in zip(puzzle["characters"], expected.values(), strict=True)
+        },
+        "murderer": "person_02",
+        "murderer_name": puzzle["characters"][1]["name"],
+    }
+    diagnostics = {
+        "puzzle_id": puzzle["id"],
+        "generator": "scaling_chain",
+        "size": size,
+        "exact_validation": {
+            "unique": result.unique,
+            "matches_solution": True,
+            "stats": result.stats.to_dict(),
+        },
+        "generation_ms": round(elapsed_ms, 3),
+        "human_solver_available": False,
+    }
+    explanation = {
+        "puzzle_id": puzzle["id"],
+        "available": False,
+        "reason": "La explicación deductiva actual usa enumeración 6x6; este caso se valida con CP-SAT.",
+    }
+    generation_report = {
+        "puzzle_id": puzzle["id"],
+        "summary": {
+            "accepted": True,
+            "method": "scaling_chain",
+            "size": size,
+            "solver": result.stats.solver,
+        },
+    }
+    output.mkdir(parents=True, exist_ok=True)
+    for name, data in {
+        "puzzle": puzzle,
+        "solution": solution,
+        "diagnostics": diagnostics,
+        "explanation": explanation,
+        "generation_report": generation_report,
+    }.items():
+        (output / f"{name}.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    return {
+        "puzzle": puzzle,
+        "solution": solution,
+        "diagnostics": diagnostics,
+        "explanation": explanation,
+        "generation_report": generation_report,
+    }
+
+
 def run_scaling_benchmark(
     sizes: list[int],
     *,
