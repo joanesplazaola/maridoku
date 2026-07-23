@@ -371,6 +371,17 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     assert (tmp_path / "generation_report.json").exists()
 
 
+def test_render_writes_printable_html(tmp_path: Path) -> None:
+    from murdoku_v2.render import render_file
+
+    output = tmp_path / "puzzle.html"
+    render_file(PROJECT / "examples/board_restaurant/puzzle.json", output)
+    html = output.read_text(encoding="utf-8")
+    assert "<table>" in html
+    assert "<main>" in html
+    assert "case-board_restaurant" in html
+
+
 def test_scaling_generator_depends_on_seed() -> None:
     from murdoku_v2.scaling import expected_scaling_solution
 

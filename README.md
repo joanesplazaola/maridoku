@@ -85,6 +85,12 @@ Para generar un caso escalable sintético validado con CP-SAT:
 uv run murdoku-v2 generate-scale --size 10 --seed 6201 --output generated_scale
 ```
 
+Para generar una hoja HTML imprimible:
+
+```bash
+uv run murdoku-v2 render --puzzle generated/puzzle.json --output generated/puzzle.html
+```
+
 ## Objetivo inmediato
 
 La siguiente fase es sustituir el universo exhaustivo y las máscaras NumPy por

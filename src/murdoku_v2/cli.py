@@ -11,6 +11,7 @@ from .benchmark import run_benchmark, run_benchmark_suite
 from .clue_catalog import catalog_json
 from .engine import generate
 from .human_solver import analyze_puzzle
+from .render import render_file
 from .scaling import generate_scaling_case, run_scaling_benchmark
 from .solvers.registry import availability, get_solver
 from .targeted import generate_targeted
@@ -80,6 +81,10 @@ def main() -> None:
     explain_parser.add_argument("--puzzle", type=Path, default=Path("generated/puzzle.json"))
     explain_parser.add_argument("--output", type=Path, default=Path("generated/explanation.json"))
 
+    render_parser = subparsers.add_parser("render", help="Renderiza un puzle a HTML imprimible")
+    render_parser.add_argument("--puzzle", type=Path, default=Path("generated/puzzle.json"))
+    render_parser.add_argument("--output", type=Path, default=Path("generated/puzzle.html"))
+
     benchmark_parser = subparsers.add_parser("benchmark", help="Genera muchos casos")
     benchmark_parser.add_argument("--board", type=Path, default=Path("boards/board_two_houses.json"))
     benchmark_parser.add_argument("--start-seed", type=int, default=100)
@@ -144,6 +149,9 @@ def main() -> None:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(explanation, ensure_ascii=False, indent=2), encoding="utf-8")
         _json({"puzzle": explanation["puzzle_id"], "difficulty": explanation["difficulty"], "steps": explanation["step_count"]})
+    elif args.command == "render":
+        render_file(args.puzzle, args.output)
+        _json({"puzzle": str(args.puzzle), "html": str(args.output)})
     elif args.command == "benchmark":
         report = run_benchmark(
             args.board, args.start_seed, args.count, args.output,
