@@ -925,9 +925,9 @@ def _card_mask(atoms: list[AtomicClue], masks: dict[str, np.ndarray], size: int)
     return result
 
 
-def probe_candidate_with_cpsat(
+def probe_candidates_with_cpsat(
     puzzle: dict[str, Any],
-    candidate: AtomicClue,
+    candidates: list[AtomicClue],
     expected_positions: dict[str, tuple[int, int]],
     *,
     limit: int = 2,
@@ -936,19 +936,45 @@ def probe_candidate_with_cpsat(
     from .solvers.ortools_solver import ORToolsSolver
     from .validator import _matches_statement
 
-    statement = candidate.to_json("candidate-probe")
-    statements = tuple(base_statements or ()) + (statement,)
+    extra_statements = tuple(
+        candidate.to_json(f"candidate-probe-{index + 1}")
+        for index, candidate in enumerate(candidates)
+    )
+    statements = tuple(base_statements or ()) + extra_statements
     result = ORToolsSolver().solve(
         puzzle,
         limit=limit,
-        extra_statements=(statement,),
+        extra_statements=extra_statements,
+        base_statements=base_statements,
+    )
+    return {
+        "candidates": [candidate.key for candidate in candidates],
+        "solution_count": len(result.solutions),
+        "target_valid": all(_matches_statement(item, expected_positions, puzzle) for item in statements),
+        "available": result.available,
+    }
+
+
+def probe_candidate_with_cpsat(
+    puzzle: dict[str, Any],
+    candidate: AtomicClue,
+    expected_positions: dict[str, tuple[int, int]],
+    *,
+    limit: int = 2,
+    base_statements: tuple[dict[str, Any], ...] | None = None,
+) -> dict[str, Any]:
+    result = probe_candidates_with_cpsat(
+        puzzle,
+        [candidate],
+        expected_positions,
+        limit=limit,
         base_statements=base_statements,
     )
     return {
         "candidate": candidate.key,
-        "solution_count": len(result.solutions),
-        "target_valid": all(_matches_statement(item, expected_positions, puzzle) for item in statements),
-        "available": result.available,
+        "solution_count": result["solution_count"],
+        "target_valid": result["target_valid"],
+        "available": result["available"],
     }
 
 
