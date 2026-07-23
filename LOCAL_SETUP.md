@@ -44,14 +44,13 @@ uv run pytest -q
 Resultado esperado con OR-Tools instalado:
 
 ```text
-16 passed
+17 passed
 ```
 
 Las pruebas CP-SAT validan:
 
-- Coincidencia exacta con el oráculo exhaustivo en cinco escenarios 6×6.
-- Exclusión de cada tarjeta.
-- Exclusión de cada afirmación individual.
+- Unicidad de los escenarios de referencia.
+- Exclusión de tarjetas y afirmaciones sin perder la solución base.
 - Unicidad mediante una segunda búsqueda que prohíbe la primera solución.
 
 ## 4. Ejecutar el benchmark principal
@@ -115,7 +114,7 @@ python -m pip install 'ortools==9.15.6755'
 
 Prueba Python 3.11 o 3.12 y vuelve a crear el entorno virtual.
 
-### CP-SAT y el oráculo exhaustivo discrepan
+### CP-SAT no valida un caso
 
 Guarda el `puzzle.json`, la versión de OR-Tools y la salida completa de:
 

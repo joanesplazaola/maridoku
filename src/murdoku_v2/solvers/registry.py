@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from .exhaustive import ExhaustiveSolver
 from .ortools_solver import ORToolsSolver
 from .z3_solver import Z3Solver
 
@@ -10,7 +9,6 @@ from .z3_solver import Z3Solver
 SOLVER_TYPES = {
     "z3": Z3Solver,
     "ortools": ORToolsSolver,
-    "exhaustive": ExhaustiveSolver,
 }
 
 
@@ -31,7 +29,6 @@ def availability() -> list[dict[str, Any]]:
             "role": {
                 "z3": "adaptador SMT opcional",
                 "ortools": "motor exacto principal CP-SAT",
-                "exhaustive": "oráculo de referencia 6×6",
             }[name],
         }
         for name, solver_type in SOLVER_TYPES.items()

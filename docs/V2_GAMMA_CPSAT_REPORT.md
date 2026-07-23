@@ -9,7 +9,6 @@ Por tanto:
 
 - La implementación CP-SAT está escrita y compila.
 - OR-Tools se instala por defecto desde `pyproject.toml`.
-- El oráculo exhaustivo se conserva para contrastes 6×6.
 - El solver artesanal anterior se retiró.
 
 ## Implementación
@@ -53,8 +52,7 @@ La búsqueda se configura de forma reproducible con:
 
 ## Banco de comparación
 
-`murdoku-v2 benchmark-solvers` compara CP-SAT con el oráculo exhaustivo sobre
-los cinco escenarios 6×6 y registra por separado:
+`murdoku-v2 scale-benchmark` mide CP-SAT en casos sintéticos grandes y registra:
 
 - construcción del modelo;
 - primera solución;
@@ -77,7 +75,6 @@ Resultado en este entorno:
 ```bash
 uv sync --extra dev
 uv run pytest -q
-uv run murdoku-v2 benchmark-solvers --puzzles examples --solvers ortools exhaustive
 uv run murdoku-v2 scale-benchmark --sizes 6 8 10 12 --solver ortools
 ```
 

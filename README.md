@@ -1,16 +1,13 @@
 # Murdoku V2-gamma — CP-SAT
 
 Repositorio local del motor de generación y validación de puzles Murdoku.
-Esta rama usa **Google OR-Tools CP-SAT** como motor exacto principal y conserva
-el exhaustivo solo como oráculo de referencia 6×6.
+Esta rama usa **Google OR-Tools CP-SAT** como motor exacto principal.
 
 ## Contenido
 
 - `ORToolsSolver`: modelo exacto CP-SAT para las 22 familias de pistas actuales.
-- `ExhaustiveSolver`: oráculo independiente para 6×6.
 - `Z3Solver`: punto de integración experimental.
 - Cinco tableros manuales y casos ya generados.
-- Pruebas cruzadas entre CP-SAT y el oráculo exhaustivo.
 - Benchmark de construcción del modelo, primera solución y unicidad.
 
 ## Requisitos
@@ -47,8 +44,7 @@ uv run murdoku-v2 solvers
 uv run pytest -q
 ```
 
-Con OR-Tools instalado deben ejecutarse **16 pruebas**: 10 generales y 6 de
-CP-SAT. Sin OR-Tools, las 6 pruebas del backend se omiten.
+Con OR-Tools instalado debe pasar la suite completa.
 
 ## Benchmark de escalado CP-SAT
 
@@ -63,15 +59,6 @@ uv run murdoku-v2 validate \
   --puzzle examples/board_restaurant/puzzle.json \
   --solution examples/board_restaurant/solution.json \
   --solver ortools
-```
-
-Comparar motores desde la CLI:
-
-```bash
-uv run murdoku-v2 benchmark-solvers \
-  --puzzles examples \
-  --solvers ortools exhaustive \
-  --output solver_comparison_local.json
 ```
 
 ## Generar un caso

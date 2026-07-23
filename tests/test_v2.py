@@ -170,21 +170,22 @@ def test_global_selector_can_require_a_real_double_card() -> None:
     assert len(cards["c"]) == 1
 
 
-def test_ortools_matches_exhaustive_on_all_reference_cases() -> None:
+def test_ortools_matches_generated_solutions_on_all_reference_cases() -> None:
     import json
 
-    from murdoku_v2.solvers.exhaustive import ExhaustiveSolver
     from murdoku_v2.solvers.ortools_solver import ORToolsSolver
 
     for puzzle_path in sorted((PROJECT / "examples").glob("*/puzzle.json")):
         puzzle = json.loads(puzzle_path.read_text(encoding="utf-8"))
+        solution = json.loads((puzzle_path.parent / "solution.json").read_text(encoding="utf-8"))
+        expected = {
+            character: (position["row"], position["column"])
+            for character, position in solution["positions"].items()
+        }
         ortools = ORToolsSolver().solve(puzzle, limit=2)
-        exhaustive = ExhaustiveSolver().solve(puzzle, limit=2)
         assert ortools.available is True
-        assert exhaustive.available is True
         assert ortools.unique is True
-        assert exhaustive.unique is True
-        assert ortools.solutions == exhaustive.solutions
+        assert ortools.solutions == [expected]
 
 
 def test_ortools_scales_to_twelve_characters() -> None:

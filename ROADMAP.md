@@ -3,7 +3,6 @@
 ## Estado actual
 
 - CP-SAT (`ortools`) es el motor exacto principal.
-- `exhaustive` queda solo como oráculo 6x6.
 - El antiguo solver artesanal se retiró en Git.
 - El generador sintético CP-SAT escribe casos 10x10+ con `generate-scale`.
 
@@ -18,8 +17,8 @@
 3. Solver humano enumerativo.
    `human_solver.py` reutiliza `enumerate_base_solutions()`, así que la explicación/dificultad tampoco escala.
 
-4. Tests de paridad lentos.
-   Al borrar backtracking, la comparación masiva usa `exhaustive`; sirve como oráculo, pero la suite tarda unos 2 minutos.
+4. Tests deben cubrir propiedades, no enumeración.
+   La suite normal debe seguir barata: unicidad, solución esperada, exclusiones y escalado sintético.
 
 5. Datos históricos con nombres legacy.
    Los JSON generados antiguos aún contienen campos `backtracking_*`. No rompen ejecución, pero confunden reportes.
@@ -38,8 +37,8 @@
 4. Separar explicación humana de generación grande.
    Mantener explicación completa para 6x6; para 8x8+ devolver diagnóstico estructural hasta que haya propagador no enumerativo.
 
-5. Acelerar tests.
-   Mantener una prueba exhaustiva 6x6 completa y convertir exclusiones masivas en un fixture pequeño o marcado como benchmark.
+5. Medir casos reales grandes.
+   Añadir benchmarks de generación 8x8, 10x10 y 13x13 cuando el selector CP-SAT sustituya las máscaras.
 
 6. Regenerar fixtures.
    Crear ejemplos frescos con `exact_validation` y borrar campos históricos `backtracking_*` de salidas versionadas.

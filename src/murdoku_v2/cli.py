@@ -12,7 +12,6 @@ from .clue_catalog import catalog_json
 from .engine import generate
 from .human_solver import analyze_puzzle
 from .scaling import generate_scaling_case, run_scaling_benchmark
-from .solver_benchmark import compare_solvers
 from .solvers.registry import availability, get_solver
 from .targeted import generate_targeted
 
@@ -75,7 +74,7 @@ def main() -> None:
     validate_parser = subparsers.add_parser("validate", help="Valida un caso con el motor elegido")
     validate_parser.add_argument("--puzzle", type=Path, default=Path("generated/puzzle.json"))
     validate_parser.add_argument("--solution", type=Path, default=Path("generated/solution.json"))
-    validate_parser.add_argument("--solver", choices=["auto", "ortools", "exhaustive", "z3"], default="auto")
+    validate_parser.add_argument("--solver", choices=["auto", "ortools", "z3"], default="auto")
 
     explain_parser = subparsers.add_parser("explain", help="Regenera la explicación deductiva")
     explain_parser.add_argument("--puzzle", type=Path, default=Path("generated/puzzle.json"))
@@ -99,14 +98,9 @@ def main() -> None:
     suite_parser.add_argument("--max-attempts", type=int, default=12)
     suite_parser.add_argument("--target-attempts", type=int, default=16)
 
-    compare_parser = subparsers.add_parser("benchmark-solvers", help="Compara motores sobre casos JSON")
-    compare_parser.add_argument("--puzzles", type=Path, default=Path("examples"))
-    compare_parser.add_argument("--solvers", nargs="+", default=["ortools", "exhaustive"])
-    compare_parser.add_argument("--output", type=Path, default=Path("solver_benchmark.json"))
-
     scale_parser = subparsers.add_parser("scale-benchmark", help="Prueba 6×6, 8×8, 10×10 y 12×12")
     scale_parser.add_argument("--sizes", nargs="+", type=int, default=[6, 8, 10, 12])
-    scale_parser.add_argument("--solver", choices=["ortools", "exhaustive", "z3"], default="ortools")
+    scale_parser.add_argument("--solver", choices=["ortools", "z3"], default="ortools")
     scale_parser.add_argument("--repetitions", type=int, default=3)
     scale_parser.add_argument("--output", type=Path, default=Path("scaling_benchmark.json"))
 
@@ -164,10 +158,6 @@ def main() -> None:
             target_attempts=args.target_attempts,
         )
         _json(report["summary"])
-    elif args.command == "benchmark-solvers":
-        puzzle_paths = sorted(args.puzzles.glob("*/puzzle.json")) if args.puzzles.is_dir() else [args.puzzles]
-        report = compare_solvers(puzzle_paths, args.solvers, output=args.output)
-        _json(report)
     elif args.command == "scale-benchmark":
         report = run_scaling_benchmark(
             args.sizes, solver_name=args.solver, repetitions=args.repetitions, output=args.output,
