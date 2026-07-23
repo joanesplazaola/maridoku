@@ -390,6 +390,12 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     assert len(result["puzzle"]["board"]["rooms"]) >= 5
     assert len(result["puzzle"]["board"]["objects"]) >= 4
     assert result["diagnostics"]["exact_validation"]["unique"] is True
+    assert len(result["diagnostics"]["editorial_clues"]) >= 3
+    assert {"object_occupancy", "object_line", "object_adjacency"} <= {
+        statement["family"]
+        for card in result["puzzle"]["cards"]
+        for statement in card["statements"]
+    }
     assert result["solution"]["murderer"] == "person_02"
     assert (tmp_path / "puzzle.json").exists()
     assert (tmp_path / "generation_report.json").exists()
@@ -406,6 +412,8 @@ def test_render_writes_printable_html(tmp_path: Path) -> None:
     assert "<main>" in html
     assert "wall-n" in html
     assert 'class="card victim"' in html
+    assert 'class="portrait"' in html
+    assert "Testimonios" in html
     assert 'class="legend"' in html
     assert 'object object-table' in html
     assert 'object object-plant' in html

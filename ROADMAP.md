@@ -4,7 +4,7 @@
 
 - CP-SAT (`ortools`) es el motor exacto principal.
 - El antiguo solver artesanal se retiró en Git.
-- El generador CP-SAT escalable escribe casos 8x8+ seed-dependientes con `generate-scale`, con varias habitaciones, paredes y objetos visibles sobre una cadena de unicidad certificada.
+- El generador CP-SAT escalable escribe casos 8x8+ seed-dependientes con `generate-scale`, varias habitaciones, objetos visibles y pistas de objetos/habitación aceptadas solo si conservan la unicidad.
 - CP-SAT acepta `base_statements`, `extra_statements`, `probe_candidate_with_cpsat()` y `probe_candidates_with_cpsat()` para evaluar pistas candidatas sin crear tarjetas definitivas.
 - El generador editorial registra una muestra CP-SAT vs NumPy de candidatos supervivientes en diagnostics.
 - El set de tarjetas elegido se valida con CP-SAT antes de aceptar un caso.
@@ -28,6 +28,9 @@
 
 5. Fixtures actuales regenerados.
    `examples/` y `generated/` usan `exact_validation` y diagnostics CP-SAT; los informes V2-alpha/beta quedan como historia.
+
+6. Variedad editorial grande aún limitada.
+   El 8x8+ ya mezcla pistas espaciales, de habitación y de objetos, pero conserva parte de la cadena de distancias como garantía. Falta seleccionar el conjunto completo con CP-SAT y medir dificultad humana.
 
 ## Próximos pasos
 

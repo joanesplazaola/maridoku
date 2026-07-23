@@ -27,16 +27,17 @@ def _object_lookup(board: dict[str, Any]) -> dict[tuple[int, int], list[dict[str
 def _statement_tag(statement: dict[str, Any]) -> str:
     family = statement.get("family", "")
     return {
-        "murder_rule": "Coartada",
+        "murder_rule": "Crimen",
         "relative_distance": "Distancia",
         "relative_order": "Orden",
-        "coordinate": "Coord.",
+        "coordinate": "Posición",
         "object_occupancy": "Objeto",
         "object_line": "Objeto",
         "object_adjacency": "Objeto",
         "room_population": "Sala",
         "room_exact": "Sala",
         "room_choice": "Sala",
+        "room_relation": "Habitación",
     }.get(family, "Pista")
 
 
@@ -98,7 +99,8 @@ def render_html(puzzle: dict[str, Any]) -> str:
         role = "Victima" if card["role"] == "victim" else "Sospechoso"
         cards.append(
             f"<section class=\"card {html.escape(card['role'])}\">"
-            f"<header><h2>{html.escape(card['character_name'])}</h2><p>{role}</p></header>"
+            f"<header><div class=\"portrait\" aria-hidden=\"true\">{html.escape(card['character_name'][0])}</div>"
+            f"<div><h2>{html.escape(card['character_name'])}</h2><p>{role}</p></div></header>"
             f"<ol>{statements}</ol></section>"
         )
     legend = "".join(
@@ -119,7 +121,7 @@ def render_html(puzzle: dict[str, Any]) -> str:
     <header class="titlebar">
       <div>
         <h1>{html.escape(board.get('name') or puzzle['id'])}</h1>
-        <p class="subtitle">Caso imprimible para resolver: tablero, objetos y tarjetas de testimonio.</p>
+        <p class="subtitle">Una víctima. Una habitación. Un asesino entre los presentes.</p>
       </div>
       <div class="case-id">{html.escape(puzzle['id'])}</div>
     </header>
@@ -128,7 +130,7 @@ def render_html(puzzle: dict[str, Any]) -> str:
         <table aria-label="Tablero" style="--cols: {int(board['columns'])}">{''.join(rows)}</table>
         <ul class="legend">{legend}</ul>
       </aside>
-      <main>{''.join(cards)}</main>
+      <main><h2 class="section-title">Testimonios</h2>{''.join(cards)}</main>
     </div>
   </div>
 </body>
