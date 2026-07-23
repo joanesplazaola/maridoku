@@ -11,7 +11,7 @@ from typing import Any
 import numpy as np
 
 from .clue_catalog import AtomicClue, CLUE_SPECS, atomic_mask, catalog_json
-from .selector import global_select_cards
+from .selector import global_select_cards, quality_reasons
 from .dependency import analyze_card_dependencies
 
 
@@ -1083,9 +1083,102 @@ def validate_card_set_with_cpsat(
     }
 
 
+def select_cards_with_cpsat_counts(
+    board: dict[str, Any],
+    seed: int,
+    victim_index: int,
+    target: np.ndarray,
+    pools: dict[str, list[AtomicClue]],
+    profile: str,
+    *,
+    max_candidates_per_subject: int = 4,
+    beam_width: int = 8,
+) -> tuple[dict[str, list[AtomicClue]] | None, dict[str, Any]]:
+    puzzle = _candidate_probe_puzzle(board, seed, victim_index)
+    victim_statement = puzzle["cards"][victim_index]["statements"][0]
+    expected = {
+        character["id"]: divmod(int(target[index]), board["rows"])
+        for index, character in enumerate(CHARACTERS)
+    }
+    subjects = sorted(pools, key=lambda subject: len(pools[subject]))
+    states: list[tuple[float, dict[str, list[AtomicClue]]]] = [(0.0, {})]
+    report: dict[str, Any] = {
+        "method": "cpsat_count_beam",
+        "beam_width": beam_width,
+        "states_expanded": 0,
+        "complete_sets_checked": 0,
+        "options_per_subject": {
+            subject: min(max_candidates_per_subject, len(candidates))
+            for subject, candidates in pools.items()
+        },
+        "rejected": {},
+    }
+
+    def reject(reason: str) -> None:
+        rejected = report["rejected"]
+        rejected[reason] = rejected.get(reason, 0) + 1
+
+    for depth, subject in enumerate(subjects):
+        expanded: list[tuple[float, dict[str, list[AtomicClue]]]] = []
+        remaining = len(subjects) - depth - 1
+        for score, cards in states:
+            for candidate in pools[subject][:max_candidates_per_subject]:
+                trial = {key: list(value) for key, value in cards.items()}
+                trial[subject] = [candidate]
+                atoms = [atom for values in trial.values() for atom in values]
+                probe = probe_candidates_with_cpsat(
+                    puzzle,
+                    atoms,
+                    expected,
+                    limit=2,
+                    base_statements=(victim_statement,),
+                )
+                report["states_expanded"] += 1
+                if not probe["available"] or not probe["target_valid"] or probe["solution_count"] == 0:
+                    reject("contradiction")
+                    continue
+                if remaining and probe["solution_count"] == 1:
+                    reject("solved_before_all_cards")
+                    continue
+                cost = score + len(atoms) * 10 + candidate.directness * 4 + candidate.complexity
+                if candidate.family in RICH_FAMILIES:
+                    cost -= 1.5
+                expanded.append((cost, trial))
+        if not expanded:
+            return None, report
+        states = sorted(expanded, key=lambda item: item[0])[:beam_width]
+
+    best: tuple[float, dict[str, list[AtomicClue]], dict[str, Any]] | None = None
+    for score, cards in states:
+        report["complete_sets_checked"] += 1
+        tuple_cards = {subject: tuple(atoms) for subject, atoms in cards.items()}
+        reasons = quality_reasons(tuple_cards, profile)
+        if reasons:
+            for reason in reasons:
+                reject(reason)
+            continue
+        validation = validate_card_set_with_cpsat(board, seed, victim_index, target, cards)
+        if not validation["unique"] or not validation["target_valid"]:
+            reject("not_unique")
+            continue
+        if best is None or score < best[0]:
+            best = (score, cards, validation)
+    if best is None:
+        return None, report
+
+    _, cards, validation = best
+    atoms = [atom for values in cards.values() for atom in values]
+    report["accepted_score"] = round(best[0], 3)
+    report["selected_families"] = dict(__import__("collections").Counter(atom.family for atom in atoms))
+    report["selected_types"] = dict(__import__("collections").Counter(atom.type for atom in atoms))
+    report["validation"] = validation
+    return cards, report
+
+
 def generate(
     board_path: Path, seed: int, output_dir: Path, selection_profile: str = "any",
     max_target_attempts: int = 24,
+    use_cpsat_selector: bool = False,
 ) -> dict[str, Any]:
     selection_profile = _normalise_profile(selection_profile)
     if max_target_attempts < 1:
@@ -1206,6 +1299,17 @@ def generate(
             attempt_report["reasons"].append("no_global_card_set")
             attempt_reports.append(attempt_report)
             continue
+
+        if use_cpsat_selector:
+            cpsat_cards, cpsat_selection_report = select_cards_with_cpsat_counts(
+                board, seed, victim_index, target, pools, selection_profile
+            )
+            attempt_report["cpsat_selector"] = cpsat_selection_report
+            if cpsat_cards is not None:
+                cards = cpsat_cards
+                selection_report = cpsat_selection_report
+                selection_report["fallback_selector"] = attempt_report["selector"]
+                attempt_report["selector"] = selection_report
 
         card_set_validation = validate_card_set_with_cpsat(board, seed, victim_index, target, cards)
         attempt_report["cpsat_card_set_validation"] = card_set_validation
@@ -1447,6 +1551,7 @@ def generate(
     diagnostics = {
         "puzzle_id": puzzle["id"],
         "selection_profile": selection_profile,
+        "cpsat_selector_enabled": use_cpsat_selector,
         "base_assignment_count": int(len(base_solutions)),
         "valid_after_victim_card": int(len(valid_solutions)),
         "raw_candidate_count_for_selected_target": raw_candidate_count,

@@ -77,6 +77,7 @@ def test_same_engine_generates_valid_cases_on_five_manual_boards(tmp_path: Path)
         diagnostics = result["diagnostics"]
         assert result["puzzle"]["schema_version"] == 8
         assert diagnostics["final_solution_count"] == 1
+        assert diagnostics["cpsat_selector_enabled"] is False
         assert diagnostics["all_cards_necessary"] is True
         assert diagnostics["all_suspect_statements_necessary"] is True
         assert diagnostics["human_solver_matches_solution"] is True

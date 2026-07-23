@@ -9,6 +9,7 @@
 - El generador editorial registra una muestra CP-SAT vs NumPy de candidatos supervivientes en diagnostics.
 - El set de tarjetas elegido se valida con CP-SAT antes de aceptar un caso.
 - La CLI renderiza puzzles a una hoja HTML imprimible para pruebas humanas.
+- Existe una ruta experimental `--cpsat-selector` basada en conteos CP-SAT capados a 2; queda diagnosticada y cae al selector estable cuando no encuentra set.
 
 ## Gaps principales
 
@@ -36,7 +37,7 @@
    Para cada pista candidata o conjunto de pistas: añadirlas al modelo base y preguntar si conserva la solución objetivo y cuántas alternativas deja, con límite 2. Los probes ya existen y el generador ya registra una muestra comparativa; falta reemplazar el filtro completo.
 
 3. Rehacer el selector sobre conteos CP-SAT.
-   Mantener el beam search existente, pero cambiar su señal de `mask bitset` a `solution_count <= 2` y `target still valid`. La aceptación del set completo ya está en CP-SAT; falta mover la búsqueda parcial.
+   Optimizar/cachear `--cpsat-selector` hasta hacerlo default. La aceptación del set completo ya está en CP-SAT; la búsqueda parcial ya existe experimentalmente, pero tarda demasiado y aún cae al selector estable en algunos tableros.
 
 4. Separar explicación humana de generación grande.
    Mantener explicación completa para 6x6; para 8x8+ devolver diagnóstico estructural hasta que haya propagador no enumerativo.

@@ -91,6 +91,12 @@ Para generar una hoja HTML imprimible:
 uv run murdoku-v2 render --puzzle generated/puzzle.json --output generated/puzzle.html
 ```
 
+Para probar la ruta experimental del selector por conteos CP-SAT:
+
+```bash
+uv run murdoku-v2 generate --board boards/board_mansion.json --seed 5002 --output generated_cpsat_selector --cpsat-selector --target-attempts 1
+```
+
 ## Objetivo inmediato
 
 La siguiente fase es sustituir el universo exhaustivo y las máscaras NumPy por
