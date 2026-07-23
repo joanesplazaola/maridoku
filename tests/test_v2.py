@@ -415,7 +415,8 @@ def test_render_writes_printable_html(tmp_path: Path) -> None:
     assert 'class="portrait"' in html
     assert "Declaraciones" in html
     assert "data:image/webp;base64," in html
-    assert "<svg class=\"object object-table\"" in html
+    assert "<span class=\"object object-table\"" in html
+    assert "--portrait-x:" in html
     assert 'class="legend"' in html
     assert 'object object-table' in html
     assert 'object object-plant' in html

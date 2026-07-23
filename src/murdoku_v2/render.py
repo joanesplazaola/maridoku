@@ -49,28 +49,24 @@ def _object_class(obj: dict[str, Any]) -> str:
 
 def _object_marker(obj: dict[str, Any]) -> str:
     name = html.escape(obj.get("name") or obj.get("type") or "Objeto")
-    type_ = str(obj.get("type") or "object").lower()
-    art = {
-        "plant": '<path d="M29 43h22l-3 15H32z"/><path class="soft" d="M40 43C17 34 22 13 39 28 35 7 55 8 47 29c17-14 23 7 2 14z"/>',
-        "table": '<ellipse class="soft" cx="40" cy="31" rx="25" ry="16"/><path d="M18 31h44v8H18zM22 39h6l-3 20h-6zm30 0h6l3 20h-6z"/><ellipse cx="40" cy="31" rx="23" ry="13"/>',
-        "rug": '<rect x="10" y="17" width="60" height="46" rx="7"/><path class="soft" d="M17 24h46v32H17zM24 40l16-11 16 11-16 11z"/>',
-        "carpet": '<rect x="10" y="17" width="60" height="46" rx="7"/><path class="soft" d="M17 24h46v32H17zM24 40l16-11 16 11-16 11z"/>',
-        "sofa": '<path class="soft" d="M14 31c0-9 8-15 17-10l9 5 9-5c9-5 17 1 17 10v24H14z"/><path d="M10 34c0-8 10-8 10 0v12h40V34c0-8 10-8 10 0v24H10zM19 58h7v6h-7zm35 0h7v6h-7z"/>',
-        "chair": '<path class="soft" d="M22 12h36v27H22z"/><path d="M18 35h44v11H18zM22 46h6l-3 18h-6zm30 0h6l3 18h-6z"/>',
-        "bed": '<path class="soft" d="M11 25h58v34H11z"/><path d="M8 20h8v44H8zm56 0h8v44h-8zM16 50h48v9H16z"/><path class="paper" d="M18 28h18v13H18z"/>',
-        "tv": '<rect class="soft" x="10" y="12" width="60" height="39" rx="5"/><path d="M35 51h10v8h12v6H23v-6h12z"/><path class="paper" d="M17 19h46v25H17z"/>',
-    }.get(type_, '<circle class="soft" cx="40" cy="40" r="25"/><path d="M36 22h8v24h-8zm0 30h8v8h-8z"/>')
-    return (
-        f'<svg class="object {_object_class(obj)}" viewBox="0 0 80 80" role="img" '
-        f'aria-label="{name}" title="{name}">{art}</svg>'
-    )
+    return f'<span class="object {_object_class(obj)}" role="img" aria-label="{name}" title="{name}"></span>'
 
 
 def _stylesheet() -> str:
     assets = files("murdoku_v2").joinpath("assets")
     css = assets.joinpath("murdoku.css").read_text(encoding="utf-8")
-    texture = base64.b64encode(assets.joinpath("case-paper.webp").read_bytes()).decode("ascii")
-    return css.replace("__CASE_PAPER__", f"data:image/webp;base64,{texture}")
+    replacements = {
+        "__CASE_PAPER__": assets.joinpath("case-paper.webp"),
+        "__PORTRAITS__": assets.joinpath("portraits.webp"),
+        "__PLANT__": assets.joinpath("furniture/plant.webp"),
+        "__TABLE__": assets.joinpath("furniture/table.webp"),
+        "__RUG__": assets.joinpath("furniture/rug.webp"),
+        "__SOFA__": assets.joinpath("furniture/sofa.webp"),
+    }
+    for marker, asset in replacements.items():
+        data = base64.b64encode(asset.read_bytes()).decode("ascii")
+        css = css.replace(marker, f"data:image/webp;base64,{data}")
+    return css
 
 
 def render_html(puzzle: dict[str, Any]) -> str:
@@ -108,6 +104,8 @@ def render_html(puzzle: dict[str, Any]) -> str:
         rows.append(f"<tr>{''.join(cells)}</tr>")
 
     cards = []
+    gender_slots = {"woman": 0, "man": 0}
+    gender_by_character = {character["id"]: character.get("gender", "woman") for character in puzzle["characters"]}
     for card in puzzle["cards"]:
         statements = "".join(
             f"<li><small>{html.escape(_statement_tag(statement))}</small>"
@@ -115,9 +113,15 @@ def render_html(puzzle: dict[str, Any]) -> str:
             for statement in card["statements"]
         )
         role = "Victima" if card["role"] == "victim" else "Sospechoso"
+        gender = gender_by_character.get(card["character"], "woman")
+        portrait_column = min(gender_slots.get(gender, 0), 3)
+        gender_slots[gender] = portrait_column + 1
+        portrait_x = (0, 33.333, 66.667, 100)[portrait_column]
+        portrait_y = 100 if gender == "man" else 0
         cards.append(
             f"<article class=\"card {html.escape(card['role'])}\">"
-            f"<header><div class=\"portrait\" aria-hidden=\"true\">{html.escape(card['character_name'][0])}</div>"
+            f"<header><div class=\"portrait\" style=\"--portrait-x:{portrait_x}%;--portrait-y:{portrait_y}%\" "
+            f"role=\"img\" aria-label=\"Retrato de {html.escape(card['character_name'])}\"></div>"
             f"<div><h2>{html.escape(card['character_name'])}</h2><p>{role}</p></div></header>"
             f"<ol>{statements}</ol></article>"
         )
