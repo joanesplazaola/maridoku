@@ -76,10 +76,9 @@ def run_benchmark(
                 "selector_method": diagnostics.get("global_selector", {}).get("method", "unknown"),
                 "dependency_depth": diagnostics.get("card_dependency_graph", {}).get("max_dependency_depth", 0),
                 "dependency_edges": diagnostics.get("card_dependency_graph", {}).get("edge_count", 0),
-                "backtracking_unique": diagnostics.get("backtracking_validation", {}).get("unique", False),
-                "backtracking_matches_solution": diagnostics.get("backtracking_validation", {}).get("matches_solution", False),
-                "backtracking_elapsed_ms": diagnostics.get("backtracking_validation", {}).get("stats", {}).get("elapsed_ms"),
-                "backtracking_nodes": diagnostics.get("backtracking_validation", {}).get("stats", {}).get("nodes"),
+                "exact_unique": diagnostics.get("exact_validation", {}).get("unique", False),
+                "exact_matches_solution": diagnostics.get("exact_validation", {}).get("matches_solution", False),
+                "exact_elapsed_ms": diagnostics.get("exact_validation", {}).get("stats", {}).get("elapsed_ms"),
             })
 
     labels = Counter(case["difficulty"] for case in cases)
@@ -117,11 +116,11 @@ def run_benchmark(
         "double_card_cases": sum(case["double_card_count"] > 0 for case in cases),
         "all_cards_necessary_cases": sum(bool(case["all_cards_necessary"]) for case in cases),
         "human_solver_match_cases": sum(bool(case["human_solver_matches_solution"]) for case in cases),
-        "backtracking_unique_cases": sum(bool(case["backtracking_unique"]) for case in cases),
-        "backtracking_match_cases": sum(bool(case["backtracking_matches_solution"]) for case in cases),
-        "backtracking_elapsed_ms": {
-            "mean": round(statistics.mean(case["backtracking_elapsed_ms"] for case in cases), 3) if cases else None,
-            "max": round(max(case["backtracking_elapsed_ms"] for case in cases), 3) if cases else None,
+        "exact_unique_cases": sum(bool(case["exact_unique"]) for case in cases),
+        "exact_match_cases": sum(bool(case["exact_matches_solution"]) for case in cases),
+        "exact_elapsed_ms": {
+            "mean": round(statistics.mean(case["exact_elapsed_ms"] for case in cases), 3) if cases else None,
+            "max": round(max(case["exact_elapsed_ms"] for case in cases), 3) if cases else None,
         },
         "family_totals": dict(family_totals.most_common()),
         "type_totals": dict(type_totals.most_common()),
@@ -228,12 +227,12 @@ def run_benchmark_suite(
             "max": max((case["dependency_edges"] for case in combined_cases), default=None),
         },
         "human_solver_match_cases": sum(bool(case["human_solver_matches_solution"]) for case in combined_cases),
-        "backtracking_unique_cases": sum(bool(case["backtracking_unique"]) for case in combined_cases),
-        "backtracking_match_cases": sum(bool(case["backtracking_matches_solution"]) for case in combined_cases),
-        "backtracking_elapsed_ms": {
-            "mean": round(statistics.mean(case["backtracking_elapsed_ms"] for case in combined_cases), 3) if combined_cases else None,
-            "p95": sorted(case["backtracking_elapsed_ms"] for case in combined_cases)[p95_index] if combined_cases else None,
-            "max": round(max(case["backtracking_elapsed_ms"] for case in combined_cases), 3) if combined_cases else None,
+        "exact_unique_cases": sum(bool(case["exact_unique"]) for case in combined_cases),
+        "exact_match_cases": sum(bool(case["exact_matches_solution"]) for case in combined_cases),
+        "exact_elapsed_ms": {
+            "mean": round(statistics.mean(case["exact_elapsed_ms"] for case in combined_cases), 3) if combined_cases else None,
+            "p95": sorted(case["exact_elapsed_ms"] for case in combined_cases)[p95_index] if combined_cases else None,
+            "max": round(max(case["exact_elapsed_ms"] for case in combined_cases), 3) if combined_cases else None,
         },
         "family_totals": dict(family_totals.most_common()),
         "type_totals": dict(type_totals.most_common()),

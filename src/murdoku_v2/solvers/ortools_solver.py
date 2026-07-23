@@ -31,8 +31,8 @@ class ORToolsSolver:
     """Exact Google OR-Tools CP-SAT backend for the public puzzle contract.
 
     The model uses one cell, row, column and room variable per character.
-    It deliberately compiles the public clue semantics rather than reusing the
-    custom backtracking implementation, making it useful for cross-validation.
+    It deliberately compiles the public clue semantics directly, making it
+    useful for cross-validation against the 6x6 exhaustive oracle.
     """
 
     name = "ortools-cp-sat"

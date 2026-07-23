@@ -1259,17 +1259,17 @@ def generate(
     }
     human_solver_matches_solution = human_analysis["final_positions"] == expected_positions_for_human
 
-    # V2-beta: scalable exact validation independent from the NumPy universe.
-    from .solvers.backtracking import BacktrackingSolver
+    # V2-gamma: exact CP-SAT validation independent from the NumPy universe.
+    from .solvers.ortools_solver import ORToolsSolver
 
-    backtracking_result = BacktrackingSolver().solve(puzzle, limit=2)
+    exact_result = ORToolsSolver().solve(puzzle, limit=2)
     expected_positions_for_exact = {
         character_id: (data["row"], data["column"])
         for character_id, data in solution["positions"].items()
     }
-    backtracking_matches_solution = bool(
-        backtracking_result.unique
-        and backtracking_result.solutions[0] == expected_positions_for_exact
+    exact_matches_solution = bool(
+        exact_result.unique
+        and exact_result.solutions[0] == expected_positions_for_exact
     )
 
     diagnostics = {
@@ -1305,15 +1305,15 @@ def generate(
         "human_difficulty": human_analysis["difficulty"],
         "human_solver_step_count": human_analysis["step_count"],
         "human_solver_matches_solution": human_solver_matches_solution,
-        "backtracking_validation": {
-            "unique": backtracking_result.unique,
-            "matches_solution": backtracking_matches_solution,
-            "stats": backtracking_result.stats.to_dict(),
+        "exact_validation": {
+            "unique": exact_result.unique,
+            "matches_solution": exact_matches_solution,
+            "stats": exact_result.stats.to_dict(),
         },
     }
 
-    if not backtracking_matches_solution:
-        raise RuntimeError("El solucionador backtracking no coincide con la solución generada.")
+    if not exact_matches_solution:
+        raise RuntimeError("El solucionador CP-SAT no coincide con la solución generada.")
 
     if not human_solver_matches_solution:
         raise RuntimeError("El solucionador humano no coincide con la solución generada.")

@@ -1,12 +1,12 @@
 from .base import SolverResult, SolverStats
-from .backtracking import BacktrackingSolver
 from .exhaustive import ExhaustiveSolver
+from .ortools_solver import ORToolsSolver
 from .registry import availability, get_solver
 
 __all__ = [
     "SolverResult",
     "SolverStats",
-    "BacktrackingSolver",
+    "ORToolsSolver",
     "ExhaustiveSolver",
     "availability",
     "get_solver",

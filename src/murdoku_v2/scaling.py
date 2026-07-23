@@ -134,7 +134,7 @@ def expected_scaling_solution(size: int) -> dict[str, tuple[int, int]]:
 def run_scaling_benchmark(
     sizes: list[int],
     *,
-    solver_name: str = "backtracking",
+    solver_name: str = "ortools",
     repetitions: int = 3,
     output: Path | None = None,
 ) -> dict[str, Any]:

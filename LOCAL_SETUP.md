@@ -5,7 +5,7 @@
 ### Opción recomendada: uv
 
 ```bash
-uv sync --extra cpsat --extra dev
+uv sync --extra dev
 ```
 
 ### Opción alternativa: pip
@@ -14,7 +14,7 @@ uv sync --extra cpsat --extra dev
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install -e '.[cpsat,dev]'
+python -m pip install -e '.[dev]'
 ```
 
 En Windows PowerShell:
@@ -23,7 +23,7 @@ En Windows PowerShell:
 py -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-python -m pip install -e ".[cpsat,dev]"
+python -m pip install -e ".[dev]"
 ```
 
 ## 2. Confirmar que OR-Tools está disponible
@@ -49,7 +49,7 @@ Resultado esperado con OR-Tools instalado:
 
 Las pruebas CP-SAT validan:
 
-- Coincidencia exacta con backtracking en cinco escenarios.
+- Coincidencia exacta con el oráculo exhaustivo en cinco escenarios 6×6.
 - Exclusión de cada tarjeta.
 - Exclusión de cada afirmación individual.
 - Unicidad mediante una segunda búsqueda que prohíbe la primera solución.
@@ -57,17 +57,13 @@ Las pruebas CP-SAT validan:
 ## 4. Ejecutar el benchmark principal
 
 ```bash
-uv run python benchmarks_cpsat_compare.py \
-  --repeats 50 \
-  --output cpsat_benchmark_local
+uv run murdoku-v2 scale-benchmark --sizes 6 8 10 12 --solver ortools --repetitions 3
 ```
 
 Para una prueba rápida:
 
 ```bash
-uv run python benchmarks_cpsat_compare.py \
-  --repeats 5 \
-  --output cpsat_benchmark_smoke
+uv run murdoku-v2 scale-benchmark --sizes 10 --solver ortools --repetitions 1
 ```
 
 ## 5. Datos que conviene compartir
@@ -75,8 +71,7 @@ uv run python benchmarks_cpsat_compare.py \
 Los dos archivos generados:
 
 ```text
-cpsat_benchmark_local/cpsat_vs_backtracking.json
-cpsat_benchmark_local/cpsat_vs_backtracking.csv
+scaling_benchmark.json
 ```
 
 El JSON separa:
@@ -107,7 +102,7 @@ benchmark separado con varios trabajadores para medir rendimiento máximo.
 ### `OR-Tools no está instalado`
 
 ```bash
-uv sync --extra cpsat --extra dev
+uv sync --extra dev
 ```
 
 O:
@@ -120,7 +115,7 @@ python -m pip install 'ortools==9.15.6755'
 
 Prueba Python 3.11 o 3.12 y vuelve a crear el entorno virtual.
 
-### CP-SAT y backtracking discrepan
+### CP-SAT y el oráculo exhaustivo discrepan
 
 Guarda el `puzzle.json`, la versión de OR-Tools y la salida completa de:
 
@@ -128,4 +123,4 @@ Guarda el `puzzle.json`, la versión de OR-Tools y la salida completa de:
 uv run pytest -q tests/test_ortools_solver.py -vv
 ```
 
-No uses ese backend como motor principal hasta resolver la discrepancia.
+No uses ese cambio hasta resolver la discrepancia.

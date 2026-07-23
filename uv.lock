@@ -87,19 +87,16 @@ dependencies = [
     { name = "networkx" },
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "numpy", version = "2.5.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "ortools" },
     { name = "pydantic" },
     { name = "rich" },
 ]
 
 [package.optional-dependencies]
-cpsat = [
-    { name = "ortools" },
-]
 dev = [
     { name = "pytest" },
 ]
 solvers = [
-    { name = "ortools" },
     { name = "z3-solver" },
 ]
 z3 = [
@@ -110,15 +107,14 @@ z3 = [
 requires-dist = [
     { name = "networkx", specifier = ">=3.4" },
     { name = "numpy", specifier = ">=2.0" },
-    { name = "ortools", marker = "extra == 'cpsat'", specifier = "==9.15.6755" },
-    { name = "ortools", marker = "extra == 'solvers'", specifier = "==9.15.6755" },
+    { name = "ortools", specifier = "==9.15.6755" },
     { name = "pydantic", specifier = ">=2.10" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "rich", specifier = ">=13.9" },
     { name = "z3-solver", marker = "extra == 'solvers'", specifier = ">=4.13" },
     { name = "z3-solver", marker = "extra == 'z3'", specifier = ">=4.13" },
 ]
-provides-extras = ["cpsat", "z3", "solvers", "dev"]
+provides-extras = ["z3", "solvers", "dev"]
 
 [[package]]
 name = "networkx"

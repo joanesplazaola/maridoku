@@ -2,14 +2,15 @@
 
 ## Estado de la entrega
 
-Se ha implementado el backend CP-SAT y el banco de comparación, pero **el binario de OR-Tools no pudo instalarse en este entorno de ejecución**. El índice de paquetes disponible devolvió que no había ninguna distribución accesible para `ortools==9.15.6755`, y las descargas binarias externas están bloqueadas.
+Se ha implementado el backend CP-SAT y OR-Tools queda como motor exacto
+principal del proyecto.
 
 Por tanto:
 
 - La implementación CP-SAT está escrita y compila.
-- El contrato y los diez tests no dependientes de OR-Tools pasan.
-- Los seis tests que ejecutan CP-SAT se omiten automáticamente cuando la dependencia no está disponible.
-- El benchmark se ejecutó, pero devolvió un resultado `blocked`; **no se han inventado tiempos de CP-SAT**.
+- OR-Tools se instala por defecto desde `pyproject.toml`.
+- El oráculo exhaustivo se conserva para contrastes 6×6.
+- El solver artesanal anterior se retiró.
 
 ## Implementación
 
@@ -52,7 +53,8 @@ La búsqueda se configura de forma reproducible con:
 
 ## Banco de comparación
 
-`benchmarks_cpsat_compare.py` compara CP-SAT con el backtracking sobre los cinco escenarios reales y registra por separado:
+`murdoku-v2 benchmark-solvers` compara CP-SAT con el oráculo exhaustivo sobre
+los cinco escenarios 6×6 y registra por separado:
 
 - construcción del modelo;
 - primera solución;
@@ -67,21 +69,16 @@ La búsqueda se configura de forma reproducible con:
 Resultado en este entorno:
 
 ```text
-10 passed, 6 skipped
+16 passed
 ```
-
-Los seis tests omitidos son exclusivamente los que necesitan importar el binario de OR-Tools.
-
-También se verificó que todos los módulos compilan mediante `compileall`.
 
 ## Cómo ejecutar la prueba real
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -e '.[solvers,dev]'
-PYTHONPATH=src pytest -q
-PYTHONPATH=src python benchmarks_cpsat_compare.py --repeats 20 --output cpsat_benchmark
+uv sync --extra dev
+uv run pytest -q
+uv run murdoku-v2 benchmark-solvers --puzzles examples --solvers ortools exhaustive
+uv run murdoku-v2 scale-benchmark --sizes 6 8 10 12 --solver ortools
 ```
 
 Resultados esperados:

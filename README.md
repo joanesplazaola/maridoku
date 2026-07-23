@@ -1,17 +1,16 @@
 # Murdoku V2-gamma — CP-SAT
 
 Repositorio local del motor de generación y validación de puzles Murdoku.
-Esta rama incorpora un backend completo para **Google OR-Tools CP-SAT** y lo
-compara contra el backtracking propio sobre los cinco escenarios de referencia.
+Esta rama usa **Google OR-Tools CP-SAT** como motor exacto principal y conserva
+el exhaustivo solo como oráculo de referencia 6×6.
 
 ## Contenido
 
 - `ORToolsSolver`: modelo exacto CP-SAT para las 22 familias de pistas actuales.
-- `BacktrackingSolver`: motor artesanal de referencia.
 - `ExhaustiveSolver`: oráculo independiente para 6×6.
 - `Z3Solver`: punto de integración experimental.
 - Cinco tableros manuales y casos ya generados.
-- Pruebas cruzadas entre CP-SAT y backtracking.
+- Pruebas cruzadas entre CP-SAT y el oráculo exhaustivo.
 - Benchmark de construcción del modelo, primera solución y unicidad.
 
 ## Requisitos
@@ -22,7 +21,7 @@ compara contra el backtracking propio sobre los cinco escenarios de referencia.
 ## Instalación rápida con uv
 
 ```bash
-uv sync --extra cpsat --extra dev
+uv sync --extra dev
 ```
 
 Para instalar también Z3:
@@ -38,7 +37,7 @@ python -m venv .venv
 source .venv/bin/activate        # Linux/macOS
 # .venv\\Scripts\\activate       # Windows PowerShell
 python -m pip install --upgrade pip
-python -m pip install -e '.[cpsat,dev]'
+python -m pip install -e '.[dev]'
 ```
 
 ## Primera comprobación
@@ -51,23 +50,11 @@ uv run pytest -q
 Con OR-Tools instalado deben ejecutarse **16 pruebas**: 10 generales y 6 de
 CP-SAT. Sin OR-Tools, las 6 pruebas del backend se omiten.
 
-## Benchmark CP-SAT frente a backtracking
+## Benchmark de escalado CP-SAT
 
 ```bash
-uv run python benchmarks_cpsat_compare.py \
-  --repeats 20 \
-  --output cpsat_benchmark_local
+uv run murdoku-v2 scale-benchmark --sizes 6 8 10 12 --solver ortools --repetitions 3
 ```
-
-Resultados:
-
-```text
-cpsat_benchmark_local/cpsat_vs_backtracking.json
-cpsat_benchmark_local/cpsat_vs_backtracking.csv
-```
-
-El benchmark comprueba además que ambos motores devuelven exactamente el mismo
-conjunto de soluciones en los cinco tableros.
 
 ## Validar un caso con CP-SAT
 
@@ -83,7 +70,7 @@ Comparar motores desde la CLI:
 ```bash
 uv run murdoku-v2 benchmark-solvers \
   --puzzles examples \
-  --solvers backtracking ortools exhaustive \
+  --solvers ortools exhaustive \
   --output solver_comparison_local.json
 ```
 

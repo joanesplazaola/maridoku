@@ -70,7 +70,7 @@ def main() -> None:
     validate_parser = subparsers.add_parser("validate", help="Valida un caso con el motor elegido")
     validate_parser.add_argument("--puzzle", type=Path, default=Path("generated/puzzle.json"))
     validate_parser.add_argument("--solution", type=Path, default=Path("generated/solution.json"))
-    validate_parser.add_argument("--solver", choices=["auto", "backtracking", "exhaustive", "z3", "ortools"], default="auto")
+    validate_parser.add_argument("--solver", choices=["auto", "ortools", "exhaustive", "z3"], default="auto")
 
     explain_parser = subparsers.add_parser("explain", help="Regenera la explicación deductiva")
     explain_parser.add_argument("--puzzle", type=Path, default=Path("generated/puzzle.json"))
@@ -96,12 +96,12 @@ def main() -> None:
 
     compare_parser = subparsers.add_parser("benchmark-solvers", help="Compara motores sobre casos JSON")
     compare_parser.add_argument("--puzzles", type=Path, default=Path("examples"))
-    compare_parser.add_argument("--solvers", nargs="+", default=["backtracking", "exhaustive"])
+    compare_parser.add_argument("--solvers", nargs="+", default=["ortools", "exhaustive"])
     compare_parser.add_argument("--output", type=Path, default=Path("solver_benchmark.json"))
 
     scale_parser = subparsers.add_parser("scale-benchmark", help="Prueba 6×6, 8×8, 10×10 y 12×12")
     scale_parser.add_argument("--sizes", nargs="+", type=int, default=[6, 8, 10, 12])
-    scale_parser.add_argument("--solver", choices=["backtracking", "exhaustive", "z3", "ortools"], default="backtracking")
+    scale_parser.add_argument("--solver", choices=["ortools", "exhaustive", "z3"], default="ortools")
     scale_parser.add_argument("--repetitions", type=int, default=3)
     scale_parser.add_argument("--output", type=Path, default=Path("scaling_benchmark.json"))
 
@@ -125,7 +125,7 @@ def main() -> None:
             "murderer": result["solution"]["murderer_name"],
             "final_solutions": diagnostics["final_solution_count"],
             "difficulty": diagnostics["human_difficulty"]["label"],
-            "backtracking": diagnostics["backtracking_validation"],
+            "exact": diagnostics["exact_validation"],
         })
     elif args.command == "validate":
         _json(_validate_with_solver(args.puzzle, args.solution, args.solver))
@@ -166,7 +166,7 @@ def main() -> None:
         for item in availability():
             table.add_row(item["name"], "sí" if item["available"] else "no", item["role"])
         console.print(table)
-        console.print("Extras opcionales: [bold]uv sync --extra solvers[/bold]")
+        console.print("CP-SAT viene instalado por defecto; Z3 es opcional con [bold]uv sync --extra solvers[/bold]")
     else:
         _json(catalog_json())
 

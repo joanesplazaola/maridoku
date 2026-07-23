@@ -21,6 +21,7 @@ cpsat_benchmark_local/
 cpsat_benchmark_uv/
 scaling_10x10_*.json
 solver_comparison_uv_cpsat.json
+solver_comparison_ortools_exhaustive.json
 
 # OS / editors
 .DS_Store

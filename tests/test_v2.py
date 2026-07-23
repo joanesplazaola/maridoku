@@ -78,8 +78,8 @@ def test_same_engine_generates_valid_cases_on_five_manual_boards(tmp_path: Path)
         assert diagnostics["all_cards_necessary"] is True
         assert diagnostics["all_suspect_statements_necessary"] is True
         assert diagnostics["human_solver_matches_solution"] is True
-        assert diagnostics["backtracking_validation"]["unique"] is True
-        assert diagnostics["backtracking_validation"]["matches_solution"] is True
+        assert diagnostics["exact_validation"]["unique"] is True
+        assert diagnostics["exact_validation"]["matches_solution"] is True
         assert diagnostics["formal_clue_catalog_size"] == 22
         assert diagnostics["global_selector"]["method"].startswith("global_")
         assert (output / "generation_report.json").exists()
@@ -170,35 +170,33 @@ def test_global_selector_can_require_a_real_double_card() -> None:
     assert len(cards["c"]) == 1
 
 
-def test_backtracking_matches_exhaustive_on_all_reference_cases() -> None:
+def test_ortools_matches_exhaustive_on_all_reference_cases() -> None:
     import json
 
-    from murdoku_v2.solvers.backtracking import BacktrackingSolver
     from murdoku_v2.solvers.exhaustive import ExhaustiveSolver
+    from murdoku_v2.solvers.ortools_solver import ORToolsSolver
 
     for puzzle_path in sorted((PROJECT / "examples").glob("*/puzzle.json")):
         puzzle = json.loads(puzzle_path.read_text(encoding="utf-8"))
-        backtracking = BacktrackingSolver().solve(puzzle, limit=2)
+        ortools = ORToolsSolver().solve(puzzle, limit=2)
         exhaustive = ExhaustiveSolver().solve(puzzle, limit=2)
-        assert backtracking.available is True
+        assert ortools.available is True
         assert exhaustive.available is True
-        assert backtracking.unique is True
+        assert ortools.unique is True
         assert exhaustive.unique is True
-        assert backtracking.solutions == exhaustive.solutions
-        assert backtracking.stats.nodes < 10000
+        assert ortools.solutions == exhaustive.solutions
 
 
-def test_backtracking_scales_to_twelve_characters() -> None:
+def test_ortools_scales_to_twelve_characters() -> None:
     from murdoku_v2.scaling import expected_scaling_solution, make_scaling_puzzle
-    from murdoku_v2.solvers.backtracking import BacktrackingSolver
+    from murdoku_v2.solvers.ortools_solver import ORToolsSolver
 
-    solver = BacktrackingSolver()
+    solver = ORToolsSolver()
     for size in (6, 8, 10, 12):
         result = solver.solve(make_scaling_puzzle(size), limit=2)
         assert result.available is True
         assert result.unique is True
         assert result.solutions[0] == expected_scaling_solution(size)
-        assert result.stats.max_depth == size
 
 
 def test_pydantic_contract_rejects_a_card_with_the_wrong_subject() -> None:
