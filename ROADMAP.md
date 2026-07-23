@@ -9,6 +9,7 @@
 - El generador editorial registra una muestra CP-SAT vs NumPy de candidatos supervivientes en diagnostics.
 - El set de tarjetas elegido se valida con CP-SAT antes de aceptar un caso.
 - La CLI renderiza puzzles a una hoja HTML imprimible para pruebas humanas.
+- El selector editorial estable está separado en `selector.py` y usa máscaras bitset con `int.bit_count()` para elegir sets completos de tarjetas.
 - Existe una ruta experimental `--cpsat-selector` basada en conteos CP-SAT capados a 2; reporta `solve_calls`/`cache_hits` y cae al selector estable cuando no encuentra set.
 
 ## Gaps principales
@@ -17,7 +18,7 @@
    `engine.py` usa `CHARACTERS` fijo y exige `rows == len(CHARACTERS)`.
 
 2. Selector basado en universo enumerado.
-   `enumerate_base_solutions()` crea `(n!)^2` asignaciones y las máscaras NumPy dependen de ese universo. Esto bloquea 8x8+ aunque CP-SAT ya resuelva esos tamaños.
+   La selección por máscaras ya es rápida para 6x6, pero `enumerate_base_solutions()` aún crea `(n!)^2` asignaciones y las máscaras dependen de ese universo. Esto bloquea 8x8+ aunque CP-SAT ya resuelva esos tamaños.
 
 3. Solver humano enumerativo.
    `human_solver.py` reutiliza `enumerate_base_solutions()`, así que la explicación/dificultad tampoco escala.
@@ -37,7 +38,7 @@
    Para cada pista candidata o conjunto de pistas: añadirlas al modelo base y preguntar si conserva la solución objetivo y cuántas alternativas deja, con límite 2. Los probes ya existen y el generador ya registra una muestra comparativa; falta reemplazar el filtro completo.
 
 3. Rehacer el selector sobre conteos CP-SAT.
-   Optimizar/cachear `--cpsat-selector` hasta hacerlo default. La aceptación del set completo ya está en CP-SAT; la búsqueda parcial ya existe experimentalmente, pero tarda demasiado y aún cae al selector estable en algunos tableros.
+   Optimizar/cachear `--cpsat-selector` hasta hacerlo default. La aceptación del set completo ya está en CP-SAT; la búsqueda parcial ya existe experimentalmente y evita shortlists de una sola familia, pero todavía puede quedarse en sets no únicos y caer al selector de máscara estable.
 
 4. Separar explicación humana de generación grande.
    Mantener explicación completa para 6x6; para 8x8+ devolver diagnóstico estructural hasta que haya propagador no enumerativo.

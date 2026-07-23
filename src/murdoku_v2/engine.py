@@ -1083,6 +1083,16 @@ def validate_card_set_with_cpsat(
     }
 
 
+def _diverse_candidate_options(candidates: list[AtomicClue], limit: int) -> list[AtomicClue]:
+    by_family: dict[str, AtomicClue] = {}
+    for candidate in candidates:
+        by_family.setdefault(candidate.family, candidate)
+    diverse = list(by_family.values())[:limit]
+    used = {candidate.key for candidate in diverse}
+    diverse.extend(candidate for candidate in candidates if candidate.key not in used)
+    return diverse[:limit]
+
+
 def select_cards_with_cpsat_counts(
     board: dict[str, Any],
     seed: int,
@@ -1103,6 +1113,10 @@ def select_cards_with_cpsat_counts(
     subjects = sorted(pools, key=lambda subject: len(pools[subject]))
     states: list[tuple[float, dict[str, list[AtomicClue]]]] = [(0.0, {})]
     cache: dict[tuple[str, ...], dict[str, Any]] = {}
+    options_by_subject = {
+        subject: _diverse_candidate_options(candidates, max_candidates_per_subject)
+        for subject, candidates in pools.items()
+    }
     report: dict[str, Any] = {
         "method": "cpsat_count_beam",
         "beam_width": beam_width,
@@ -1111,8 +1125,8 @@ def select_cards_with_cpsat_counts(
         "cache_hits": 0,
         "complete_sets_checked": 0,
         "options_per_subject": {
-            subject: min(max_candidates_per_subject, len(candidates))
-            for subject, candidates in pools.items()
+            subject: len(candidates)
+            for subject, candidates in options_by_subject.items()
         },
         "rejected": {},
     }
@@ -1142,7 +1156,7 @@ def select_cards_with_cpsat_counts(
         expanded: list[tuple[float, dict[str, list[AtomicClue]]]] = []
         remaining = len(subjects) - depth - 1
         for score, cards in states:
-            for candidate in pools[subject][:max_candidates_per_subject]:
+            for candidate in options_by_subject[subject]:
                 trial = {key: list(value) for key, value in cards.items()}
                 trial[subject] = [candidate]
                 atoms = [atom for values in trial.values() for atom in values]
@@ -1154,7 +1168,20 @@ def select_cards_with_cpsat_counts(
                 if remaining and probe_result["solution_count"] == 1:
                     reject("solved_before_all_cards")
                     continue
-                cost = score + len(atoms) * 10 + candidate.directness * 4 + candidate.complexity
+                families = [atom.family for atom in atoms]
+                if any(families.count(family) > 3 for family in set(families)):
+                    reject("family_overrepresented_partial")
+                    continue
+                previous_family_count = families[:-1].count(candidate.family)
+                cost = (
+                    score
+                    + len(atoms) * 10
+                    + previous_family_count * 9
+                    + candidate.directness * 4
+                    + candidate.complexity
+                )
+                if previous_family_count == 0:
+                    cost -= 4
                 if candidate.family in RICH_FAMILIES:
                     cost -= 1.5
                 expanded.append((cost, trial))

@@ -9,6 +9,7 @@ import numpy as np
 from murdoku_v2.clue_catalog import AtomicClue, CLUE_SPECS, atomic_mask, catalog_json
 from murdoku_v2.engine import (
     CHARACTERS,
+    _diverse_candidate_options,
     apply_victim_rule,
     board_geometry,
     build_board_arrays,
@@ -335,6 +336,20 @@ def test_global_selector_can_require_a_real_double_card() -> None:
     assert len(cards["a"]) == 2
     assert len(cards["b"]) == 1
     assert len(cards["c"]) == 1
+
+
+def test_cpsat_selector_shortlist_keeps_family_diversity() -> None:
+    candidates = [
+        AtomicClue("a", f"same-{index}", "same", {"character": "a", "i": index}, f"S{index}")
+        for index in range(4)
+    ] + [
+        AtomicClue("a", "other", "other", {"character": "a"}, "O"),
+        AtomicClue("a", "third", "third", {"character": "a"}, "T"),
+    ]
+
+    options = _diverse_candidate_options(candidates, 4)
+
+    assert [candidate.family for candidate in options] == ["same", "other", "third", "same"]
 
 
 def test_ortools_matches_generated_solutions_on_all_reference_cases() -> None:
