@@ -411,6 +411,8 @@ def test_render_writes_printable_html(tmp_path: Path) -> None:
     assert "<main>" in html
     assert 'class="card victim"' in html
     assert 'class="legend"' in html
+    assert 'object object-table' in html
+    assert 'object object-plant' in html
     assert "case-board_restaurant" in html
 
 

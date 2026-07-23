@@ -40,8 +40,14 @@ def _statement_tag(statement: dict[str, Any]) -> str:
     }.get(family, "Pista")
 
 
-def _object_initial(obj: dict[str, Any]) -> str:
-    return html.escape(str(obj.get("name") or obj.get("type") or "?")[:1].upper())
+def _object_class(obj: dict[str, Any]) -> str:
+    value = str(obj.get("type") or "object").lower().replace("_", "-")
+    return f"object-{html.escape(value)}"
+
+
+def _object_marker(obj: dict[str, Any]) -> str:
+    name = html.escape(obj.get("name") or obj.get("type") or "Objeto")
+    return f"<span class=\"object {_object_class(obj)}\" title=\"{name}\" aria-label=\"{name}\"></span>"
 
 
 def _stylesheet() -> str:
@@ -65,13 +71,7 @@ def render_html(puzzle: dict[str, Any]) -> str:
             cell_objects = objects.get((row, column), [])
             label = html.escape(room["name"]) if room_labels[room["id"]] == (row, column) else ""
             label_html = f"<span>{label}</span>" if label else ""
-            markers = "".join(
-                "<span class=\"object\" title=\"{name}\">{initial}</span>".format(
-                    name=html.escape(obj.get("name") or obj.get("type") or "Objeto"),
-                    initial=_object_initial(obj),
-                )
-                for obj in cell_objects
-            )
+            markers = "".join(_object_marker(obj) for obj in cell_objects)
             cells.append(
                 f"<td class=\"{room_classes[room['id']]}\">"
                 f"<b>{row + 1}.{column + 1}</b>{label_html}<div>{markers}</div></td>"
@@ -92,7 +92,7 @@ def render_html(puzzle: dict[str, Any]) -> str:
             f"<ol>{statements}</ol></section>"
         )
     legend = "".join(
-        f"<li><span>{_object_initial(obj)}</span>{html.escape(obj.get('name') or obj.get('type') or 'Objeto')}</li>"
+        f"<li>{_object_marker(obj)}{html.escape(obj.get('name') or obj.get('type') or 'Objeto')}</li>"
         for obj in board.get("objects", [])
     )
 

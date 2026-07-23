@@ -139,16 +139,156 @@ td div {
 }
 
 .object {
-  display: inline-grid;
-  place-items: center;
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  filter: drop-shadow(1px 2px 0 rgb(0 0 0 / 22%));
+}
+
+.object::before,
+.object::after {
+  content: "";
+  position: absolute;
+  display: block;
+}
+
+.object-table::before {
+  inset: 6px;
+  background: #9a6532;
+  border: 2px solid #4e2f17;
+  transform: rotate(45deg);
+}
+
+.object-table::after {
+  left: 10px;
+  top: 10px;
+  width: 10px;
+  height: 10px;
+  background: #d39a56;
+  transform: rotate(45deg);
+}
+
+.object-plant::before {
+  left: 9px;
+  bottom: 4px;
+  width: 12px;
+  height: 10px;
+  background: #8f4b2c;
+  border: 2px solid #4d2618;
+  border-radius: 2px 2px 6px 6px;
+}
+
+.object-plant::after {
+  left: 4px;
+  top: 2px;
   width: 22px;
-  height: 22px;
+  height: 18px;
+  background:
+    radial-gradient(circle at 45% 35%, #8ccf5f 0 31%, transparent 32%),
+    radial-gradient(circle at 28% 58%, #4f9a42 0 28%, transparent 29%),
+    radial-gradient(circle at 66% 60%, #5fb04c 0 30%, transparent 31%);
+}
+
+.object-rug::before,
+.object-carpet::before {
+  inset: 4px 2px;
+  background: #d4a34d;
+  border: 2px solid #7b4c18;
   border-radius: 999px;
-  background: var(--ink);
-  color: white;
-  font-size: 11px;
-  font-weight: 850;
-  box-shadow: 0 1px 0 rgb(255 255 255 / 45%) inset;
+}
+
+.object-rug::after,
+.object-carpet::after {
+  left: 8px;
+  top: 10px;
+  width: 14px;
+  height: 10px;
+  border: 2px solid #fff2c2;
+  border-left: 0;
+  border-right: 0;
+}
+
+.object-sofa::before {
+  left: 3px;
+  right: 3px;
+  bottom: 6px;
+  height: 14px;
+  background: #466f9f;
+  border: 2px solid #1f3551;
+  border-radius: 8px 8px 5px 5px;
+}
+
+.object-sofa::after {
+  left: 7px;
+  top: 5px;
+  width: 16px;
+  height: 12px;
+  background: #6d93c0;
+  border: 2px solid #1f3551;
+  border-bottom: 0;
+  border-radius: 7px 7px 0 0;
+}
+
+.object-chair::before {
+  left: 8px;
+  top: 8px;
+  width: 14px;
+  height: 14px;
+  background: #b77b42;
+  border: 2px solid #5c3619;
+  border-radius: 4px;
+}
+
+.object-chair::after {
+  left: 10px;
+  top: 3px;
+  width: 10px;
+  height: 8px;
+  background: #d09a5c;
+  border: 2px solid #5c3619;
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+}
+
+.object-bed::before {
+  left: 3px;
+  right: 3px;
+  bottom: 5px;
+  height: 17px;
+  background: #b65555;
+  border: 2px solid #552223;
+  border-radius: 4px;
+}
+
+.object-bed::after {
+  left: 6px;
+  top: 6px;
+  width: 10px;
+  height: 8px;
+  background: #f2eadb;
+  border: 1px solid #552223;
+  border-radius: 3px;
+}
+
+.object-tv::before {
+  left: 4px;
+  top: 5px;
+  width: 22px;
+  height: 15px;
+  background: #20242a;
+  border: 2px solid #050608;
+  border-radius: 3px;
+}
+
+.object-tv::after {
+  left: 12px;
+  bottom: 5px;
+  width: 6px;
+  height: 5px;
+  background: #050608;
+  box-shadow: 0 5px 0 3px #050608;
 }
 
 .legend {
@@ -168,16 +308,9 @@ td div {
   gap: 6px;
 }
 
-.legend span {
-  display: inline-grid;
-  place-items: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  background: var(--ink);
-  color: white;
-  font-size: 10px;
-  font-weight: 800;
+.legend .object {
+  width: 22px;
+  height: 22px;
 }
 
 main {
