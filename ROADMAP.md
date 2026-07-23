@@ -7,6 +7,7 @@
 - El generador sintético CP-SAT escribe casos 10x10+ seed-dependientes con `generate-scale`.
 - CP-SAT acepta `base_statements`, `extra_statements`, `probe_candidate_with_cpsat()` y `probe_candidates_with_cpsat()` para evaluar pistas candidatas sin crear tarjetas definitivas.
 - El generador editorial registra una muestra CP-SAT vs NumPy de candidatos supervivientes en diagnostics.
+- El set de tarjetas elegido se valida con CP-SAT antes de aceptar un caso.
 
 ## Gaps principales
 
@@ -34,7 +35,7 @@
    Para cada pista candidata o conjunto de pistas: añadirlas al modelo base y preguntar si conserva la solución objetivo y cuántas alternativas deja, con límite 2. Los probes ya existen y el generador ya registra una muestra comparativa; falta reemplazar el filtro completo.
 
 3. Rehacer el selector sobre conteos CP-SAT.
-   Mantener el beam search existente, pero cambiar su señal de `mask bitset` a `solution_count <= 2` y `target still valid`.
+   Mantener el beam search existente, pero cambiar su señal de `mask bitset` a `solution_count <= 2` y `target still valid`. La aceptación del set completo ya está en CP-SAT; falta mover la búsqueda parcial.
 
 4. Separar explicación humana de generación grande.
    Mantener explicación completa para 6x6; para 8x8+ devolver diagnóstico estructural hasta que haya propagador no enumerativo.

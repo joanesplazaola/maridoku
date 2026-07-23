@@ -82,6 +82,12 @@ def test_same_engine_generates_valid_cases_on_five_manual_boards(tmp_path: Path)
         assert diagnostics["human_solver_matches_solution"] is True
         assert diagnostics["exact_validation"]["unique"] is True
         assert diagnostics["exact_validation"]["matches_solution"] is True
+        assert diagnostics["cpsat_card_set_validation"] == {
+            "unique": True,
+            "target_valid": True,
+            "solution_count": 1,
+            "statement_count": diagnostics["total_statement_count"],
+        }
         probe = diagnostics["cpsat_candidate_probe_sample"]
         assert probe["tested"] == 5
         assert all(

@@ -1054,6 +1054,35 @@ def sample_cpsat_candidate_filter(
     }
 
 
+def validate_card_set_with_cpsat(
+    board: dict[str, Any],
+    seed: int,
+    victim_index: int,
+    target: np.ndarray,
+    cards: dict[str, list[AtomicClue]],
+) -> dict[str, Any]:
+    puzzle = _candidate_probe_puzzle(board, seed, victim_index)
+    victim_statement = puzzle["cards"][victim_index]["statements"][0]
+    expected = {
+        character["id"]: divmod(int(target[index]), board["rows"])
+        for index, character in enumerate(CHARACTERS)
+    }
+    atoms = [atom for values in cards.values() for atom in values]
+    probe = probe_candidates_with_cpsat(
+        puzzle,
+        atoms,
+        expected,
+        limit=2,
+        base_statements=(victim_statement,),
+    )
+    return {
+        "unique": probe["solution_count"] == 1,
+        "target_valid": probe["target_valid"],
+        "solution_count": probe["solution_count"],
+        "statement_count": len(atoms) + 1,
+    }
+
+
 def generate(
     board_path: Path, seed: int, output_dir: Path, selection_profile: str = "any",
     max_target_attempts: int = 24,
@@ -1083,6 +1112,7 @@ def generate(
     raw_candidate_count = 0
     chosen_selection_report: dict[str, Any] = {}
     chosen_cpsat_candidate_probe: dict[str, Any] = {}
+    chosen_cpsat_card_set_validation: dict[str, Any] = {}
     attempt_reports: list[dict[str, Any]] = []
     atomic_mask_cache: dict[str, np.ndarray] = {}
 
@@ -1177,6 +1207,13 @@ def generate(
             attempt_reports.append(attempt_report)
             continue
 
+        card_set_validation = validate_card_set_with_cpsat(board, seed, victim_index, target, cards)
+        attempt_report["cpsat_card_set_validation"] = card_set_validation
+        if not card_set_validation["unique"] or not card_set_validation["target_valid"]:
+            attempt_report["reasons"].append("cpsat_card_set_not_unique")
+            attempt_reports.append(attempt_report)
+            continue
+
         suspect_mask_over_base = np.ones(len(base_solutions), dtype=bool)
         card_masks_over_base: dict[str, np.ndarray] = {}
         for subject, atoms in cards.items():
@@ -1207,6 +1244,7 @@ def generate(
         chosen_bit_masks = bit_masks
         chosen_selection_report = selection_report
         chosen_cpsat_candidate_probe = attempt_report["cpsat_candidate_probe_sample"]
+        chosen_cpsat_card_set_validation = card_set_validation
         chosen_card_masks_over_base = card_masks_over_base
         murderer_index = candidate_murderer
         chosen_victim_without_count = victim_without_count
@@ -1432,6 +1470,7 @@ def generate(
         "formal_clue_catalog": catalog_json(),
         "global_selector": chosen_selection_report,
         "cpsat_candidate_probe_sample": chosen_cpsat_candidate_probe,
+        "cpsat_card_set_validation": chosen_cpsat_card_set_validation,
         "card_dependency_graph": dependency_graph,
         "generation_targets_attempted": len(attempt_reports),
         "generation_rejection_summary": dict(__import__("collections").Counter(
