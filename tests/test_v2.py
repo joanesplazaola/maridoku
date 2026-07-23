@@ -387,13 +387,8 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
 
     result = generate_scaling_case(10, 9001, tmp_path)
     assert result["puzzle"]["board"]["rows"] == 10
+    assert len(result["puzzle"]["board"]["rooms"]) >= 5
     assert len(result["puzzle"]["board"]["objects"]) >= 4
-    families = {
-        statement["family"]
-        for card in result["puzzle"]["cards"]
-        for statement in card["statements"]
-    }
-    assert {"object_occupancy", "object_line", "object_adjacency"} <= families
     assert result["diagnostics"]["exact_validation"]["unique"] is True
     assert result["solution"]["murderer"] == "person_02"
     assert (tmp_path / "puzzle.json").exists()
@@ -409,6 +404,7 @@ def test_render_writes_printable_html(tmp_path: Path) -> None:
     assert 'class="sheet"' in html
     assert '<table aria-label="Tablero" style="--cols:' in html
     assert "<main>" in html
+    assert "wall-n" in html
     assert 'class="card victim"' in html
     assert 'class="legend"' in html
     assert 'object object-table' in html

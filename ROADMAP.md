@@ -4,7 +4,7 @@
 
 - CP-SAT (`ortools`) es el motor exacto principal.
 - El antiguo solver artesanal se retiró en Git.
-- El generador CP-SAT escalable escribe casos 8x8+ seed-dependientes con `generate-scale`, con objetos y pistas editoriales básicas además de la cadena de unicidad.
+- El generador CP-SAT escalable escribe casos 8x8+ seed-dependientes con `generate-scale`, con varias habitaciones, paredes y objetos visibles sobre una cadena de unicidad certificada.
 - CP-SAT acepta `base_statements`, `extra_statements`, `probe_candidate_with_cpsat()` y `probe_candidates_with_cpsat()` para evaluar pistas candidatas sin crear tarjetas definitivas.
 - El generador editorial registra una muestra CP-SAT vs NumPy de candidatos supervivientes en diagnostics.
 - El set de tarjetas elegido se valida con CP-SAT antes de aceptar un caso.

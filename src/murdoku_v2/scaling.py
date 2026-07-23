@@ -23,6 +23,17 @@ OBJECT_NAMES = {
     "sofa": "Sofá",
 }
 
+ROOM_NAMES = [
+    ("library", "Biblioteca"),
+    ("lounge", "Salón"),
+    ("study", "Despacho"),
+    ("gallery", "Galería"),
+    ("dining", "Comedor"),
+    ("winter_garden", "Invernadero"),
+    ("service", "Office"),
+    ("music_room", "Sala de música"),
+]
+
 
 def _object(type_: str, row: int, column: int, suffix: str, *, occupiable: bool = False) -> dict[str, Any]:
     return {
@@ -38,6 +49,19 @@ def _object(type_: str, row: int, column: int, suffix: str, *, occupiable: bool 
     }
 
 
+def _neighbors(row: int, column: int, size: int) -> list[tuple[int, int]]:
+    return [
+        (next_row, next_column)
+        for next_row, next_column in (
+            (row, column + 1),
+            (row + 1, column),
+            (row, column - 1),
+            (row - 1, column),
+        )
+        if 0 <= next_row < size and 0 <= next_column < size
+    ]
+
+
 def _free_neighbor(row: int, column: int, size: int, occupied: set[tuple[int, int]]) -> tuple[int, int]:
     for next_row, next_column in (
         (row, column + 1),
@@ -50,18 +74,112 @@ def _free_neighbor(row: int, column: int, size: int, occupied: set[tuple[int, in
     raise RuntimeError("No hay casilla vecina libre para colocar objeto editorial.")
 
 
-def _free_in_row(row: int, size: int, occupied: set[tuple[int, int]]) -> tuple[int, int]:
-    for column in range(size):
-        if (row, column) not in occupied:
-            return row, column
-    raise RuntimeError("No hay casilla libre en la fila para colocar objeto editorial.")
+def _crime_path(size: int, start: tuple[int, int], end: tuple[int, int], blocked: set[tuple[int, int]]) -> set[tuple[int, int]]:
+    queue = [start]
+    previous: dict[tuple[int, int], tuple[int, int] | None] = {start: None}
+    for cell in queue:
+        if cell == end:
+            break
+        for neighbor in _neighbors(*cell, size):
+            if neighbor in previous or (neighbor in blocked and neighbor != end):
+                continue
+            previous[neighbor] = cell
+            queue.append(neighbor)
+    if end not in previous:
+        return {start, end}
+
+    path = {end}
+    current = end
+    while previous[current] is not None:
+        current = previous[current]
+        path.add(current)
+    return path
 
 
-def _free_in_column(column: int, size: int, occupied: set[tuple[int, int]]) -> tuple[int, int]:
+def _zone(row: int, column: int, size: int) -> int:
+    return int(row >= size // 2) * 2 + int(column >= size // 2)
+
+
+def _components(cells: set[tuple[int, int]], size: int) -> list[list[tuple[int, int]]]:
+    remaining = set(cells)
+    result: list[list[tuple[int, int]]] = []
+    while remaining:
+        start = min(remaining)
+        stack = [start]
+        remaining.remove(start)
+        component = [start]
+        while stack:
+            cell = stack.pop()
+            for neighbor in _neighbors(*cell, size):
+                if neighbor in remaining:
+                    remaining.remove(neighbor)
+                    stack.append(neighbor)
+                    component.append(neighbor)
+        result.append(sorted(component))
+    return result
+
+
+def _scaling_rooms(size: int, crime_cells: set[tuple[int, int]]) -> list[dict[str, Any]]:
+    rooms: list[dict[str, Any]] = [{
+        "id": "crime_room",
+        "name": "Sala del crimen",
+        "label_anchor": list(min(crime_cells)),
+        "cells": sorted(crime_cells),
+    }]
+    by_zone: dict[int, set[tuple[int, int]]] = {}
     for row in range(size):
-        if (row, column) not in occupied:
-            return row, column
-    raise RuntimeError("No hay casilla libre en la columna para colocar objeto editorial.")
+        for column in range(size):
+            cell = (row, column)
+            if cell not in crime_cells:
+                by_zone.setdefault(_zone(row, column, size), set()).add(cell)
+
+    room_index = 0
+    for zone_cells in by_zone.values():
+        for component in _components(zone_cells, size):
+            room_id, name = ROOM_NAMES[room_index % len(ROOM_NAMES)]
+            suffix = "" if room_index < len(ROOM_NAMES) else f"_{room_index}"
+            rooms.append({
+                "id": f"{room_id}{suffix}",
+                "name": name,
+                "label_anchor": list(component[len(component) // 2]),
+                "cells": component,
+            })
+            room_index += 1
+    return rooms
+
+
+def _room_at(rooms: list[dict[str, Any]]) -> dict[tuple[int, int], str]:
+    return {
+        tuple(cell): room["id"]
+        for room in rooms
+        for cell in room["cells"]
+    }
+
+
+def _free_in_room_row(
+    row: int, room_id: str, rooms: list[dict[str, Any]], occupied: set[tuple[int, int]],
+) -> tuple[int, int]:
+    for room in rooms:
+        if room["id"] != room_id:
+            continue
+        for cell_row, cell_column in room["cells"]:
+            cell = (cell_row, cell_column)
+            if cell_row == row and cell not in occupied:
+                return cell
+    raise RuntimeError("No hay casilla libre en la fila y habitación para colocar objeto editorial.")
+
+
+def _free_in_room_column(
+    column: int, room_id: str, rooms: list[dict[str, Any]], occupied: set[tuple[int, int]],
+) -> tuple[int, int]:
+    for room in rooms:
+        if room["id"] != room_id:
+            continue
+        for cell_row, cell_column in room["cells"]:
+            cell = (cell_row, cell_column)
+            if cell_column == column and cell not in occupied:
+                return cell
+    raise RuntimeError("No hay casilla libre en la columna y habitación para colocar objeto editorial.")
 
 
 def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
@@ -97,11 +215,28 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
         (row_perm[0], column_perm[0]),
         (row_perm[murderer_index], column_perm[murderer_index]),
     }
-    other_cells = {(row, column) for row in range(size) for column in range(size)} - crime_cells
+    crime_room_cells = _crime_path(
+        size,
+        (row_perm[0], column_perm[0]),
+        (row_perm[1], column_perm[1]),
+        solution_cells - crime_cells,
+    )
+    rooms = _scaling_rooms(size, crime_room_cells)
+    room_at = _room_at(rooms)
     plant_cell = (row_perm[3 % size], column_perm[3 % size])
-    blocked_for_objects = set(solution_cells) | crime_cells
-    table_cell = _free_in_row(row_perm[4 % size], size, blocked_for_objects | {plant_cell})
-    rug_cell = _free_in_column(column_perm[5 % size], size, blocked_for_objects | {plant_cell, table_cell})
+    blocked_for_objects = set(solution_cells) | crime_room_cells
+    table_cell = _free_in_room_row(
+        row_perm[4 % size],
+        room_at[(row_perm[4 % size], column_perm[4 % size])],
+        rooms,
+        blocked_for_objects | {plant_cell},
+    )
+    rug_cell = _free_in_room_column(
+        column_perm[5 % size],
+        room_at[(row_perm[5 % size], column_perm[5 % size])],
+        rooms,
+        blocked_for_objects | {plant_cell, table_cell},
+    )
     sofa_cell = _free_neighbor(row_perm[6 % size], column_perm[6 % size], size, blocked_for_objects | {plant_cell, table_cell, rug_cell})
     object_cells = {
         "plant": plant_cell,
@@ -117,12 +252,9 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
         "room_groups": [{
             "id": "investigation_area",
             "name": "Zona de investigación",
-            "rooms": ["rest"],
+            "rooms": [room["id"] for room in rooms if room["id"] != "crime_room"],
         }],
-        "rooms": [
-            {"id": "crime_room", "name": "Sala del crimen", "cells": sorted(crime_cells)},
-            {"id": "rest", "name": "Ala de invitados", "cells": sorted(other_cells)},
-        ],
+        "rooms": rooms,
         "objects": [
             _object("plant", *object_cells["plant"], "gallery", occupiable=True),
             _object("table", *object_cells["table"], "study"),
@@ -193,38 +325,6 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
                     ),
                 },
             ]
-            if index == 3:
-                statements[0] = {
-                    "id": f"card-{character['id']}-statement-1",
-                    "type": "unique_on_object",
-                    "family": "object_occupancy",
-                    "args": {"character": character["id"], "object_type": "plant"},
-                    "text": f"{character['name']} era la única persona sobre una planta.",
-                }
-            elif index == 4:
-                statements[0] = {
-                    "id": f"card-{character['id']}-statement-1",
-                    "type": "object_same_row_in_room",
-                    "family": "object_line",
-                    "args": {"character": character["id"], "object_type": "table"},
-                    "text": f"Había una mesa en la misma fila que {character['name']}, dentro de su habitación.",
-                }
-            elif index == 5:
-                statements[1] = {
-                    "id": f"card-{character['id']}-statement-2",
-                    "type": "object_same_column_in_room",
-                    "family": "object_line",
-                    "args": {"character": character["id"], "object_type": "rug"},
-                    "text": f"Había una alfombra en la misma columna que {character['name']}, dentro de su habitación.",
-                }
-            elif index == 6:
-                statements[1] = {
-                    "id": f"card-{character['id']}-statement-2",
-                    "type": "adjacent_object",
-                    "family": "object_adjacency",
-                    "args": {"character": character["id"], "object_type": "sofa"},
-                    "text": f"{character['name']} estaba junto a un sofá.",
-                }
         cards.append({
             "id": f"card-{character['id']}",
             "character": character["id"],

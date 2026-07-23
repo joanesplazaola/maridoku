@@ -68,12 +68,22 @@ def render_html(puzzle: dict[str, Any]) -> str:
         cells = []
         for column in range(board["columns"]):
             room = rooms[(row, column)]
+            wall_classes = [
+                name
+                for name, neighbor in {
+                    "wall-n": (row - 1, column),
+                    "wall-s": (row + 1, column),
+                    "wall-w": (row, column - 1),
+                    "wall-e": (row, column + 1),
+                }.items()
+                if neighbor not in rooms or rooms[neighbor]["id"] != room["id"]
+            ]
             cell_objects = objects.get((row, column), [])
             label = html.escape(room["name"]) if room_labels[room["id"]] == (row, column) else ""
             label_html = f"<span>{label}</span>" if label else ""
             markers = "".join(_object_marker(obj) for obj in cell_objects)
             cells.append(
-                f"<td class=\"{room_classes[room['id']]}\">"
+                f"<td class=\"{room_classes[room['id']]} {' '.join(wall_classes)}\">"
                 f"<b>{row + 1}.{column + 1}</b>{label_html}<div>{markers}</div></td>"
             )
         rows.append(f"<tr>{''.join(cells)}</tr>")

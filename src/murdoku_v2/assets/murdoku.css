@@ -89,6 +89,22 @@ td {
   overflow: hidden;
 }
 
+.wall-n {
+  border-top: 3px solid var(--line);
+}
+
+.wall-s {
+  border-bottom: 3px solid var(--line);
+}
+
+.wall-w {
+  border-left: 3px solid var(--line);
+}
+
+.wall-e {
+  border-right: 3px solid var(--line);
+}
+
 td b {
   font-size: 10px;
   color: rgb(24 32 38 / 48%);
