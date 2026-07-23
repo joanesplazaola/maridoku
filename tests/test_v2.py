@@ -81,6 +81,14 @@ def test_same_engine_generates_valid_cases_on_five_manual_boards(tmp_path: Path)
         assert diagnostics["human_solver_matches_solution"] is True
         assert diagnostics["exact_validation"]["unique"] is True
         assert diagnostics["exact_validation"]["matches_solution"] is True
+        probe = diagnostics["cpsat_candidate_probe_sample"]
+        assert probe["tested"] == 5
+        assert all(
+            item["target_valid"] is True
+            and item["cpsat_solution_count_cap2"] == item["numpy_solution_count_cap2"]
+            for items in probe["by_subject"].values()
+            for item in items
+        )
         assert diagnostics["formal_clue_catalog_size"] == 22
         assert diagnostics["global_selector"]["method"].startswith("global_")
         assert (output / "generation_report.json").exists()

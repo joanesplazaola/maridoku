@@ -952,6 +952,82 @@ def probe_candidate_with_cpsat(
     }
 
 
+def _candidate_probe_puzzle(board: dict[str, Any], seed: int, victim_index: int) -> dict[str, Any]:
+    characters = [
+        {**character, "role": "victim" if index == victim_index else "suspect"}
+        for index, character in enumerate(CHARACTERS)
+    ]
+    fallback_room = board["rooms"][0]["id"]
+    return {
+        "schema_version": 8,
+        "id": f"candidate-probe-{board['id']}-{seed}",
+        "seed": seed,
+        "board": board,
+        "characters": characters,
+        "victim": CHARACTERS[victim_index]["id"],
+        "cards": [
+            {
+                "id": f"card-{character['id']}",
+                "character": character["id"],
+                "role": character["role"],
+                "statements": [{
+                    "id": f"card-{character['id']}-statement-1",
+                    "type": "victim_rule" if index == victim_index else "room",
+                    "family": "murder_rule" if index == victim_index else "room_exact",
+                    "args": (
+                        {"character": character["id"]}
+                        if index == victim_index
+                        else {"character": character["id"], "room": fallback_room}
+                    ),
+                    "text": "",
+                }],
+            }
+            for index, character in enumerate(characters)
+        ],
+    }
+
+
+def sample_cpsat_candidate_filter(
+    board: dict[str, Any],
+    seed: int,
+    victim_index: int,
+    target: np.ndarray,
+    pools: dict[str, list[AtomicClue]],
+    masks: dict[str, np.ndarray],
+    *,
+    sample_per_subject: int = 1,
+) -> dict[str, Any]:
+    puzzle = _candidate_probe_puzzle(board, seed, victim_index)
+    victim_statement = puzzle["cards"][victim_index]["statements"][0]
+    expected = {
+        character["id"]: divmod(int(target[index]), board["rows"])
+        for index, character in enumerate(CHARACTERS)
+    }
+    by_subject: dict[str, list[dict[str, Any]]] = {}
+    for subject, candidates in pools.items():
+        by_subject[subject] = []
+        for candidate in candidates[:sample_per_subject]:
+            numpy_count = int(np.count_nonzero(masks[candidate.key]))
+            probe = probe_candidate_with_cpsat(
+                puzzle,
+                candidate,
+                expected,
+                limit=2,
+                base_statements=(victim_statement,),
+            )
+            by_subject[subject].append({
+                "candidate": candidate.key,
+                "numpy_solution_count_cap2": min(2, numpy_count),
+                "cpsat_solution_count_cap2": probe["solution_count"],
+                "target_valid": probe["target_valid"],
+            })
+    return {
+        "sample_per_subject": sample_per_subject,
+        "tested": sum(len(items) for items in by_subject.values()),
+        "by_subject": by_subject,
+    }
+
+
 def generate(
     board_path: Path, seed: int, output_dir: Path, selection_profile: str = "any",
     max_target_attempts: int = 24,
@@ -980,6 +1056,7 @@ def generate(
     chosen_card_masks_over_base: dict[str, np.ndarray] = {}
     raw_candidate_count = 0
     chosen_selection_report: dict[str, Any] = {}
+    chosen_cpsat_candidate_probe: dict[str, Any] = {}
     attempt_reports: list[dict[str, Any]] = []
     atomic_mask_cache: dict[str, np.ndarray] = {}
 
@@ -1094,12 +1171,16 @@ def generate(
 
         attempt_report["status"] = "accepted"
         attempt_report["solutions_without_victim_card"] = victim_without_count
+        attempt_report["cpsat_candidate_probe_sample"] = sample_cpsat_candidate_filter(
+            board, seed, victim_index, target, pools, masks
+        )
         attempt_reports.append(attempt_report)
         chosen_cards = cards
         chosen_target_index = target_index
         chosen_masks = masks
         chosen_bit_masks = bit_masks
         chosen_selection_report = selection_report
+        chosen_cpsat_candidate_probe = attempt_report["cpsat_candidate_probe_sample"]
         chosen_card_masks_over_base = card_masks_over_base
         murderer_index = candidate_murderer
         chosen_victim_without_count = victim_without_count
@@ -1324,6 +1405,7 @@ def generate(
         "formal_clue_catalog_size": len(CLUE_SPECS),
         "formal_clue_catalog": catalog_json(),
         "global_selector": chosen_selection_report,
+        "cpsat_candidate_probe_sample": chosen_cpsat_candidate_probe,
         "card_dependency_graph": dependency_graph,
         "generation_targets_attempted": len(attempt_reports),
         "generation_rejection_summary": dict(__import__("collections").Counter(

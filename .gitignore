@@ -20,6 +20,7 @@ cpsat_benchmark/
 cpsat_benchmark_local/
 cpsat_benchmark_uv/
 generated_scale*/
+generated_probe_*/
 scaling_10x10_*.json
 scaling_cpsat_*.json
 solver_comparison_uv_cpsat.json
