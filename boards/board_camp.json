@@ -1,0 +1,417 @@
+{
+  "id": "board_camp",
+  "name": "Campamento junto al lago",
+  "rows": 6,
+  "columns": 6,
+  "room_groups": [
+    {
+      "id": "ana_camp",
+      "name": "Zona de Ana",
+      "clue_label": "la zona de Ana",
+      "rooms": [
+        "cabin_a"
+      ]
+    },
+    {
+      "id": "bruno_camp",
+      "name": "Zona de Bruno",
+      "clue_label": "la zona de Bruno",
+      "rooms": [
+        "cabin_b"
+      ]
+    },
+    {
+      "id": "camp_common",
+      "name": "Zonas comunes del campamento",
+      "clue_label": "una zona común del campamento",
+      "rooms": [
+        "woods",
+        "trail",
+        "lake",
+        "firepit",
+        "meadow",
+        "dock",
+        "tent"
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "id": "cabin_a",
+      "name": "Cabaña de Ana",
+      "label_anchor": [
+        1,
+        0
+      ],
+      "cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "woods",
+      "name": "Bosque",
+      "label_anchor": [
+        0,
+        3
+      ],
+      "cells": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    },
+    {
+      "id": "cabin_b",
+      "name": "Cabaña de Bruno",
+      "label_anchor": [
+        1,
+        5
+      ],
+      "cells": [
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          5
+        ]
+      ]
+    },
+    {
+      "id": "trail",
+      "name": "Sendero",
+      "label_anchor": [
+        2,
+        1
+      ],
+      "cells": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ]
+      ]
+    },
+    {
+      "id": "lake",
+      "name": "Lago",
+      "label_anchor": [
+        3,
+        0
+      ],
+      "cells": [
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "firepit",
+      "name": "Hoguera",
+      "label_anchor": [
+        3,
+        3
+      ],
+      "cells": [
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ]
+    },
+    {
+      "id": "meadow",
+      "name": "Pradera",
+      "label_anchor": [
+        5,
+        5
+      ],
+      "cells": [
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          5
+        ]
+      ]
+    },
+    {
+      "id": "dock",
+      "name": "Embarcadero",
+      "label_anchor": [
+        5,
+        0
+      ],
+      "cells": [
+        [
+          4,
+          0
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "tent",
+      "name": "Comedor cubierto",
+      "label_anchor": [
+        5,
+        2
+      ],
+      "cells": [
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          3
+        ]
+      ]
+    }
+  ],
+  "objects": [
+    {
+      "id": "bed-ca",
+      "type": "bed",
+      "name": "Cama",
+      "cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false,
+      "orientation": "horizontal"
+    },
+    {
+      "id": "bed-cb",
+      "type": "bed",
+      "name": "Cama",
+      "cells": [
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false,
+      "orientation": "horizontal"
+    },
+    {
+      "id": "plant-woods",
+      "type": "plant",
+      "name": "Planta",
+      "cells": [
+        [
+          0,
+          2
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "table-fire",
+      "type": "table",
+      "name": "Mesa",
+      "cells": [
+        [
+          2,
+          2
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "chair-fire",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [
+        [
+          3,
+          2
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "rug-tent",
+      "type": "rug",
+      "name": "Alfombra",
+      "cells": [
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "layer": "floor",
+      "occupiable": true,
+      "blocks_character": false,
+      "shape": "1x2"
+    },
+    {
+      "id": "chair-tent",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [
+        [
+          4,
+          2
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "sofa-meadow",
+      "type": "sofa",
+      "name": "Banco",
+      "cells": [
+        [
+          4,
+          4
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "plant-meadow",
+      "type": "plant",
+      "name": "Planta",
+      "cells": [
+        [
+          4,
+          5
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    }
+  ]
+}

@@ -1,0 +1,445 @@
+{
+  "id": "board_restaurant",
+  "name": "Restaurante y terraza",
+  "rows": 6,
+  "columns": 6,
+  "room_groups": [
+    {
+      "id": "restaurant_staff",
+      "name": "Zonas de trabajo",
+      "clue_label": "una zona de trabajo del restaurante",
+      "rooms": [
+        "kitchen",
+        "prep",
+        "pantry"
+      ]
+    },
+    {
+      "id": "restaurant_guests",
+      "name": "Zonas para clientes",
+      "clue_label": "una zona para clientes",
+      "rooms": [
+        "bar",
+        "dining",
+        "entry",
+        "restroom",
+        "terrace",
+        "garden"
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "id": "kitchen",
+      "name": "Cocina",
+      "label_anchor": [
+        2,
+        0
+      ],
+      "cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "pantry",
+      "name": "Despensa",
+      "label_anchor": [
+        0,
+        2
+      ],
+      "cells": [
+        [
+          0,
+          2
+        ]
+      ]
+    },
+    {
+      "id": "bar",
+      "name": "Barra",
+      "label_anchor": [
+        1,
+        5
+      ],
+      "cells": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          5
+        ]
+      ]
+    },
+    {
+      "id": "prep",
+      "name": "Zona de preparación",
+      "label_anchor": [
+        2,
+        1
+      ],
+      "cells": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "dining",
+      "name": "Comedor",
+      "label_anchor": [
+        3,
+        4
+      ],
+      "cells": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ]
+    },
+    {
+      "id": "entry",
+      "name": "Entrada",
+      "label_anchor": [
+        3,
+        0
+      ],
+      "cells": [
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "restroom",
+      "name": "Aseos",
+      "label_anchor": [
+        3,
+        5
+      ],
+      "cells": [
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          5
+        ]
+      ]
+    },
+    {
+      "id": "terrace",
+      "name": "Terraza",
+      "label_anchor": [
+        4,
+        2
+      ],
+      "cells": [
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "garden",
+      "name": "Jardín",
+      "label_anchor": [
+        5,
+        5
+      ],
+      "cells": [
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          5
+        ]
+      ]
+    }
+  ],
+  "objects": [
+    {
+      "id": "table-kitchen",
+      "type": "table",
+      "name": "Mesa",
+      "cells": [
+        [
+          0,
+          0
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "plant-kitchen",
+      "type": "plant",
+      "name": "Planta",
+      "cells": [
+        [
+          1,
+          0
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "rug-bar",
+      "type": "rug",
+      "name": "Alfombra",
+      "cells": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "layer": "floor",
+      "occupiable": true,
+      "blocks_character": false,
+      "shape": "1x2"
+    },
+    {
+      "id": "chair-bar",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [
+        [
+          0,
+          4
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "sofa-bar",
+      "type": "sofa",
+      "name": "Sofá",
+      "cells": [
+        [
+          0,
+          5
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "table-dining",
+      "type": "table",
+      "name": "Mesa",
+      "cells": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "chair-dining-a",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [
+        [
+          1,
+          4
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "chair-dining-b",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [
+        [
+          3,
+          2
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "rug-terrace",
+      "type": "rug",
+      "name": "Alfombra",
+      "cells": [
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          1
+        ]
+      ],
+      "layer": "floor",
+      "occupiable": true,
+      "blocks_character": false,
+      "shape": "2x2"
+    },
+    {
+      "id": "chair-terrace",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [
+        [
+          4,
+          1
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "plant-garden",
+      "type": "plant",
+      "name": "Planta",
+      "cells": [
+        [
+          4,
+          5
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    }
+  ]
+}

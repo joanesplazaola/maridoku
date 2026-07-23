@@ -1,0 +1,17 @@
+{
+  "version": "2.2.0a1",
+  "backend": "Google OR-Tools CP-SAT",
+  "implementation_complete": true,
+  "runtime_executed": false,
+  "runtime_status": "blocked",
+  "blocker": "OR-Tools no estaba disponible en el índice de paquetes del entorno y las descargas binarias externas estaban bloqueadas.",
+  "tests": {
+    "passed": 10,
+    "skipped": 6,
+    "failed": 0,
+    "skipped_reason": "Los tests CP-SAT requieren el paquete ortools."
+  },
+  "compiled": true,
+  "ortools_pin": "9.15.6755",
+  "benchmark_result": "cpsat_benchmark_current/benchmark_blocked.json"
+}

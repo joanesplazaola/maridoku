@@ -1,0 +1,454 @@
+{
+  "id": "board_hotel_corridor",
+  "name": "Hotel con pasillo",
+  "rows": 6,
+  "columns": 6,
+  "room_groups": [
+    {
+      "id": "guest_rooms",
+      "name": "Habitaciones de huéspedes",
+      "clue_label": "una habitación de huéspedes",
+      "rooms": [
+        "h101",
+        "h102",
+        "h103"
+      ]
+    },
+    {
+      "id": "hotel_common",
+      "name": "Zonas comunes",
+      "clue_label": "una zona común del hotel",
+      "rooms": [
+        "corridor",
+        "lobby",
+        "lounge",
+        "dining",
+        "courtyard"
+      ]
+    },
+    {
+      "id": "hotel_staff",
+      "name": "Zonas de personal",
+      "clue_label": "una zona reservada al personal",
+      "rooms": [
+        "service"
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "id": "h101",
+      "name": "Habitación 101",
+      "label_anchor": [
+        1,
+        0
+      ],
+      "cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "h102",
+      "name": "Habitación 102",
+      "label_anchor": [
+        1,
+        3
+      ],
+      "cells": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    },
+    {
+      "id": "h103",
+      "name": "Habitación 103",
+      "label_anchor": [
+        1,
+        4
+      ],
+      "cells": [
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          5
+        ]
+      ]
+    },
+    {
+      "id": "corridor",
+      "name": "Pasillo del hotel",
+      "label_anchor": [
+        2,
+        1
+      ],
+      "cells": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          2
+        ]
+      ]
+    },
+    {
+      "id": "lobby",
+      "name": "Recepción",
+      "label_anchor": [
+        2,
+        0
+      ],
+      "cells": [
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "lounge",
+      "name": "Salón común",
+      "label_anchor": [
+        3,
+        3
+      ],
+      "cells": [
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          3
+        ]
+      ]
+    },
+    {
+      "id": "service",
+      "name": "Zona de servicio",
+      "label_anchor": [
+        4,
+        5
+      ],
+      "cells": [
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          5
+        ]
+      ]
+    },
+    {
+      "id": "dining",
+      "name": "Comedor",
+      "label_anchor": [
+        5,
+        1
+      ],
+      "cells": [
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "courtyard",
+      "name": "Patio interior",
+      "label_anchor": [
+        5,
+        5
+      ],
+      "cells": [
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          5
+        ]
+      ]
+    }
+  ],
+  "objects": [
+    {
+      "id": "bed-101",
+      "type": "bed",
+      "name": "Cama",
+      "cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false,
+      "orientation": "horizontal"
+    },
+    {
+      "id": "bed-102",
+      "type": "bed",
+      "name": "Cama",
+      "cells": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false,
+      "orientation": "horizontal"
+    },
+    {
+      "id": "bed-103",
+      "type": "bed",
+      "name": "Cama",
+      "cells": [
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false,
+      "orientation": "horizontal"
+    },
+    {
+      "id": "rug-lounge",
+      "type": "rug",
+      "name": "Alfombra",
+      "cells": [
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ]
+      ],
+      "layer": "floor",
+      "occupiable": true,
+      "blocks_character": false,
+      "shape": "1x2"
+    },
+    {
+      "id": "chair-lounge",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [
+        [
+          2,
+          3
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "sofa-lounge",
+      "type": "sofa",
+      "name": "Sofá",
+      "cells": [
+        [
+          2,
+          5
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "tv-lobby",
+      "type": "tv",
+      "name": "Televisión",
+      "cells": [
+        [
+          3,
+          0
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "table-dining",
+      "type": "table",
+      "name": "Mesa",
+      "cells": [
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "chair-dining",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [
+        [
+          5,
+          0
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "plant-court",
+      "type": "plant",
+      "name": "Planta",
+      "cells": [
+        [
+          4,
+          4
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "table-service",
+      "type": "table",
+      "name": "Mesa",
+      "cells": [
+        [
+          3,
+          5
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    }
+  ]
+}

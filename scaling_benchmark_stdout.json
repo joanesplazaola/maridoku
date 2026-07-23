@@ -1,0 +1,63 @@
+{
+  "solver": "backtracking",
+  "repetitions": 3,
+  "results": [
+    {
+      "size": 6,
+      "solver": "backtracking",
+      "available": true,
+      "unique": true,
+      "matches_expected": true,
+      "elapsed_ms_min": 3.248,
+      "elapsed_ms_mean": 3.446,
+      "elapsed_ms_max": 3.679,
+      "nodes": 6,
+      "backtracks": 0,
+      "pruned": 0,
+      "message": null
+    },
+    {
+      "size": 8,
+      "solver": "backtracking",
+      "available": true,
+      "unique": true,
+      "matches_expected": true,
+      "elapsed_ms_min": 18.21,
+      "elapsed_ms_mean": 18.314,
+      "elapsed_ms_max": 18.427,
+      "nodes": 8,
+      "backtracks": 0,
+      "pruned": 0,
+      "message": null
+    },
+    {
+      "size": 10,
+      "solver": "backtracking",
+      "available": true,
+      "unique": true,
+      "matches_expected": true,
+      "elapsed_ms_min": 71.971,
+      "elapsed_ms_mean": 72.482,
+      "elapsed_ms_max": 72.893,
+      "nodes": 10,
+      "backtracks": 0,
+      "pruned": 0,
+      "message": null
+    },
+    {
+      "size": 12,
+      "solver": "backtracking",
+      "available": true,
+      "unique": true,
+      "matches_expected": true,
+      "elapsed_ms_min": 222.718,
+      "elapsed_ms_mean": 224.225,
+      "elapsed_ms_max": 225.777,
+      "nodes": 12,
+      "backtracks": 0,
+      "pruned": 0,
+      "message": null
+    }
+  ],
+  "all_available_cases_unique": true
+}

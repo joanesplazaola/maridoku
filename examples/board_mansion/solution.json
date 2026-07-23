@@ -1,0 +1,39 @@
+{
+  "puzzle_id": "case-board_mansion-5002",
+  "victim": "fabio",
+  "victim_name": "Fabio",
+  "positions": {
+    "alicia": {
+      "row": 5,
+      "column": 0,
+      "room": "garden"
+    },
+    "bruno": {
+      "row": 3,
+      "column": 2,
+      "room": "conservatory"
+    },
+    "carla": {
+      "row": 2,
+      "column": 4,
+      "room": "hall"
+    },
+    "diego": {
+      "row": 1,
+      "column": 5,
+      "room": "bedroom"
+    },
+    "elena": {
+      "row": 0,
+      "column": 3,
+      "room": "ballroom"
+    },
+    "fabio": {
+      "row": 4,
+      "column": 1,
+      "room": "hall"
+    }
+  },
+  "murderer": "carla",
+  "murderer_name": "Carla"
+}

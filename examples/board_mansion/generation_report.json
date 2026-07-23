@@ -1,0 +1,79 @@
+{
+  "puzzle_id": "case-board_mansion-5002",
+  "board": "board_mansion",
+  "seed": 5002,
+  "selection_profile": "any",
+  "max_target_attempts": 8,
+  "accepted_target_index": 27152,
+  "targets": [
+    {
+      "attempt": 1,
+      "target_index": 27152,
+      "status": "accepted",
+      "reasons": [],
+      "raw_candidate_count": 213,
+      "deduplicated_candidates_per_subject": {
+        "alicia": 39,
+        "bruno": 42,
+        "carla": 41,
+        "diego": 39,
+        "elena": 44
+      },
+      "selector": {
+        "method": "global_exact_single_card_dfs",
+        "subject_orders_tried": 1,
+        "beam_width": 100,
+        "states_expanded": 6,
+        "complete_sets_checked": 1,
+        "options_per_subject": {},
+        "rejected": {},
+        "accepted_score": 519.2,
+        "selected_families": {
+          "room_population": 1,
+          "object_adjacency": 1,
+          "relative_distance": 1,
+          "object_line": 1,
+          "relative_order": 1
+        },
+        "selected_types": {
+          "alone_in_room": 1,
+          "adjacent_object": 1,
+          "relative_column_distance": 1,
+          "object_same_column_in_room": 1,
+          "relative_row_order": 1
+        }
+      },
+      "solutions_without_victim_card": 2
+    }
+  ],
+  "summary": {
+    "targets_attempted": 1,
+    "targets_rejected": 0,
+    "accepted": true,
+    "rejection_reasons": {},
+    "selector": {
+      "method": "global_exact_single_card_dfs",
+      "subject_orders_tried": 1,
+      "beam_width": 100,
+      "states_expanded": 6,
+      "complete_sets_checked": 1,
+      "options_per_subject": {},
+      "rejected": {},
+      "accepted_score": 519.2,
+      "selected_families": {
+        "room_population": 1,
+        "object_adjacency": 1,
+        "relative_distance": 1,
+        "object_line": 1,
+        "relative_order": 1
+      },
+      "selected_types": {
+        "alone_in_room": 1,
+        "adjacent_object": 1,
+        "relative_column_distance": 1,
+        "object_same_column_in_room": 1,
+        "relative_row_order": 1
+      }
+    }
+  }
+}

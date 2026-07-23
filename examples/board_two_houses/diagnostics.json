@@ -1,0 +1,504 @@
+{
+  "puzzle_id": "case-board_two_houses-5004",
+  "selection_profile": "any",
+  "base_assignment_count": 129600,
+  "valid_after_victim_card": 39840,
+  "raw_candidate_count_for_selected_target": 212,
+  "atomic_mask_cache_size": 212,
+  "room_count": 8,
+  "room_group_count": 3,
+  "interior_cells_not_adjacent_to_wall": 0,
+  "room_corner_cells": 27,
+  "card_count": 6,
+  "total_statement_count": 6,
+  "double_card_count": 0,
+  "final_solution_count": 1,
+  "all_cards_necessary": true,
+  "all_suspect_statements_necessary": true,
+  "family_distribution": {
+    "object_line": 1,
+    "room_population": 1,
+    "relative_distance": 1,
+    "object_occupancy": 1,
+    "room_choice": 1
+  },
+  "type_distribution": {
+    "object_same_row_in_room": 1,
+    "alone_in_room": 1,
+    "relative_column_distance": 1,
+    "unique_on_object": 1,
+    "room_disjunction": 1
+  },
+  "card_progression": [
+    {
+      "card_id": "card-carla",
+      "character": "carla",
+      "role": "victim",
+      "statements": 1,
+      "solutions_before": 129600,
+      "solutions_after": 39840,
+      "information_gain_bits": 1.702
+    },
+    {
+      "card_id": "card-fabio",
+      "character": "fabio",
+      "role": "suspect",
+      "statements": 1,
+      "solutions_before": 39840,
+      "solutions_after": 3168,
+      "information_gain_bits": 3.653
+    },
+    {
+      "card_id": "card-diego",
+      "character": "diego",
+      "role": "suspect",
+      "statements": 1,
+      "solutions_before": 3168,
+      "solutions_after": 372,
+      "information_gain_bits": 3.09
+    },
+    {
+      "card_id": "card-bruno",
+      "character": "bruno",
+      "role": "suspect",
+      "statements": 1,
+      "solutions_before": 372,
+      "solutions_after": 40,
+      "information_gain_bits": 3.217
+    },
+    {
+      "card_id": "card-elena",
+      "character": "elena",
+      "role": "suspect",
+      "statements": 1,
+      "solutions_before": 40,
+      "solutions_after": 5,
+      "information_gain_bits": 3.0
+    },
+    {
+      "card_id": "card-alicia",
+      "character": "alicia",
+      "role": "suspect",
+      "statements": 1,
+      "solutions_before": 5,
+      "solutions_after": 1,
+      "information_gain_bits": 2.322
+    }
+  ],
+  "card_necessity": [
+    {
+      "card_id": "card-carla",
+      "character": "carla",
+      "solutions_without_card": 4,
+      "necessary": true
+    },
+    {
+      "card_id": "card-bruno",
+      "character": "bruno",
+      "solutions_without_card": 6,
+      "necessary": true
+    },
+    {
+      "card_id": "card-alicia",
+      "character": "alicia",
+      "solutions_without_card": 5,
+      "necessary": true
+    },
+    {
+      "card_id": "card-elena",
+      "character": "elena",
+      "solutions_without_card": 8,
+      "necessary": true
+    },
+    {
+      "card_id": "card-fabio",
+      "character": "fabio",
+      "solutions_without_card": 16,
+      "necessary": true
+    },
+    {
+      "card_id": "card-diego",
+      "character": "diego",
+      "solutions_without_card": 12,
+      "necessary": true
+    }
+  ],
+  "statement_necessity": [
+    {
+      "statement_id": "card-bruno-statement-1",
+      "character": "bruno",
+      "type": "object_same_row_in_room",
+      "family": "object_line",
+      "solutions_without_statement": 6,
+      "necessary": true
+    },
+    {
+      "statement_id": "card-alicia-statement-1",
+      "character": "alicia",
+      "type": "alone_in_room",
+      "family": "room_population",
+      "solutions_without_statement": 5,
+      "necessary": true
+    },
+    {
+      "statement_id": "card-elena-statement-1",
+      "character": "elena",
+      "type": "relative_column_distance",
+      "family": "relative_distance",
+      "solutions_without_statement": 8,
+      "necessary": true
+    },
+    {
+      "statement_id": "card-fabio-statement-1",
+      "character": "fabio",
+      "type": "unique_on_object",
+      "family": "object_occupancy",
+      "solutions_without_statement": 16,
+      "necessary": true
+    },
+    {
+      "statement_id": "card-diego-statement-1",
+      "character": "diego",
+      "type": "room_disjunction",
+      "family": "room_choice",
+      "solutions_without_statement": 12,
+      "necessary": true
+    }
+  ],
+  "formal_clue_catalog_size": 22,
+  "formal_clue_catalog": [
+    {
+      "type": "room",
+      "family": "room_exact",
+      "summary": "El personaje está en una habitación concreta.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "exact_row",
+      "family": "coordinate",
+      "summary": "El personaje está en una fila concreta.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "exact_column",
+      "family": "coordinate",
+      "summary": "El personaje está en una columna concreta.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "room_population",
+      "family": "room_population",
+      "summary": "Cantidad total de personas en su habitación.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "alone_in_room",
+      "family": "room_population",
+      "summary": "Está solo en una habitación concreta.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "room_gender_count",
+      "family": "room_composition",
+      "summary": "Cantidad de un género en su habitación, incluyéndole.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "companion_gender_count",
+      "family": "room_companion",
+      "summary": "Cantidad de acompañantes de un género, excluyéndole.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "alone_with_gender",
+      "family": "room_companion",
+      "summary": "Está únicamente con una persona de un género.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "not_adjacent_to_wall",
+      "family": "room_geometry",
+      "summary": "No toca ninguna pared de su habitación.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "in_room_corner",
+      "family": "room_geometry",
+      "summary": "Está en una esquina de su habitación.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "in_room_group",
+      "family": "room_group",
+      "summary": "Está en una habitación de un grupo jerárquico.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "room_disjunction",
+      "family": "room_choice",
+      "summary": "Está en una de dos habitaciones.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "unique_on_object",
+      "family": "object_occupancy",
+      "summary": "Es la única persona situada sobre un tipo de objeto.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "object_same_row_in_room",
+      "family": "object_line",
+      "summary": "Comparte fila y habitación con un tipo de objeto.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "object_same_column_in_room",
+      "family": "object_line",
+      "summary": "Comparte columna y habitación con un tipo de objeto.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "adjacent_object",
+      "family": "object_adjacency",
+      "summary": "Está ortogonalmente junto a un tipo de objeto.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "relative_row_order",
+      "family": "relative_order",
+      "summary": "Está al norte o al sur de otra persona.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "relative_column_order",
+      "family": "relative_order",
+      "summary": "Está al este o al oeste de otra persona.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "relative_row_distance",
+      "family": "relative_distance",
+      "summary": "Distancia vertical exacta respecto a otra persona.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "relative_column_distance",
+      "family": "relative_distance",
+      "summary": "Distancia horizontal exacta respecto a otra persona.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "same_room",
+      "family": "room_relation",
+      "summary": "Está en la misma habitación que otra persona.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    },
+    {
+      "type": "different_room",
+      "family": "room_relation",
+      "summary": "Está en una habitación distinta de otra persona.",
+      "subject_centred": true,
+      "supports_partial_propagation": true
+    }
+  ],
+  "global_selector": {
+    "method": "global_exact_single_card_dfs",
+    "subject_orders_tried": 1,
+    "beam_width": 100,
+    "states_expanded": 711,
+    "complete_sets_checked": 679,
+    "options_per_subject": {},
+    "rejected": {
+      "not_unique": 678
+    },
+    "accepted_score": 521.234,
+    "selected_families": {
+      "object_line": 1,
+      "room_population": 1,
+      "relative_distance": 1,
+      "object_occupancy": 1,
+      "room_choice": 1
+    },
+    "selected_types": {
+      "object_same_row_in_room": 1,
+      "alone_in_room": 1,
+      "relative_column_distance": 1,
+      "unique_on_object": 1,
+      "room_disjunction": 1
+    }
+  },
+  "card_dependency_graph": {
+    "definition": "A→B cuando B gana información marginal al conocer previamente A.",
+    "application_order": [
+      "card-carla",
+      "card-fabio",
+      "card-diego",
+      "card-bruno",
+      "card-elena",
+      "card-alicia"
+    ],
+    "nodes": [
+      {
+        "id": "card-carla",
+        "order": 1,
+        "role": "victim",
+        "character": "carla",
+        "families": [
+          "murder_rule"
+        ],
+        "standalone_solutions": 39840,
+        "standalone_information_bits": 1.702,
+        "dependency_depth": 1
+      },
+      {
+        "id": "card-fabio",
+        "order": 2,
+        "role": "suspect",
+        "character": "fabio",
+        "families": [
+          "object_occupancy"
+        ],
+        "standalone_solutions": 9600,
+        "standalone_information_bits": 3.755,
+        "dependency_depth": 1
+      },
+      {
+        "id": "card-diego",
+        "order": 3,
+        "role": "suspect",
+        "character": "diego",
+        "families": [
+          "room_choice"
+        ],
+        "standalone_solutions": 25920,
+        "standalone_information_bits": 2.322,
+        "dependency_depth": 2
+      },
+      {
+        "id": "card-bruno",
+        "order": 4,
+        "role": "suspect",
+        "character": "bruno",
+        "families": [
+          "object_line"
+        ],
+        "standalone_solutions": 34320,
+        "standalone_information_bits": 1.917,
+        "dependency_depth": 3
+      },
+      {
+        "id": "card-elena",
+        "order": 5,
+        "role": "suspect",
+        "character": "elena",
+        "families": [
+          "relative_distance"
+        ],
+        "standalone_solutions": 12960,
+        "standalone_information_bits": 3.322,
+        "dependency_depth": 3
+      },
+      {
+        "id": "card-alicia",
+        "order": 6,
+        "role": "suspect",
+        "character": "alicia",
+        "families": [
+          "room_population"
+        ],
+        "standalone_solutions": 13680,
+        "standalone_information_bits": 3.244,
+        "dependency_depth": 1
+      }
+    ],
+    "edges": [
+      {
+        "from": "card-carla",
+        "to": "card-diego",
+        "strength_bits": 0.446,
+        "target_gain_with_context_bits": 3.09,
+        "target_gain_without_source_bits": 2.644
+      },
+      {
+        "from": "card-fabio",
+        "to": "card-diego",
+        "strength_bits": 0.603,
+        "target_gain_with_context_bits": 3.09,
+        "target_gain_without_source_bits": 2.488
+      },
+      {
+        "from": "card-carla",
+        "to": "card-bruno",
+        "strength_bits": 0.217,
+        "target_gain_with_context_bits": 3.217,
+        "target_gain_without_source_bits": 3.0
+      },
+      {
+        "from": "card-fabio",
+        "to": "card-bruno",
+        "strength_bits": 0.763,
+        "target_gain_with_context_bits": 3.217,
+        "target_gain_without_source_bits": 2.455
+      },
+      {
+        "from": "card-diego",
+        "to": "card-bruno",
+        "strength_bits": 0.458,
+        "target_gain_with_context_bits": 3.217,
+        "target_gain_without_source_bits": 2.759
+      },
+      {
+        "from": "card-diego",
+        "to": "card-elena",
+        "strength_bits": 0.13,
+        "target_gain_with_context_bits": 3.0,
+        "target_gain_without_source_bits": 2.87
+      }
+    ],
+    "edge_count": 6,
+    "max_dependency_depth": 3,
+    "cards_with_dependencies": 3
+  },
+  "generation_targets_attempted": 1,
+  "generation_rejection_summary": {},
+  "human_difficulty": {
+    "label": "hard",
+    "score": 59,
+    "requires_hypothesis": false,
+    "propagation_steps": 9,
+    "candidate_removals": 210,
+    "cross_character_steps": 7,
+    "repeated_constraint_uses": 3,
+    "branch_count": 0,
+    "rejected_hypotheses": 0,
+    "max_branch_depth": 0,
+    "first_forced_step": 7,
+    "direct_clue_count": 0,
+    "double_card_count": 0,
+    "method": "generalized_constraint_propagation_with_optional_hypotheses",
+    "calibration_status": "provisional"
+  },
+  "human_solver_step_count": 9,
+  "human_solver_matches_solution": true
+}

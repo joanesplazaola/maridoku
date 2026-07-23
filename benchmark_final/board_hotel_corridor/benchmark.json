@@ -1,0 +1,243 @@
+{
+  "summary": {
+    "requested_cases": 5,
+    "successful_cases": 5,
+    "failed_cases": 0,
+    "success_rate": 1.0,
+    "start_seed": 4005,
+    "end_seed": 4009,
+    "requested_difficulty": "any",
+    "difficulty_match_cases": 5,
+    "generation_seconds": {
+      "mean": 0.4906,
+      "median": 0.4797,
+      "min": 0.4347,
+      "max": 0.5767
+    },
+    "difficulty_score": {
+      "mean": 69.2,
+      "median": 65,
+      "min": 48,
+      "max": 100
+    },
+    "difficulty_distribution": {
+      "expert": 2,
+      "hard": 1,
+      "medium": 2
+    },
+    "hypothesis_required_cases": 1,
+    "double_card_cases": 0,
+    "all_cards_necessary_cases": 5,
+    "human_solver_match_cases": 5,
+    "family_totals": {
+      "relative_distance": 8,
+      "room_population": 5,
+      "relative_order": 5,
+      "object_adjacency": 4,
+      "object_line": 3
+    },
+    "type_totals": {
+      "alone_in_room": 5,
+      "relative_column_distance": 4,
+      "relative_column_order": 4,
+      "relative_row_distance": 4,
+      "adjacent_object": 4,
+      "object_same_column_in_room": 3,
+      "relative_row_order": 1
+    },
+    "calibration_status": "provisional_manual_review_required"
+  },
+  "cases": [
+    {
+      "seed": 4005,
+      "generation_seconds": 0.4797,
+      "difficulty": "medium",
+      "difficulty_score": 50,
+      "requires_hypothesis": false,
+      "propagation_steps": 8,
+      "candidate_removals": 210,
+      "cross_character_steps": 7,
+      "repeated_constraint_uses": 1,
+      "branch_count": 0,
+      "first_forced_step": 4,
+      "double_card_count": 0,
+      "total_statement_count": 6,
+      "family_distribution": {
+        "relative_distance": 1,
+        "room_population": 2,
+        "relative_order": 1,
+        "object_line": 1
+      },
+      "type_distribution": {
+        "relative_column_distance": 1,
+        "alone_in_room": 2,
+        "relative_column_order": 1,
+        "object_same_column_in_room": 1
+      },
+      "all_cards_necessary": true,
+      "human_solver_matches_solution": true,
+      "requested_difficulty": "any",
+      "difficulty_match": true,
+      "generation_attempts": 1,
+      "generation_targets_attempted": 1,
+      "generation_rejection_summary": {},
+      "selector_method": "global_exact_single_card_dfs",
+      "dependency_depth": 3,
+      "dependency_edges": 5
+    },
+    {
+      "seed": 4006,
+      "generation_seconds": 0.5088,
+      "difficulty": "expert",
+      "difficulty_score": 83,
+      "requires_hypothesis": false,
+      "propagation_steps": 13,
+      "candidate_removals": 210,
+      "cross_character_steps": 12,
+      "repeated_constraint_uses": 6,
+      "branch_count": 0,
+      "first_forced_step": 5,
+      "double_card_count": 0,
+      "total_statement_count": 6,
+      "family_distribution": {
+        "room_population": 1,
+        "relative_distance": 2,
+        "object_adjacency": 1,
+        "relative_order": 1
+      },
+      "type_distribution": {
+        "alone_in_room": 1,
+        "relative_row_distance": 1,
+        "adjacent_object": 1,
+        "relative_row_order": 1,
+        "relative_column_distance": 1
+      },
+      "all_cards_necessary": true,
+      "human_solver_matches_solution": true,
+      "requested_difficulty": "any",
+      "difficulty_match": true,
+      "generation_attempts": 1,
+      "generation_targets_attempted": 1,
+      "generation_rejection_summary": {},
+      "selector_method": "global_exact_single_card_dfs",
+      "dependency_depth": 3,
+      "dependency_edges": 9
+    },
+    {
+      "seed": 4007,
+      "generation_seconds": 0.4347,
+      "difficulty": "hard",
+      "difficulty_score": 65,
+      "requires_hypothesis": false,
+      "propagation_steps": 12,
+      "candidate_removals": 210,
+      "cross_character_steps": 8,
+      "repeated_constraint_uses": 5,
+      "branch_count": 0,
+      "first_forced_step": 2,
+      "double_card_count": 0,
+      "total_statement_count": 6,
+      "family_distribution": {
+        "object_line": 1,
+        "relative_order": 1,
+        "relative_distance": 2,
+        "object_adjacency": 1
+      },
+      "type_distribution": {
+        "object_same_column_in_room": 1,
+        "relative_column_order": 1,
+        "relative_column_distance": 1,
+        "adjacent_object": 1,
+        "relative_row_distance": 1
+      },
+      "all_cards_necessary": true,
+      "human_solver_matches_solution": true,
+      "requested_difficulty": "any",
+      "difficulty_match": true,
+      "generation_attempts": 1,
+      "generation_targets_attempted": 1,
+      "generation_rejection_summary": {},
+      "selector_method": "global_exact_single_card_dfs",
+      "dependency_depth": 3,
+      "dependency_edges": 6
+    },
+    {
+      "seed": 4008,
+      "generation_seconds": 0.4532,
+      "difficulty": "medium",
+      "difficulty_score": 48,
+      "requires_hypothesis": false,
+      "propagation_steps": 8,
+      "candidate_removals": 210,
+      "cross_character_steps": 6,
+      "repeated_constraint_uses": 1,
+      "branch_count": 0,
+      "first_forced_step": 5,
+      "double_card_count": 0,
+      "total_statement_count": 6,
+      "family_distribution": {
+        "object_adjacency": 1,
+        "room_population": 1,
+        "relative_distance": 1,
+        "object_line": 1,
+        "relative_order": 1
+      },
+      "type_distribution": {
+        "adjacent_object": 1,
+        "alone_in_room": 1,
+        "relative_row_distance": 1,
+        "object_same_column_in_room": 1,
+        "relative_column_order": 1
+      },
+      "all_cards_necessary": true,
+      "human_solver_matches_solution": true,
+      "requested_difficulty": "any",
+      "difficulty_match": true,
+      "generation_attempts": 1,
+      "generation_targets_attempted": 1,
+      "generation_rejection_summary": {},
+      "selector_method": "global_exact_single_card_dfs",
+      "dependency_depth": 4,
+      "dependency_edges": 10
+    },
+    {
+      "seed": 4009,
+      "generation_seconds": 0.5767,
+      "difficulty": "expert",
+      "difficulty_score": 100,
+      "requires_hypothesis": true,
+      "propagation_steps": 16,
+      "candidate_removals": 208,
+      "cross_character_steps": 14,
+      "repeated_constraint_uses": 6,
+      "branch_count": 2,
+      "first_forced_step": 15,
+      "double_card_count": 0,
+      "total_statement_count": 6,
+      "family_distribution": {
+        "room_population": 1,
+        "object_adjacency": 1,
+        "relative_distance": 2,
+        "relative_order": 1
+      },
+      "type_distribution": {
+        "alone_in_room": 1,
+        "adjacent_object": 1,
+        "relative_row_distance": 1,
+        "relative_column_order": 1,
+        "relative_column_distance": 1
+      },
+      "all_cards_necessary": true,
+      "human_solver_matches_solution": true,
+      "requested_difficulty": "any",
+      "difficulty_match": true,
+      "generation_attempts": 1,
+      "generation_targets_attempted": 1,
+      "generation_rejection_summary": {},
+      "selector_method": "global_exact_single_card_dfs",
+      "dependency_depth": 4,
+      "dependency_edges": 11
+    }
+  ],
+  "failures": []
+}

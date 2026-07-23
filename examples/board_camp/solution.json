@@ -1,0 +1,39 @@
+{
+  "puzzle_id": "case-board_camp-5000",
+  "victim": "bruno",
+  "victim_name": "Bruno",
+  "positions": {
+    "alicia": {
+      "row": 0,
+      "column": 0,
+      "room": "cabin_a"
+    },
+    "bruno": {
+      "row": 1,
+      "column": 1,
+      "room": "trail"
+    },
+    "carla": {
+      "row": 4,
+      "column": 2,
+      "room": "tent"
+    },
+    "diego": {
+      "row": 2,
+      "column": 4,
+      "room": "trail"
+    },
+    "elena": {
+      "row": 5,
+      "column": 3,
+      "room": "tent"
+    },
+    "fabio": {
+      "row": 3,
+      "column": 5,
+      "room": "meadow"
+    }
+  },
+  "murderer": "diego",
+  "murderer_name": "Diego"
+}

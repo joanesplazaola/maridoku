@@ -1,0 +1,279 @@
+{
+  "cases": [
+    {
+      "puzzle": "case-board_camp-5000",
+      "path": "examples/board_camp/puzzle.json",
+      "results": [
+        {
+          "solver": "backtracking",
+          "available": true,
+          "solution_count": 1,
+          "unique": true,
+          "stats": {
+            "solver": "backtracking",
+            "nodes": 37,
+            "backtracks": 13,
+            "pruned": 18,
+            "constraint_checks": 6,
+            "max_depth": 6,
+            "elapsed_ms": 2.591078000023117,
+            "metadata": {
+              "initial_domain_sizes": {
+                "alicia": 3,
+                "bruno": 33,
+                "carla": 2,
+                "diego": 33,
+                "elena": 33,
+                "fabio": 33
+              },
+              "constraint_graph_edges": 8,
+              "constraint_graph_density": 0.5333,
+              "limit": 2
+            }
+          },
+          "matches_first_unique_solver": true
+        },
+        {
+          "solver": "exhaustive",
+          "available": true,
+          "solution_count": 1,
+          "unique": true,
+          "stats": {
+            "solver": "exhaustive",
+            "nodes": 0,
+            "backtracks": 0,
+            "pruned": 0,
+            "constraint_checks": 0,
+            "max_depth": 0,
+            "elapsed_ms": 1831.9566200002555,
+            "metadata": {
+              "limit": 2,
+              "enumeration": "row_permutations_x_column_permutations"
+            }
+          },
+          "matches_first_unique_solver": true
+        }
+      ]
+    },
+    {
+      "puzzle": "case-board_hotel_corridor-5001",
+      "path": "examples/board_hotel_corridor/puzzle.json",
+      "results": [
+        {
+          "solver": "backtracking",
+          "available": true,
+          "solution_count": 1,
+          "unique": true,
+          "stats": {
+            "solver": "backtracking",
+            "nodes": 14,
+            "backtracks": 3,
+            "pruned": 5,
+            "constraint_checks": 6,
+            "max_depth": 6,
+            "elapsed_ms": 2.0701749999716412,
+            "metadata": {
+              "initial_domain_sizes": {
+                "alicia": 31,
+                "bruno": 1,
+                "carla": 2,
+                "diego": 2,
+                "elena": 31,
+                "fabio": 31
+              },
+              "constraint_graph_edges": 5,
+              "constraint_graph_density": 0.3333,
+              "limit": 2
+            }
+          },
+          "matches_first_unique_solver": true
+        },
+        {
+          "solver": "exhaustive",
+          "available": true,
+          "solution_count": 1,
+          "unique": true,
+          "stats": {
+            "solver": "exhaustive",
+            "nodes": 0,
+            "backtracks": 0,
+            "pruned": 0,
+            "constraint_checks": 0,
+            "max_depth": 0,
+            "elapsed_ms": 1759.5351420000043,
+            "metadata": {
+              "limit": 2,
+              "enumeration": "row_permutations_x_column_permutations"
+            }
+          },
+          "matches_first_unique_solver": true
+        }
+      ]
+    },
+    {
+      "puzzle": "case-board_mansion-5002",
+      "path": "examples/board_mansion/puzzle.json",
+      "results": [
+        {
+          "solver": "backtracking",
+          "available": true,
+          "solution_count": 1,
+          "unique": true,
+          "stats": {
+            "solver": "backtracking",
+            "nodes": 20,
+            "backtracks": 6,
+            "pruned": 8,
+            "constraint_checks": 6,
+            "max_depth": 6,
+            "elapsed_ms": 1.797449999685341,
+            "metadata": {
+              "initial_domain_sizes": {
+                "alicia": 3,
+                "bruno": 1,
+                "carla": 29,
+                "diego": 5,
+                "elena": 29,
+                "fabio": 29
+              },
+              "constraint_graph_edges": 6,
+              "constraint_graph_density": 0.4,
+              "limit": 2
+            }
+          },
+          "matches_first_unique_solver": true
+        },
+        {
+          "solver": "exhaustive",
+          "available": true,
+          "solution_count": 1,
+          "unique": true,
+          "stats": {
+            "solver": "exhaustive",
+            "nodes": 0,
+            "backtracks": 0,
+            "pruned": 0,
+            "constraint_checks": 0,
+            "max_depth": 0,
+            "elapsed_ms": 881.5178149998246,
+            "metadata": {
+              "limit": 2,
+              "enumeration": "row_permutations_x_column_permutations"
+            }
+          },
+          "matches_first_unique_solver": true
+        }
+      ]
+    },
+    {
+      "puzzle": "case-board_restaurant-5003",
+      "path": "examples/board_restaurant/puzzle.json",
+      "results": [
+        {
+          "solver": "backtracking",
+          "available": true,
+          "solution_count": 1,
+          "unique": true,
+          "stats": {
+            "solver": "backtracking",
+            "nodes": 46,
+            "backtracks": 18,
+            "pruned": 22,
+            "constraint_checks": 6,
+            "max_depth": 6,
+            "elapsed_ms": 3.958839999995689,
+            "metadata": {
+              "initial_domain_sizes": {
+                "alicia": 31,
+                "bruno": 31,
+                "carla": 31,
+                "diego": 31,
+                "elena": 2,
+                "fabio": 31
+              },
+              "constraint_graph_edges": 9,
+              "constraint_graph_density": 0.6,
+              "limit": 2
+            }
+          },
+          "matches_first_unique_solver": true
+        },
+        {
+          "solver": "exhaustive",
+          "available": true,
+          "solution_count": 1,
+          "unique": true,
+          "stats": {
+            "solver": "exhaustive",
+            "nodes": 0,
+            "backtracks": 0,
+            "pruned": 0,
+            "constraint_checks": 0,
+            "max_depth": 0,
+            "elapsed_ms": 1258.0667460001678,
+            "metadata": {
+              "limit": 2,
+              "enumeration": "row_permutations_x_column_permutations"
+            }
+          },
+          "matches_first_unique_solver": true
+        }
+      ]
+    },
+    {
+      "puzzle": "case-board_two_houses-5004",
+      "path": "examples/board_two_houses/puzzle.json",
+      "results": [
+        {
+          "solver": "backtracking",
+          "available": true,
+          "solution_count": 1,
+          "unique": true,
+          "stats": {
+            "solver": "backtracking",
+            "nodes": 59,
+            "backtracks": 22,
+            "pruned": 31,
+            "constraint_checks": 6,
+            "max_depth": 6,
+            "elapsed_ms": 5.022390000249288,
+            "metadata": {
+              "initial_domain_sizes": {
+                "alicia": 4,
+                "bruno": 8,
+                "carla": 29,
+                "diego": 5,
+                "elena": 29,
+                "fabio": 6
+              },
+              "constraint_graph_edges": 5,
+              "constraint_graph_density": 0.3333,
+              "limit": 2
+            }
+          },
+          "matches_first_unique_solver": true
+        },
+        {
+          "solver": "exhaustive",
+          "available": true,
+          "solution_count": 1,
+          "unique": true,
+          "stats": {
+            "solver": "exhaustive",
+            "nodes": 0,
+            "backtracks": 0,
+            "pruned": 0,
+            "constraint_checks": 0,
+            "max_depth": 0,
+            "elapsed_ms": 1004.5634759999302,
+            "metadata": {
+              "limit": 2,
+              "enumeration": "row_permutations_x_column_permutations"
+            }
+          },
+          "matches_first_unique_solver": true
+        }
+      ]
+    }
+  ]
+}

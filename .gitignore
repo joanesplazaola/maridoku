@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environments
+.venv/
+.venv-*/
+
+# Tooling
+.uv/
+.ruff_cache/
+.mypy_cache/
+
+# Generated local benchmarks
+cpsat_benchmark/
+cpsat_benchmark_local/
+cpsat_benchmark_uv/
+scaling_10x10_*.json
+solver_comparison_uv_cpsat.json
+
+# OS / editors
+.DS_Store
+.vscode/
+.idea/

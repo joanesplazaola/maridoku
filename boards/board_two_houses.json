@@ -1,0 +1,545 @@
+{
+  "id": "board_two_houses",
+  "name": "Dos casas y zonas comunes",
+  "rows": 6,
+  "columns": 6,
+  "room_groups": [
+    {
+      "id": "bruno_house",
+      "name": "Casa de Bruno",
+      "clue_label": "una habitación de Bruno",
+      "rooms": [
+        "bruno_kitchen",
+        "bruno_living",
+        "bruno_bedroom"
+      ]
+    },
+    {
+      "id": "ana_house",
+      "name": "Casa de Ana",
+      "clue_label": "una habitación de Ana",
+      "rooms": [
+        "ana_kitchen",
+        "ana_living",
+        "ana_bedroom"
+      ]
+    },
+    {
+      "id": "shared_area",
+      "name": "Zonas comunes",
+      "clue_label": "una zona común",
+      "rooms": [
+        "hallway",
+        "patio"
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "id": "bruno_kitchen",
+      "name": "Cocina de Bruno",
+      "label_anchor": [
+        1,
+        0
+      ],
+      "cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "bruno_living",
+      "name": "Salón de Bruno",
+      "label_anchor": [
+        0,
+        2
+      ],
+      "cells": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    },
+    {
+      "id": "ana_bedroom",
+      "name": "Dormitorio de Ana",
+      "label_anchor": [
+        0,
+        4
+      ],
+      "cells": [
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          5
+        ]
+      ]
+    },
+    {
+      "id": "ana_living",
+      "name": "Salón de Ana",
+      "label_anchor": [
+        1,
+        4
+      ],
+      "cells": [
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ]
+      ]
+    },
+    {
+      "id": "hallway",
+      "name": "Distribuidor común",
+      "label_anchor": [
+        1,
+        1
+      ],
+      "cells": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          2
+        ]
+      ]
+    },
+    {
+      "id": "bruno_bedroom",
+      "name": "Dormitorio de Bruno",
+      "label_anchor": [
+        3,
+        0
+      ],
+      "cells": [
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "ana_kitchen",
+      "name": "Cocina de Ana",
+      "label_anchor": [
+        3,
+        3
+      ],
+      "cells": [
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          3
+        ]
+      ]
+    },
+    {
+      "id": "patio",
+      "name": "Patio común",
+      "label_anchor": [
+        4,
+        5
+      ],
+      "cells": [
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          5
+        ]
+      ]
+    }
+  ],
+  "objects": [
+    {
+      "id": "table-bk",
+      "type": "table",
+      "name": "Mesa",
+      "cells": [
+        [
+          0,
+          0
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "chair-bk",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [
+        [
+          0,
+          1
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "plant-bk",
+      "type": "plant",
+      "name": "Planta",
+      "cells": [
+        [
+          2,
+          0
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "sofa-bl",
+      "type": "sofa",
+      "name": "Sofá",
+      "cells": [
+        [
+          1,
+          2
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "tv-bl",
+      "type": "tv",
+      "name": "Televisión",
+      "cells": [
+        [
+          0,
+          3
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "bed-ab",
+      "type": "bed",
+      "name": "Cama",
+      "cells": [
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          5
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false,
+      "orientation": "vertical"
+    },
+    {
+      "id": "plant-ab",
+      "type": "plant",
+      "name": "Planta",
+      "cells": [
+        [
+          3,
+          5
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "sofa-al",
+      "type": "sofa",
+      "name": "Sofá",
+      "cells": [
+        [
+          2,
+          3
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "tv-al",
+      "type": "tv",
+      "name": "Televisión",
+      "cells": [
+        [
+          3,
+          4
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "rug-hall",
+      "type": "rug",
+      "name": "Alfombra",
+      "cells": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "layer": "floor",
+      "occupiable": true,
+      "blocks_character": false,
+      "shape": "2x2"
+    },
+    {
+      "id": "chair-hall",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [
+        [
+          3,
+          1
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "bed-bb",
+      "type": "bed",
+      "name": "Cama",
+      "cells": [
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          1
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false,
+      "orientation": "horizontal"
+    },
+    {
+      "id": "chair-bb",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [
+        [
+          4,
+          1
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "table-ak",
+      "type": "table",
+      "name": "Mesa",
+      "cells": [
+        [
+          4,
+          3
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "chair-ak",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [
+        [
+          4,
+          4
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    },
+    {
+      "id": "plant-ak",
+      "type": "plant",
+      "name": "Planta",
+      "cells": [
+        [
+          5,
+          3
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": false,
+      "blocks_character": true
+    },
+    {
+      "id": "rug-patio",
+      "type": "rug",
+      "name": "Alfombra",
+      "cells": [
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "layer": "floor",
+      "occupiable": true,
+      "blocks_character": false,
+      "shape": "1x2"
+    },
+    {
+      "id": "chair-patio",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [
+        [
+          5,
+          4
+        ]
+      ],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false
+    }
+  ]
+}

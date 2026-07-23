@@ -1,0 +1,4825 @@
+{
+  "puzzle_id": "case-board_restaurant-6201",
+  "solver_kind": "approximate_human_deduction",
+  "note": "La dificultad es provisional. El motor aplica consistencia de restricciones y propagación global; puede realizar deducciones más sistemáticas que una persona.",
+  "difficulty": {
+    "label": "expert",
+    "score": 100,
+    "requires_hypothesis": true,
+    "propagation_steps": 20,
+    "candidate_removals": 235,
+    "cross_character_steps": 17,
+    "repeated_constraint_uses": 6,
+    "branch_count": 1,
+    "rejected_hypotheses": 1,
+    "max_branch_depth": 1,
+    "first_forced_step": 13,
+    "direct_clue_count": 0,
+    "double_card_count": 0,
+    "method": "generalized_constraint_propagation_with_optional_hypotheses",
+    "calibration_status": "provisional"
+  },
+  "step_count": 18,
+  "steps": [
+    {
+      "index": 1,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "card-alicia-statement-1",
+      "card_id": "card-alicia",
+      "character": "alicia",
+      "type": "adjacent_object",
+      "family": "object_adjacency",
+      "clue_text": "Alicia estaba junto a un sofá.",
+      "explanation": "Al aplicar «Alicia estaba junto a un sofá.» se descartan 34 posibilidades entre 1 personaje.",
+      "candidate_count_before": 216,
+      "candidate_count_after": 182,
+      "removed": {
+        "alicia": [
+          "F1C1",
+          "F1C2",
+          "F1C3",
+          "F1C4",
+          "F1C6",
+          "F2C1",
+          "F2C2",
+          "F2C3",
+          "F2C4",
+          "F2C5",
+          "F3C1",
+          "F3C2",
+          "F3C3",
+          "F3C4",
+          "F3C5",
+          "F3C6",
+          "F4C1",
+          "F4C2",
+          "F4C3",
+          "F4C4",
+          "F4C5",
+          "F4C6",
+          "F5C1",
+          "F5C2",
+          "F5C3",
+          "F5C4",
+          "F5C5",
+          "F5C6",
+          "F6C1",
+          "F6C2",
+          "F6C3",
+          "F6C4",
+          "F6C5",
+          "F6C6"
+        ]
+      },
+      "newly_forced": {},
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 0,
+            "column": 0
+          },
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 0,
+            "column": 5
+          },
+          {
+            "row": 1,
+            "column": 0
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 2
+          },
+          {
+            "row": 1,
+            "column": 3
+          },
+          {
+            "row": 1,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 4,
+            "column": 5
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "carla": [
+          {
+            "row": 0,
+            "column": 0
+          },
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 0,
+            "column": 5
+          },
+          {
+            "row": 1,
+            "column": 0
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 2
+          },
+          {
+            "row": 1,
+            "column": 3
+          },
+          {
+            "row": 1,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 4,
+            "column": 5
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "diego": [
+          {
+            "row": 0,
+            "column": 0
+          },
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 0,
+            "column": 5
+          },
+          {
+            "row": 1,
+            "column": 0
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 2
+          },
+          {
+            "row": 1,
+            "column": 3
+          },
+          {
+            "row": 1,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 4,
+            "column": 5
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "elena": [
+          {
+            "row": 0,
+            "column": 0
+          },
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 0,
+            "column": 5
+          },
+          {
+            "row": 1,
+            "column": 0
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 2
+          },
+          {
+            "row": 1,
+            "column": 3
+          },
+          {
+            "row": 1,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 4,
+            "column": 5
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 0
+          },
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 0,
+            "column": 5
+          },
+          {
+            "row": 1,
+            "column": 0
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 2
+          },
+          {
+            "row": 1,
+            "column": 3
+          },
+          {
+            "row": 1,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 4,
+            "column": 5
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ]
+      }
+    },
+    {
+      "index": 2,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "rule-all-different",
+      "card_id": null,
+      "character": null,
+      "type": "all_different",
+      "family": "all_different",
+      "clue_text": "Ninguna pareja de personajes puede compartir fila ni columna.",
+      "explanation": "Al aplicar «Ninguna pareja de personajes puede compartir fila ni columna.» se descartan 35 posibilidades entre 5 personajes.",
+      "candidate_count_before": 182,
+      "candidate_count_after": 147,
+      "removed": {
+        "bruno": [
+          "F1C1",
+          "F1C6",
+          "F2C1",
+          "F2C3",
+          "F2C4",
+          "F2C5",
+          "F5C6"
+        ],
+        "carla": [
+          "F1C1",
+          "F1C6",
+          "F2C1",
+          "F2C3",
+          "F2C4",
+          "F2C5",
+          "F5C6"
+        ],
+        "diego": [
+          "F1C1",
+          "F1C6",
+          "F2C1",
+          "F2C3",
+          "F2C4",
+          "F2C5",
+          "F5C6"
+        ],
+        "elena": [
+          "F1C1",
+          "F1C6",
+          "F2C1",
+          "F2C3",
+          "F2C4",
+          "F2C5",
+          "F5C6"
+        ],
+        "fabio": [
+          "F1C1",
+          "F1C6",
+          "F2C1",
+          "F2C3",
+          "F2C4",
+          "F2C5",
+          "F5C6"
+        ]
+      },
+      "newly_forced": {},
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "carla": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "diego": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "elena": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ]
+      }
+    },
+    {
+      "index": 3,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "card-carla-statement-1",
+      "card_id": "card-carla",
+      "character": "carla",
+      "type": "room_disjunction",
+      "family": "room_choice",
+      "clue_text": "Carla estaba en la entrada o en los aseos.",
+      "explanation": "Al aplicar «Carla estaba en la entrada o en los aseos.» se descartan 25 posibilidades entre 1 personaje.",
+      "candidate_count_before": 147,
+      "candidate_count_after": 122,
+      "removed": {
+        "carla": [
+          "F1C2",
+          "F1C3",
+          "F1C4",
+          "F1C5",
+          "F2C2",
+          "F2C6",
+          "F3C1",
+          "F3C2",
+          "F3C3",
+          "F3C4",
+          "F3C5",
+          "F4C3",
+          "F4C4",
+          "F4C5",
+          "F5C1",
+          "F5C2",
+          "F5C3",
+          "F5C4",
+          "F5C5",
+          "F6C1",
+          "F6C2",
+          "F6C3",
+          "F6C4",
+          "F6C5",
+          "F6C6"
+        ]
+      },
+      "newly_forced": {},
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "carla": [
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 5
+          }
+        ],
+        "diego": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "elena": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ]
+      }
+    },
+    {
+      "index": 4,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "card-fabio-statement-1",
+      "card_id": "card-fabio",
+      "character": "fabio",
+      "type": "victim_rule",
+      "family": "murder_rule",
+      "clue_text": "Fabio estaba a solas con otra persona. Esa persona es el asesino.",
+      "explanation": "Al aplicar «Fabio estaba a solas con otra persona. Esa persona es el asesino.» se descartan 29 posibilidades entre 4 personajes.",
+      "candidate_count_before": 122,
+      "candidate_count_after": 93,
+      "removed": {
+        "bruno": [
+          "F4C2",
+          "F4C3",
+          "F4C5",
+          "F4C6"
+        ],
+        "diego": [
+          "F4C2",
+          "F4C3",
+          "F4C5",
+          "F4C6"
+        ],
+        "elena": [
+          "F4C2",
+          "F4C3",
+          "F4C5",
+          "F4C6"
+        ],
+        "fabio": [
+          "F1C2",
+          "F1C3",
+          "F2C2",
+          "F3C1",
+          "F3C2",
+          "F3C3",
+          "F3C4",
+          "F3C5",
+          "F3C6",
+          "F4C1",
+          "F4C2",
+          "F4C3",
+          "F4C4",
+          "F4C5",
+          "F4C6",
+          "F5C1",
+          "F5C2"
+        ]
+      },
+      "newly_forced": {},
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "carla": [
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 5
+          }
+        ],
+        "diego": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "elena": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ]
+      }
+    },
+    {
+      "index": 5,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "card-bruno-statement-1",
+      "card_id": "card-bruno",
+      "character": "bruno",
+      "type": "relative_column_distance",
+      "family": "relative_distance",
+      "clue_text": "Bruno estaba 2 columnas al este de Diego.",
+      "explanation": "Al aplicar «Bruno estaba 2 columnas al este de Diego.» se descartan 16 posibilidades entre 2 personajes.",
+      "candidate_count_before": 93,
+      "candidate_count_after": 77,
+      "removed": {
+        "bruno": [
+          "F1C2",
+          "F2C2",
+          "F3C1",
+          "F3C2",
+          "F4C1",
+          "F5C1",
+          "F5C2",
+          "F6C1",
+          "F6C2"
+        ],
+        "diego": [
+          "F1C5",
+          "F2C6",
+          "F3C5",
+          "F3C6",
+          "F5C5",
+          "F6C5",
+          "F6C6"
+        ]
+      },
+      "newly_forced": {},
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "carla": [
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 5
+          }
+        ],
+        "diego": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          }
+        ],
+        "elena": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ]
+      }
+    },
+    {
+      "index": 6,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "card-diego-statement-1",
+      "card_id": "card-diego",
+      "character": "diego",
+      "type": "same_room",
+      "family": "room_relation",
+      "clue_text": "Diego estaba en la misma habitación que Bruno.",
+      "explanation": "Al aplicar «Diego estaba en la misma habitación que Bruno.» se descartan 16 posibilidades entre 2 personajes.",
+      "candidate_count_before": 77,
+      "candidate_count_after": 61,
+      "removed": {
+        "diego": [
+          "F1C2",
+          "F1C3",
+          "F2C2",
+          "F3C1",
+          "F3C2",
+          "F3C4",
+          "F4C1",
+          "F5C1",
+          "F5C2",
+          "F5C3"
+        ],
+        "bruno": [
+          "F1C3",
+          "F1C4",
+          "F1C5",
+          "F3C4",
+          "F3C6",
+          "F6C4"
+        ]
+      },
+      "newly_forced": {},
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "carla": [
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          },
+          {
+            "row": 3,
+            "column": 5
+          }
+        ],
+        "diego": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          }
+        ],
+        "elena": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 2
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ]
+      }
+    },
+    {
+      "index": 7,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "card-fabio-statement-1",
+      "card_id": "card-fabio",
+      "character": "fabio",
+      "type": "victim_rule",
+      "family": "murder_rule",
+      "clue_text": "Fabio estaba a solas con otra persona. Esa persona es el asesino.",
+      "explanation": "Al volver a cruzar «Fabio estaba a solas con otra persona. Esa persona es el asesino.» se descartan 11 posibilidades entre 2 personajes.",
+      "candidate_count_before": 61,
+      "candidate_count_after": 50,
+      "removed": {
+        "carla": [
+          "F4C6"
+        ],
+        "elena": [
+          "F1C3",
+          "F1C5",
+          "F2C6",
+          "F3C6",
+          "F4C1",
+          "F4C4",
+          "F6C3",
+          "F6C4",
+          "F6C5",
+          "F6C6"
+        ]
+      },
+      "newly_forced": {},
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "carla": [
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          }
+        ],
+        "diego": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          }
+        ],
+        "elena": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 0
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 4,
+            "column": 0
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ]
+      }
+    },
+    {
+      "index": 8,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "card-elena-statement-1",
+      "card_id": "card-elena",
+      "character": "elena",
+      "type": "relative_column_order",
+      "family": "relative_order",
+      "clue_text": "Elena estaba al este de Fabio.",
+      "explanation": "Al aplicar «Elena estaba al este de Fabio.» se descartan 9 posibilidades entre 2 personajes.",
+      "candidate_count_before": 50,
+      "candidate_count_after": 41,
+      "removed": {
+        "elena": [
+          "F3C1",
+          "F5C1",
+          "F6C1",
+          "F6C2"
+        ],
+        "fabio": [
+          "F1C5",
+          "F2C6",
+          "F5C5",
+          "F6C5",
+          "F6C6"
+        ]
+      },
+      "newly_forced": {},
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "carla": [
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          }
+        ],
+        "diego": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          }
+        ],
+        "elena": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 4
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 9,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "card-fabio-statement-1",
+      "card_id": "card-fabio",
+      "character": "fabio",
+      "type": "victim_rule",
+      "family": "murder_rule",
+      "clue_text": "Fabio estaba a solas con otra persona. Esa persona es el asesino.",
+      "explanation": "Al volver a cruzar «Fabio estaba a solas con otra persona. Esa persona es el asesino.» se descartan 4 posibilidades entre 3 personajes.",
+      "candidate_count_before": 41,
+      "candidate_count_after": 37,
+      "removed": {
+        "bruno": [
+          "F5C4",
+          "F6C3"
+        ],
+        "diego": [
+          "F6C4"
+        ],
+        "elena": [
+          "F5C4"
+        ]
+      },
+      "newly_forced": {},
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "carla": [
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          }
+        ],
+        "diego": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          }
+        ],
+        "elena": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 4
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 10,
+      "kind": "assumption",
+      "depth": 1,
+      "character": "alicia",
+      "explanation": "Hipótesis: Alicia está en F1C5.",
+      "position": {
+        "row": 0,
+        "column": 4
+      },
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 0,
+            "column": 4
+          }
+        ],
+        "bruno": [
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "carla": [
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          }
+        ],
+        "diego": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          }
+        ],
+        "elena": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 4
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 11,
+      "kind": "rejection",
+      "depth": 1,
+      "character": "alicia",
+      "explanation": "La hipótesis F1C5 provoca una contradicción y se descarta.",
+      "position": {
+        "row": 0,
+        "column": 4
+      },
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 0,
+            "column": 4
+          },
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 1,
+            "column": 5
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 5
+          }
+        ],
+        "carla": [
+          {
+            "row": 2,
+            "column": 5
+          },
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          }
+        ],
+        "diego": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 3,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          }
+        ],
+        "elena": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 1,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 4
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 12,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "rule-all-different",
+      "card_id": null,
+      "character": null,
+      "type": "all_different",
+      "family": "all_different",
+      "clue_text": "Ninguna pareja de personajes puede compartir fila ni columna.",
+      "explanation": "Al aplicar «Ninguna pareja de personajes puede compartir fila ni columna.» se descartan 7 posibilidades entre 4 personajes.",
+      "candidate_count_before": 36,
+      "candidate_count_after": 29,
+      "removed": {
+        "bruno": [
+          "F2C6",
+          "F4C4",
+          "F6C6"
+        ],
+        "carla": [
+          "F3C6"
+        ],
+        "diego": [
+          "F4C4"
+        ],
+        "elena": [
+          "F2C2",
+          "F3C4"
+        ]
+      },
+      "newly_forced": {},
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 4
+          }
+        ],
+        "carla": [
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          }
+        ],
+        "diego": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          }
+        ],
+        "elena": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 4
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 13,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "card-diego-statement-1",
+      "card_id": "card-diego",
+      "character": "diego",
+      "type": "same_room",
+      "family": "room_relation",
+      "clue_text": "Diego estaba en la misma habitación que Bruno.",
+      "explanation": "Al aplicar «Diego estaba en la misma habitación que Bruno.» se descartan 4 posibilidades entre 2 personajes.",
+      "candidate_count_before": 29,
+      "candidate_count_after": 25,
+      "removed": {
+        "diego": [
+          "F1C4",
+          "F3C3"
+        ],
+        "bruno": [
+          "F3C3",
+          "F3C5"
+        ]
+      },
+      "newly_forced": {},
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 4
+          },
+          {
+            "row": 5,
+            "column": 4
+          }
+        ],
+        "carla": [
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          }
+        ],
+        "diego": [
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          }
+        ],
+        "elena": [
+          {
+            "row": 0,
+            "column": 1
+          },
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 4
+          },
+          {
+            "row": 4,
+            "column": 1
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 4
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          },
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 3
+          },
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          },
+          {
+            "row": 5,
+            "column": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 14,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "rule-all-different",
+      "card_id": null,
+      "character": null,
+      "type": "all_different",
+      "family": "all_different",
+      "clue_text": "Ninguna pareja de personajes puede compartir fila ni columna.",
+      "explanation": "Al volver a cruzar «Ninguna pareja de personajes puede compartir fila ni columna.» se descartan 13 posibilidades entre 4 personajes. Fabio queda en F1C4.",
+      "candidate_count_before": 25,
+      "candidate_count_after": 12,
+      "removed": {
+        "bruno": [
+          "F6C5"
+        ],
+        "diego": [
+          "F5C4"
+        ],
+        "elena": [
+          "F1C2",
+          "F1C4",
+          "F5C2",
+          "F5C3",
+          "F5C5"
+        ],
+        "fabio": [
+          "F5C3",
+          "F5C4",
+          "F6C1",
+          "F6C2",
+          "F6C3",
+          "F6C4"
+        ]
+      },
+      "newly_forced": {
+        "fabio": {
+          "row": 0,
+          "column": 3
+        }
+      },
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 4
+          }
+        ],
+        "carla": [
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          }
+        ],
+        "diego": [
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          }
+        ],
+        "elena": [
+          {
+            "row": 2,
+            "column": 1
+          },
+          {
+            "row": 2,
+            "column": 2
+          },
+          {
+            "row": 2,
+            "column": 4
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 15,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "card-elena-statement-1",
+      "card_id": "card-elena",
+      "character": "elena",
+      "type": "relative_column_order",
+      "family": "relative_order",
+      "clue_text": "Elena estaba al este de Fabio.",
+      "explanation": "Al aplicar «Elena estaba al este de Fabio.» se descartan 2 posibilidades entre 1 personaje. Elena queda en F3C5.",
+      "candidate_count_before": 12,
+      "candidate_count_after": 10,
+      "removed": {
+        "elena": [
+          "F3C2",
+          "F3C3"
+        ]
+      },
+      "newly_forced": {
+        "elena": {
+          "row": 2,
+          "column": 4
+        }
+      },
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 4,
+            "column": 2
+          },
+          {
+            "row": 4,
+            "column": 4
+          }
+        ],
+        "carla": [
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          }
+        ],
+        "diego": [
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          },
+          {
+            "row": 5,
+            "column": 2
+          }
+        ],
+        "elena": [
+          {
+            "row": 2,
+            "column": 4
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 16,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "rule-all-different",
+      "card_id": null,
+      "character": null,
+      "type": "all_different",
+      "family": "all_different",
+      "clue_text": "Ninguna pareja de personajes puede compartir fila ni columna.",
+      "explanation": "Al volver a cruzar «Ninguna pareja de personajes puede compartir fila ni columna.» se descartan 2 posibilidades entre 2 personajes. Bruno queda en F5C3.",
+      "candidate_count_before": 10,
+      "candidate_count_after": 8,
+      "removed": {
+        "bruno": [
+          "F5C5"
+        ],
+        "diego": [
+          "F6C3"
+        ]
+      },
+      "newly_forced": {
+        "bruno": {
+          "row": 4,
+          "column": 2
+        }
+      },
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 4,
+            "column": 2
+          }
+        ],
+        "carla": [
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          }
+        ],
+        "diego": [
+          {
+            "row": 5,
+            "column": 0
+          },
+          {
+            "row": 5,
+            "column": 1
+          }
+        ],
+        "elena": [
+          {
+            "row": 2,
+            "column": 4
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 17,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "card-bruno-statement-1",
+      "card_id": "card-bruno",
+      "character": "bruno",
+      "type": "relative_column_distance",
+      "family": "relative_distance",
+      "clue_text": "Bruno estaba 2 columnas al este de Diego.",
+      "explanation": "Al aplicar «Bruno estaba 2 columnas al este de Diego.» se descartan 1 posibilidades entre 1 personaje. Diego queda en F6C1.",
+      "candidate_count_before": 8,
+      "candidate_count_after": 7,
+      "removed": {
+        "diego": [
+          "F6C2"
+        ]
+      },
+      "newly_forced": {
+        "diego": {
+          "row": 5,
+          "column": 0
+        }
+      },
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 4,
+            "column": 2
+          }
+        ],
+        "carla": [
+          {
+            "row": 3,
+            "column": 0
+          },
+          {
+            "row": 3,
+            "column": 1
+          }
+        ],
+        "diego": [
+          {
+            "row": 5,
+            "column": 0
+          }
+        ],
+        "elena": [
+          {
+            "row": 2,
+            "column": 4
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 18,
+      "kind": "propagation",
+      "depth": 0,
+      "constraint_id": "rule-all-different",
+      "card_id": null,
+      "character": null,
+      "type": "all_different",
+      "family": "all_different",
+      "clue_text": "Ninguna pareja de personajes puede compartir fila ni columna.",
+      "explanation": "Al volver a cruzar «Ninguna pareja de personajes puede compartir fila ni columna.» se descartan 1 posibilidades entre 1 personaje. Carla queda en F4C2.",
+      "candidate_count_before": 7,
+      "candidate_count_after": 6,
+      "removed": {
+        "carla": [
+          "F4C1"
+        ]
+      },
+      "newly_forced": {
+        "carla": {
+          "row": 3,
+          "column": 1
+        }
+      },
+      "domains_after": {
+        "alicia": [
+          {
+            "row": 1,
+            "column": 5
+          }
+        ],
+        "bruno": [
+          {
+            "row": 4,
+            "column": 2
+          }
+        ],
+        "carla": [
+          {
+            "row": 3,
+            "column": 1
+          }
+        ],
+        "diego": [
+          {
+            "row": 5,
+            "column": 0
+          }
+        ],
+        "elena": [
+          {
+            "row": 2,
+            "column": 4
+          }
+        ],
+        "fabio": [
+          {
+            "row": 0,
+            "column": 3
+          }
+        ]
+      }
+    }
+  ],
+  "final_positions": {
+    "alicia": {
+      "row": 1,
+      "column": 5
+    },
+    "bruno": {
+      "row": 4,
+      "column": 2
+    },
+    "carla": {
+      "row": 3,
+      "column": 1
+    },
+    "diego": {
+      "row": 5,
+      "column": 0
+    },
+    "elena": {
+      "row": 2,
+      "column": 4
+    },
+    "fabio": {
+      "row": 0,
+      "column": 3
+    }
+  }
+}

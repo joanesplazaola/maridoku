@@ -1,0 +1,759 @@
+{
+  "schema_version": 7,
+  "id": "case-board_two_houses-5004",
+  "seed": 5004,
+  "selection_profile": "any",
+  "board": {
+    "id": "board_two_houses",
+    "name": "Dos casas y zonas comunes",
+    "rows": 6,
+    "columns": 6,
+    "room_groups": [
+      {
+        "id": "bruno_house",
+        "name": "Casa de Bruno",
+        "clue_label": "una habitación de Bruno",
+        "rooms": [
+          "bruno_kitchen",
+          "bruno_living",
+          "bruno_bedroom"
+        ]
+      },
+      {
+        "id": "ana_house",
+        "name": "Casa de Ana",
+        "clue_label": "una habitación de Ana",
+        "rooms": [
+          "ana_kitchen",
+          "ana_living",
+          "ana_bedroom"
+        ]
+      },
+      {
+        "id": "shared_area",
+        "name": "Zonas comunes",
+        "clue_label": "una zona común",
+        "rooms": [
+          "hallway",
+          "patio"
+        ]
+      }
+    ],
+    "rooms": [
+      {
+        "id": "bruno_kitchen",
+        "name": "Cocina de Bruno",
+        "label_anchor": [
+          1,
+          0
+        ],
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ]
+        ]
+      },
+      {
+        "id": "bruno_living",
+        "name": "Salón de Bruno",
+        "label_anchor": [
+          0,
+          2
+        ],
+        "cells": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      },
+      {
+        "id": "ana_bedroom",
+        "name": "Dormitorio de Ana",
+        "label_anchor": [
+          0,
+          4
+        ],
+        "cells": [
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ]
+        ]
+      },
+      {
+        "id": "ana_living",
+        "name": "Salón de Ana",
+        "label_anchor": [
+          1,
+          4
+        ],
+        "cells": [
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      {
+        "id": "hallway",
+        "name": "Distribuidor común",
+        "label_anchor": [
+          1,
+          1
+        ],
+        "cells": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            2
+          ]
+        ]
+      },
+      {
+        "id": "bruno_bedroom",
+        "name": "Dormitorio de Bruno",
+        "label_anchor": [
+          3,
+          0
+        ],
+        "cells": [
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ]
+        ]
+      },
+      {
+        "id": "ana_kitchen",
+        "name": "Cocina de Ana",
+        "label_anchor": [
+          3,
+          3
+        ],
+        "cells": [
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            3
+          ]
+        ]
+      },
+      {
+        "id": "patio",
+        "name": "Patio común",
+        "label_anchor": [
+          4,
+          5
+        ],
+        "cells": [
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ]
+      }
+    ],
+    "objects": [
+      {
+        "id": "table-bk",
+        "type": "table",
+        "name": "Mesa",
+        "cells": [
+          [
+            0,
+            0
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": false,
+        "blocks_character": true,
+        "row": 0,
+        "column": 0
+      },
+      {
+        "id": "chair-bk",
+        "type": "chair",
+        "name": "Silla",
+        "cells": [
+          [
+            0,
+            1
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false,
+        "row": 0,
+        "column": 1
+      },
+      {
+        "id": "plant-bk",
+        "type": "plant",
+        "name": "Planta",
+        "cells": [
+          [
+            2,
+            0
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": false,
+        "blocks_character": true,
+        "row": 2,
+        "column": 0
+      },
+      {
+        "id": "sofa-bl",
+        "type": "sofa",
+        "name": "Sofá",
+        "cells": [
+          [
+            1,
+            2
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false,
+        "row": 1,
+        "column": 2
+      },
+      {
+        "id": "tv-bl",
+        "type": "tv",
+        "name": "Televisión",
+        "cells": [
+          [
+            0,
+            3
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": false,
+        "blocks_character": true,
+        "row": 0,
+        "column": 3
+      },
+      {
+        "id": "bed-ab",
+        "type": "bed",
+        "name": "Cama",
+        "cells": [
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false,
+        "orientation": "vertical",
+        "row": 0,
+        "column": 5
+      },
+      {
+        "id": "plant-ab",
+        "type": "plant",
+        "name": "Planta",
+        "cells": [
+          [
+            3,
+            5
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": false,
+        "blocks_character": true,
+        "row": 3,
+        "column": 5
+      },
+      {
+        "id": "sofa-al",
+        "type": "sofa",
+        "name": "Sofá",
+        "cells": [
+          [
+            2,
+            3
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false,
+        "row": 2,
+        "column": 3
+      },
+      {
+        "id": "tv-al",
+        "type": "tv",
+        "name": "Televisión",
+        "cells": [
+          [
+            3,
+            4
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": false,
+        "blocks_character": true,
+        "row": 3,
+        "column": 4
+      },
+      {
+        "id": "rug-hall",
+        "type": "rug",
+        "name": "Alfombra",
+        "cells": [
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "layer": "floor",
+        "occupiable": true,
+        "blocks_character": false,
+        "shape": "2x2",
+        "row": 2,
+        "column": 1
+      },
+      {
+        "id": "chair-hall",
+        "type": "chair",
+        "name": "Silla",
+        "cells": [
+          [
+            3,
+            1
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false,
+        "row": 3,
+        "column": 1
+      },
+      {
+        "id": "bed-bb",
+        "type": "bed",
+        "name": "Cama",
+        "cells": [
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false,
+        "orientation": "horizontal",
+        "row": 5,
+        "column": 0
+      },
+      {
+        "id": "chair-bb",
+        "type": "chair",
+        "name": "Silla",
+        "cells": [
+          [
+            4,
+            1
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false,
+        "row": 4,
+        "column": 1
+      },
+      {
+        "id": "table-ak",
+        "type": "table",
+        "name": "Mesa",
+        "cells": [
+          [
+            4,
+            3
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": false,
+        "blocks_character": true,
+        "row": 4,
+        "column": 3
+      },
+      {
+        "id": "chair-ak",
+        "type": "chair",
+        "name": "Silla",
+        "cells": [
+          [
+            4,
+            4
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false,
+        "row": 4,
+        "column": 4
+      },
+      {
+        "id": "plant-ak",
+        "type": "plant",
+        "name": "Planta",
+        "cells": [
+          [
+            5,
+            3
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": false,
+        "blocks_character": true,
+        "row": 5,
+        "column": 3
+      },
+      {
+        "id": "rug-patio",
+        "type": "rug",
+        "name": "Alfombra",
+        "cells": [
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "layer": "floor",
+        "occupiable": true,
+        "blocks_character": false,
+        "shape": "1x2",
+        "row": 5,
+        "column": 4
+      },
+      {
+        "id": "chair-patio",
+        "type": "chair",
+        "name": "Silla",
+        "cells": [
+          [
+            5,
+            4
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false,
+        "row": 5,
+        "column": 4
+      }
+    ]
+  },
+  "characters": [
+    {
+      "id": "alicia",
+      "name": "Alicia",
+      "gender": "woman",
+      "role": "suspect"
+    },
+    {
+      "id": "bruno",
+      "name": "Bruno",
+      "gender": "man",
+      "role": "suspect"
+    },
+    {
+      "id": "carla",
+      "name": "Carla",
+      "gender": "woman",
+      "role": "victim"
+    },
+    {
+      "id": "diego",
+      "name": "Diego",
+      "gender": "man",
+      "role": "suspect"
+    },
+    {
+      "id": "elena",
+      "name": "Elena",
+      "gender": "woman",
+      "role": "suspect"
+    },
+    {
+      "id": "fabio",
+      "name": "Fabio",
+      "gender": "man",
+      "role": "suspect"
+    }
+  ],
+  "victim": "carla",
+  "rules": {
+    "one_character_per_row": true,
+    "one_character_per_column": true,
+    "one_card_per_character": true,
+    "statements_per_suspect_card": [
+      1,
+      2
+    ],
+    "murder_rule": "La víctima estaba a solas con otra persona; esa persona es el asesino.",
+    "wall_definition": "Una pared es el borde exterior o el límite ortogonal entre dos habitaciones.",
+    "corner_definition": "Una esquina toca una pared vertical y otra horizontal de la habitación.",
+    "room_gender_count_includes_subject": true,
+    "companion_gender_count_excludes_subject": true,
+    "object_footprints": true,
+    "blocked_furniture_cells_are_not_character_positions": true,
+    "allowed_object_overlap": "Solo una silla puede compartir casilla con una alfombra.",
+    "room_labels_never_overlap_objects": true,
+    "formal_clue_catalog": true,
+    "global_card_selection": true
+  },
+  "cards": [
+    {
+      "id": "card-alicia",
+      "character": "alicia",
+      "character_name": "Alicia",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-alicia-statement-1",
+          "type": "alone_in_room",
+          "family": "room_population",
+          "args": {
+            "character": "alicia",
+            "room": "ana_bedroom"
+          },
+          "text": "Alicia estaba sola en el dormitorio de Ana."
+        }
+      ]
+    },
+    {
+      "id": "card-bruno",
+      "character": "bruno",
+      "character_name": "Bruno",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-bruno-statement-1",
+          "type": "object_same_row_in_room",
+          "family": "object_line",
+          "args": {
+            "character": "bruno",
+            "object_type": "chair"
+          },
+          "text": "Había una silla en la misma fila que Bruno, dentro de su habitación."
+        }
+      ]
+    },
+    {
+      "id": "card-carla",
+      "character": "carla",
+      "character_name": "Carla",
+      "role": "victim",
+      "statements": [
+        {
+          "id": "card-carla-statement-1",
+          "type": "victim_rule",
+          "family": "murder_rule",
+          "args": {
+            "character": "carla"
+          },
+          "text": "Carla estaba a solas con otra persona. Esa persona es el asesino."
+        }
+      ]
+    },
+    {
+      "id": "card-diego",
+      "character": "diego",
+      "character_name": "Diego",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-diego-statement-1",
+          "type": "room_disjunction",
+          "family": "room_choice",
+          "args": {
+            "character": "diego",
+            "rooms": [
+              "ana_kitchen",
+              "patio"
+            ]
+          },
+          "text": "Diego estaba en la cocina de Ana o en el patio común."
+        }
+      ]
+    },
+    {
+      "id": "card-elena",
+      "character": "elena",
+      "character_name": "Elena",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-elena-statement-1",
+          "type": "relative_column_distance",
+          "family": "relative_distance",
+          "args": {
+            "character": "elena",
+            "reference": "carla",
+            "delta": 3
+          },
+          "text": "Elena estaba 3 columnas al este de Carla."
+        }
+      ]
+    },
+    {
+      "id": "card-fabio",
+      "character": "fabio",
+      "character_name": "Fabio",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-fabio-statement-1",
+          "type": "unique_on_object",
+          "family": "object_occupancy",
+          "args": {
+            "character": "fabio",
+            "object_type": "rug"
+          },
+          "text": "Fabio era la única persona sobre una alfombra."
+        }
+      ]
+    }
+  ]
+}

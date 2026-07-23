@@ -1,0 +1,39 @@
+{
+  "puzzle_id": "case-board_two_houses-5004",
+  "victim": "carla",
+  "victim_name": "Carla",
+  "positions": {
+    "alicia": {
+      "row": 0,
+      "column": 5,
+      "room": "ana_bedroom"
+    },
+    "bruno": {
+      "row": 4,
+      "column": 0,
+      "room": "bruno_bedroom"
+    },
+    "carla": {
+      "row": 5,
+      "column": 1,
+      "room": "bruno_bedroom"
+    },
+    "diego": {
+      "row": 3,
+      "column": 3,
+      "room": "ana_kitchen"
+    },
+    "elena": {
+      "row": 1,
+      "column": 4,
+      "room": "ana_living"
+    },
+    "fabio": {
+      "row": 2,
+      "column": 2,
+      "room": "hallway"
+    }
+  },
+  "murderer": "bruno",
+  "murderer_name": "Bruno"
+}

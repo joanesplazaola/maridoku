@@ -1,0 +1,85 @@
+{
+  "puzzle_id": "case-board_camp-5000",
+  "board": "board_camp",
+  "seed": 5000,
+  "selection_profile": "any",
+  "max_target_attempts": 8,
+  "accepted_target_index": 1561,
+  "targets": [
+    {
+      "attempt": 1,
+      "target_index": 1561,
+      "status": "accepted",
+      "reasons": [],
+      "raw_candidate_count": 212,
+      "deduplicated_candidates_per_subject": {
+        "alicia": 38,
+        "carla": 45,
+        "diego": 38,
+        "elena": 39,
+        "fabio": 40
+      },
+      "selector": {
+        "method": "global_exact_single_card_dfs",
+        "subject_orders_tried": 2,
+        "beam_width": 100,
+        "states_expanded": 12099,
+        "complete_sets_checked": 11528,
+        "options_per_subject": {},
+        "rejected": {
+          "not_unique": 11527,
+          "single_dfs_node_budget": 93
+        },
+        "accepted_score": 523.578,
+        "selected_families": {
+          "room_relation": 1,
+          "object_line": 1,
+          "room_population": 1,
+          "relative_distance": 1,
+          "relative_order": 1
+        },
+        "selected_types": {
+          "same_room": 1,
+          "object_same_row_in_room": 1,
+          "alone_in_room": 1,
+          "relative_column_distance": 1,
+          "relative_row_order": 1
+        }
+      },
+      "solutions_without_victim_card": 16
+    }
+  ],
+  "summary": {
+    "targets_attempted": 1,
+    "targets_rejected": 0,
+    "accepted": true,
+    "rejection_reasons": {},
+    "selector": {
+      "method": "global_exact_single_card_dfs",
+      "subject_orders_tried": 2,
+      "beam_width": 100,
+      "states_expanded": 12099,
+      "complete_sets_checked": 11528,
+      "options_per_subject": {},
+      "rejected": {
+        "not_unique": 11527,
+        "single_dfs_node_budget": 93
+      },
+      "accepted_score": 523.578,
+      "selected_families": {
+        "room_relation": 1,
+        "object_line": 1,
+        "room_population": 1,
+        "relative_distance": 1,
+        "relative_order": 1
+      },
+      "selected_types": {
+        "same_room": 1,
+        "object_same_row_in_room": 1,
+        "alone_in_room": 1,
+        "relative_column_distance": 1,
+        "relative_row_order": 1
+      }
+    }
+  }
+}

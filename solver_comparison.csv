@@ -1,0 +1,6 @@
+puzzle,backtracking_ms,exhaustive_ms,speedup_x,same_unique_solution
+case-board_camp-5000,2.591,1831.957,707.0,True
+case-board_hotel_corridor-5001,2.07,1759.535,849.9,True
+case-board_mansion-5002,1.797,881.518,490.4,True
+case-board_restaurant-5003,3.959,1258.067,317.8,True
+case-board_two_houses-5004,5.022,1004.563,200.0,True

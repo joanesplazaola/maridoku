@@ -1,0 +1,34 @@
+{
+  "puzzle": "case-board_restaurant-6201",
+  "seed": 6201,
+  "victim": "Fabio",
+  "murderer": "Alicia",
+  "final_solutions": 1,
+  "difficulty": "expert",
+  "backtracking": {
+    "unique": true,
+    "matches_solution": true,
+    "stats": {
+      "solver": "backtracking",
+      "nodes": 42,
+      "backtracks": 19,
+      "pruned": 17,
+      "constraint_checks": 6,
+      "max_depth": 6,
+      "elapsed_ms": 6.1559640002997185,
+      "metadata": {
+        "initial_domain_sizes": {
+          "alicia": 2,
+          "bruno": 31,
+          "carla": 4,
+          "diego": 31,
+          "elena": 31,
+          "fabio": 31
+        },
+        "constraint_graph_edges": 6,
+        "constraint_graph_density": 0.4,
+        "limit": 2
+      }
+    }
+  }
+}
