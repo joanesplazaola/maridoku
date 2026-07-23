@@ -8,6 +8,7 @@
 - CP-SAT acepta `base_statements`, `extra_statements`, `probe_candidate_with_cpsat()` y `probe_candidates_with_cpsat()` para evaluar pistas candidatas sin crear tarjetas definitivas.
 - El generador editorial registra una muestra CP-SAT vs NumPy de candidatos supervivientes en diagnostics.
 - El set de tarjetas elegido se valida con CP-SAT antes de aceptar un caso.
+- La CLI renderiza puzzles a una hoja HTML imprimible para pruebas humanas.
 
 ## Gaps principales
 
@@ -44,4 +45,4 @@
    Añadir benchmarks de generación 8x8, 10x10 y 13x13 cuando el selector CP-SAT sustituya las máscaras.
 
 6. Preparar paquete de prueba.
-   Mantener `scripts/bootstrap.*` como smoke reproducible: sync, tests, generación editorial y generación 13x13.
+   Mantener `scripts/bootstrap.*` como smoke reproducible: sync, tests, generación editorial, HTML imprimible y generación 13x13.
