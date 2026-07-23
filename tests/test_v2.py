@@ -371,6 +371,12 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     assert (tmp_path / "generation_report.json").exists()
 
 
+def test_scaling_generator_depends_on_seed() -> None:
+    from murdoku_v2.scaling import expected_scaling_solution
+
+    assert expected_scaling_solution(10, 1) != expected_scaling_solution(10, 2)
+
+
 def test_pydantic_contract_rejects_a_card_with_the_wrong_subject() -> None:
     import copy
     import json

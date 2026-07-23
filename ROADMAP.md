@@ -4,7 +4,7 @@
 
 - CP-SAT (`ortools`) es el motor exacto principal.
 - El antiguo solver artesanal se retiró en Git.
-- El generador sintético CP-SAT escribe casos 10x10+ con `generate-scale`.
+- El generador sintético CP-SAT escribe casos 10x10+ seed-dependientes con `generate-scale`.
 - CP-SAT acepta `base_statements`, `extra_statements`, `probe_candidate_with_cpsat()` y `probe_candidates_with_cpsat()` para evaluar pistas candidatas sin crear tarjetas definitivas.
 - El generador editorial registra una muestra CP-SAT vs NumPy de candidatos supervivientes en diagnostics.
 

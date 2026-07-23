@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import random
 import time
 from pathlib import Path
 from typing import Any
@@ -19,11 +20,17 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
     """Create a deterministic, unique synthetic puzzle for solver scalability tests.
 
     It deliberately uses only public clue types. The last suspect anchors the chain with
-    exact row/column clues; every preceding suspect is one step north/west of the next.
-    The victim is fixed by the remaining row and column plus the victim-room rule.
+    exact row/column clues; every preceding suspect is fixed relative to the next. The
+    victim is fixed by the remaining row/column plus the victim-room rule.
     """
     if size < 4 or size > len(NAMES):
         raise ValueError(f"El benchmark sintético admite tamaños entre 4 y {len(NAMES)}.")
+    rng = random.Random(seed)
+    row_perm = list(range(size))
+    column_perm = list(range(size))
+    rng.shuffle(row_perm)
+    rng.shuffle(column_perm)
+    murderer_index = 1
     characters = [
         {
             "id": f"person_{index + 1:02d}",
@@ -34,8 +41,10 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
         for index in range(size)
     ]
 
-    # A 2x2 crime room contains the target victim (0,0) and murderer (1,1).
-    crime_cells = {(0, 0), (0, 1), (1, 0), (1, 1)}
+    crime_cells = {
+        (row_perm[0], column_perm[0]),
+        (row_perm[murderer_index], column_perm[murderer_index]),
+    }
     other_cells = {(row, column) for row in range(size) for column in range(size)} - crime_cells
     board = {
         "id": f"scale_{size}x{size}",
@@ -73,33 +82,43 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
                     "id": f"card-{character['id']}-statement-1",
                     "type": "exact_row",
                     "family": "coordinate",
-                    "args": {"character": character["id"], "row": size - 1},
-                    "text": f"{character['name']} estaba en la {size}.ª fila.",
+                    "args": {"character": character["id"], "row": row_perm[index]},
+                    "text": f"{character['name']} estaba en la {row_perm[index] + 1}.ª fila.",
                 },
                 {
                     "id": f"card-{character['id']}-statement-2",
                     "type": "exact_column",
                     "family": "coordinate",
-                    "args": {"character": character["id"], "column": size - 1},
-                    "text": f"{character['name']} estaba en la {size}.ª columna.",
+                    "args": {"character": character["id"], "column": column_perm[index]},
+                    "text": f"{character['name']} estaba en la {column_perm[index] + 1}.ª columna.",
                 },
             ]
         else:
             reference = characters[index + 1]
+            row_delta = row_perm[index] - row_perm[index + 1]
+            column_delta = column_perm[index] - column_perm[index + 1]
             statements = [
                 {
                     "id": f"card-{character['id']}-statement-1",
                     "type": "relative_row_distance",
                     "family": "relative_distance",
-                    "args": {"character": character["id"], "reference": reference["id"], "delta": -1},
-                    "text": f"{character['name']} estaba una fila al norte de {reference['name']}.",
+                    "args": {"character": character["id"], "reference": reference["id"], "delta": row_delta},
+                    "text": (
+                        f"{character['name']} estaba {abs(row_delta)} fila"
+                        f"{'s' if abs(row_delta) != 1 else ''} "
+                        f"{'al sur' if row_delta > 0 else 'al norte'} de {reference['name']}."
+                    ),
                 },
                 {
                     "id": f"card-{character['id']}-statement-2",
                     "type": "relative_column_distance",
                     "family": "relative_distance",
-                    "args": {"character": character["id"], "reference": reference["id"], "delta": -1},
-                    "text": f"{character['name']} estaba una columna al oeste de {reference['name']}.",
+                    "args": {"character": character["id"], "reference": reference["id"], "delta": column_delta},
+                    "text": (
+                        f"{character['name']} estaba {abs(column_delta)} columna"
+                        f"{'s' if abs(column_delta) != 1 else ''} "
+                        f"{'al este' if column_delta > 0 else 'al oeste'} de {reference['name']}."
+                    ),
                 },
             ]
         cards.append({
@@ -127,13 +146,21 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
     }
 
 
-def expected_scaling_solution(size: int) -> dict[str, tuple[int, int]]:
-    return {f"person_{index + 1:02d}": (index, index) for index in range(size)}
+def expected_scaling_solution(size: int, seed: int = 0) -> dict[str, tuple[int, int]]:
+    rng = random.Random(seed)
+    row_perm = list(range(size))
+    column_perm = list(range(size))
+    rng.shuffle(row_perm)
+    rng.shuffle(column_perm)
+    return {
+        f"person_{index + 1:02d}": (row_perm[index], column_perm[index])
+        for index in range(size)
+    }
 
 
 def generate_scaling_case(size: int, seed: int, output: Path) -> dict[str, Any]:
     puzzle = make_scaling_puzzle(size, seed)
-    expected = expected_scaling_solution(size)
+    expected = expected_scaling_solution(size, seed)
     solver = get_solver("ortools")
     started = time.perf_counter()
     result = solver.solve(puzzle, limit=2)
