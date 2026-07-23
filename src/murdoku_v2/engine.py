@@ -1102,10 +1102,13 @@ def select_cards_with_cpsat_counts(
     }
     subjects = sorted(pools, key=lambda subject: len(pools[subject]))
     states: list[tuple[float, dict[str, list[AtomicClue]]]] = [(0.0, {})]
+    cache: dict[tuple[str, ...], dict[str, Any]] = {}
     report: dict[str, Any] = {
         "method": "cpsat_count_beam",
         "beam_width": beam_width,
         "states_expanded": 0,
+        "solve_calls": 0,
+        "cache_hits": 0,
         "complete_sets_checked": 0,
         "options_per_subject": {
             subject: min(max_candidates_per_subject, len(candidates))
@@ -1118,6 +1121,23 @@ def select_cards_with_cpsat_counts(
         rejected = report["rejected"]
         rejected[reason] = rejected.get(reason, 0) + 1
 
+    def probe(atoms: list[AtomicClue]) -> dict[str, Any]:
+        key = tuple(sorted(atom.key for atom in atoms))
+        cached = cache.get(key)
+        if cached is not None:
+            report["cache_hits"] += 1
+            return cached
+        report["solve_calls"] += 1
+        result = probe_candidates_with_cpsat(
+            puzzle,
+            atoms,
+            expected,
+            limit=2,
+            base_statements=(victim_statement,),
+        )
+        cache[key] = result
+        return result
+
     for depth, subject in enumerate(subjects):
         expanded: list[tuple[float, dict[str, list[AtomicClue]]]] = []
         remaining = len(subjects) - depth - 1
@@ -1126,18 +1146,12 @@ def select_cards_with_cpsat_counts(
                 trial = {key: list(value) for key, value in cards.items()}
                 trial[subject] = [candidate]
                 atoms = [atom for values in trial.values() for atom in values]
-                probe = probe_candidates_with_cpsat(
-                    puzzle,
-                    atoms,
-                    expected,
-                    limit=2,
-                    base_statements=(victim_statement,),
-                )
+                probe_result = probe(atoms)
                 report["states_expanded"] += 1
-                if not probe["available"] or not probe["target_valid"] or probe["solution_count"] == 0:
+                if not probe_result["available"] or not probe_result["target_valid"] or probe_result["solution_count"] == 0:
                     reject("contradiction")
                     continue
-                if remaining and probe["solution_count"] == 1:
+                if remaining and probe_result["solution_count"] == 1:
                     reject("solved_before_all_cards")
                     continue
                 cost = score + len(atoms) * 10 + candidate.directness * 4 + candidate.complexity
@@ -1157,7 +1171,14 @@ def select_cards_with_cpsat_counts(
             for reason in reasons:
                 reject(reason)
             continue
-        validation = validate_card_set_with_cpsat(board, seed, victim_index, target, cards)
+        atoms = [atom for values in cards.values() for atom in values]
+        probe_result = probe(atoms)
+        validation = {
+            "unique": probe_result["solution_count"] == 1,
+            "target_valid": probe_result["target_valid"],
+            "solution_count": probe_result["solution_count"],
+            "statement_count": len(atoms) + 1,
+        }
         if not validation["unique"] or not validation["target_valid"]:
             reject("not_unique")
             continue

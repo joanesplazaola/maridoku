@@ -9,7 +9,7 @@
 - El generador editorial registra una muestra CP-SAT vs NumPy de candidatos supervivientes en diagnostics.
 - El set de tarjetas elegido se valida con CP-SAT antes de aceptar un caso.
 - La CLI renderiza puzzles a una hoja HTML imprimible para pruebas humanas.
-- Existe una ruta experimental `--cpsat-selector` basada en conteos CP-SAT capados a 2; queda diagnosticada y cae al selector estable cuando no encuentra set.
+- Existe una ruta experimental `--cpsat-selector` basada en conteos CP-SAT capados a 2; reporta `solve_calls`/`cache_hits` y cae al selector estable cuando no encuentra set.
 
 ## Gaps principales
 
