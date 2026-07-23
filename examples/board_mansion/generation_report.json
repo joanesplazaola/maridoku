@@ -43,6 +43,12 @@
           "relative_row_order": 1
         }
       },
+      "cpsat_card_set_validation": {
+        "unique": true,
+        "target_valid": true,
+        "solution_count": 1,
+        "statement_count": 6
+      },
       "solutions_without_victim_card": 2,
       "cpsat_candidate_probe_sample": {
         "sample_per_subject": 1,

@@ -392,6 +392,12 @@
       ]
     }
   },
+  "cpsat_card_set_validation": {
+    "unique": true,
+    "target_valid": true,
+    "solution_count": 1,
+    "statement_count": 6
+  },
   "card_dependency_graph": {
     "definition": "A→B cuando B gana información marginal al conocer previamente A.",
     "application_order": [
@@ -520,23 +526,23 @@
       "pruned": 0,
       "constraint_checks": 6,
       "max_depth": 0,
-      "elapsed_ms": 6.079375999433978,
+      "elapsed_ms": 6.270530000620056,
       "metadata": {
         "backend": "Google OR-Tools CP-SAT",
         "ortools_version": "9.15.6755",
-        "model_build_ms": 1.8986129998666001,
+        "model_build_ms": 1.6674130001774756,
         "solve_calls_ms": [
-          2.260887000375078,
-          1.5696620002927375
+          2.3812429990357487,
+          1.8493020015739603
         ],
-        "first_solution_ms": 2.260887000375078,
-        "uniqueness_check_ms": 1.5696620002927375,
+        "first_solution_ms": 2.3812429990357487,
+        "uniqueness_check_ms": 1.8493020015739603,
         "statuses": [
           "OPTIMAL",
           "INFEASIBLE"
         ],
         "num_search_workers": 1,
-        "solver_wall_seconds": 0.003692471,
+        "solver_wall_seconds": 0.004089420000000001,
         "variable_count": 40,
         "constraint_count": 60
       }
