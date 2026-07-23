@@ -45,14 +45,18 @@ def active_statements(
     exclude_card_id: str | None = None,
     exclude_statement_id: str | None = None,
     extra_statements: Iterable[dict[str, Any]] = (),
+    base_statements: Iterable[dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
-    statements = [
-        statement
-        for card in puzzle["cards"]
-        if card["id"] != exclude_card_id
-        for statement in card["statements"]
-        if statement["id"] != exclude_statement_id
-    ]
+    if base_statements is None:
+        statements = [
+            statement
+            for card in puzzle["cards"]
+            if card["id"] != exclude_card_id
+            for statement in card["statements"]
+            if statement["id"] != exclude_statement_id
+        ]
+    else:
+        statements = list(base_statements)
     statements.extend(extra_statements)
     return statements
 

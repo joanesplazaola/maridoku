@@ -73,3 +73,17 @@ def test_cpsat_accepts_candidate_statements_without_mutating_cards():
     assert tightened.available
     assert tightened.stats.constraint_checks == relaxed.stats.constraint_checks + 1
     assert tightened.solutions
+
+
+@pytest.mark.skipif(not ORToolsSolver.is_available(), reason="OR-Tools no está instalado")
+def test_cpsat_can_solve_from_explicit_statement_set():
+    puzzle = json.loads((ROOT / "examples" / "board_restaurant" / "puzzle.json").read_text(encoding="utf-8"))
+    victim_statement = puzzle["cards"][0]["statements"][0]
+    result = ORToolsSolver(num_search_workers=1).solve(
+        puzzle,
+        limit=2,
+        base_statements=(victim_statement,),
+    )
+    assert result.available
+    assert len(result.solutions) == 2
+    assert result.stats.constraint_checks == 1

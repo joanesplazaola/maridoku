@@ -931,15 +931,23 @@ def probe_candidate_with_cpsat(
     expected_positions: dict[str, tuple[int, int]],
     *,
     limit: int = 2,
+    base_statements: tuple[dict[str, Any], ...] | None = None,
 ) -> dict[str, Any]:
     from .solvers.ortools_solver import ORToolsSolver
+    from .validator import _matches_statement
 
     statement = candidate.to_json("candidate-probe")
-    result = ORToolsSolver().solve(puzzle, limit=limit, extra_statements=(statement,))
+    statements = tuple(base_statements or ()) + (statement,)
+    result = ORToolsSolver().solve(
+        puzzle,
+        limit=limit,
+        extra_statements=(statement,),
+        base_statements=base_statements,
+    )
     return {
         "candidate": candidate.key,
         "solution_count": len(result.solutions),
-        "target_valid": expected_positions in result.solutions,
+        "target_valid": all(_matches_statement(item, expected_positions, puzzle) for item in statements),
         "available": result.available,
     }
 

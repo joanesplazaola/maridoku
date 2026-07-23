@@ -62,4 +62,5 @@ class PuzzleSolver(Protocol):
         exclude_card_id: str | None = None,
         exclude_statement_id: str | None = None,
         extra_statements: tuple[dict[str, Any], ...] = (),
+        base_statements: tuple[dict[str, Any], ...] | None = None,
     ) -> SolverResult: ...

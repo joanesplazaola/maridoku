@@ -133,6 +133,69 @@ def test_cpsat_candidate_probe_keeps_the_target_solution(tmp_path: Path) -> None
     assert probe["solution_count"] >= 1
 
 
+def test_cpsat_candidate_probe_matches_numpy_mask_count() -> None:
+    board = load_board(PROJECT / "boards/board_restaurant.json")
+    room_flat, room_ids, room_names, room_index, group_room_indexes = build_board_arrays(board)
+    geometry = board_geometry(board, room_flat)
+    base = enumerate_base_solutions(board)
+    victim_index = 0
+    valid = apply_victim_rule(base, victim_index, room_flat)
+    target = valid[0]
+    pools, _ = generate_atomic_candidates(
+        target, board, room_flat, room_ids, room_names, room_index,
+        group_room_indexes, geometry, victim_index,
+    )
+    candidate = pools["bruno"][0]
+    mask = atomic_mask(
+        candidate, valid, board, room_flat, room_index,
+        group_room_indexes, geometry, CHARACTERS,
+    )
+    puzzle = {
+        "schema_version": 8,
+        "id": "candidate-probe",
+        "seed": 1,
+        "board": board,
+        "characters": [
+            {**character, "role": "victim" if index == victim_index else "suspect"}
+            for index, character in enumerate(CHARACTERS)
+        ],
+        "victim": CHARACTERS[victim_index]["id"],
+        "cards": [
+            {
+                "id": f"card-{character['id']}",
+                "character": character["id"],
+                "role": "victim" if index == victim_index else "suspect",
+                "statements": [{
+                    "id": f"card-{character['id']}-statement-1",
+                    "type": "victim_rule" if index == victim_index else "room",
+                    "family": "murder_rule" if index == victim_index else "room_exact",
+                    "args": (
+                        {"character": character["id"]}
+                        if index == victim_index
+                        else {"character": character["id"], "room": board["rooms"][0]["id"]}
+                    ),
+                    "text": "",
+                }],
+            }
+            for index, character in enumerate(CHARACTERS)
+        ],
+    }
+    expected = {
+        character["id"]: divmod(int(target[index]), board["rows"])
+        for index, character in enumerate(CHARACTERS)
+    }
+    victim_statement = puzzle["cards"][victim_index]["statements"][0]
+    probe = probe_candidate_with_cpsat(
+        puzzle,
+        candidate,
+        expected,
+        limit=2,
+        base_statements=(victim_statement,),
+    )
+    assert probe["target_valid"] is True
+    assert probe["solution_count"] == min(2, int(np.count_nonzero(mask)))
+
+
 def test_generation_report_explains_acceptance_and_rejections(tmp_path: Path) -> None:
     result = generate(
         PROJECT / "boards/board_mansion.json", 102, tmp_path, selection_profile="any"
