@@ -925,6 +925,25 @@ def _card_mask(atoms: list[AtomicClue], masks: dict[str, np.ndarray], size: int)
     return result
 
 
+def probe_candidate_with_cpsat(
+    puzzle: dict[str, Any],
+    candidate: AtomicClue,
+    expected_positions: dict[str, tuple[int, int]],
+    *,
+    limit: int = 2,
+) -> dict[str, Any]:
+    from .solvers.ortools_solver import ORToolsSolver
+
+    statement = candidate.to_json("candidate-probe")
+    result = ORToolsSolver().solve(puzzle, limit=limit, extra_statements=(statement,))
+    return {
+        "candidate": candidate.key,
+        "solution_count": len(result.solutions),
+        "target_valid": expected_positions in result.solutions,
+        "available": result.available,
+    }
+
+
 def generate(
     board_path: Path, seed: int, output_dir: Path, selection_profile: str = "any",
     max_target_attempts: int = 24,

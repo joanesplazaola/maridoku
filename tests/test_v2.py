@@ -6,7 +6,7 @@ from pathlib import Path
 
 import numpy as np
 
-from murdoku_v2.clue_catalog import CLUE_SPECS, atomic_mask, catalog_json
+from murdoku_v2.clue_catalog import AtomicClue, CLUE_SPECS, atomic_mask, catalog_json
 from murdoku_v2.engine import (
     CHARACTERS,
     apply_victim_rule,
@@ -15,6 +15,7 @@ from murdoku_v2.engine import (
     enumerate_base_solutions,
     generate,
     generate_atomic_candidates,
+    probe_candidate_with_cpsat,
     load_board,
 )
 from murdoku_v2.validator import validate_files
@@ -108,6 +109,28 @@ def test_global_selector_returns_complete_nonredundant_cards(tmp_path: Path) -> 
     assert sum(selector["selected_families"].values()) == sum(
         len(card["statements"]) for card in suspect_cards
     )
+
+
+def test_cpsat_candidate_probe_keeps_the_target_solution(tmp_path: Path) -> None:
+    result = generate(
+        PROJECT / "boards/board_restaurant.json", 6201, tmp_path, selection_profile="any"
+    )
+    puzzle = result["puzzle"]
+    expected = {
+        character: (position["row"], position["column"])
+        for character, position in result["solution"]["positions"].items()
+    }
+    card, statement = next(
+        (card, statement)
+        for card in puzzle["cards"]
+        if card["role"] == "suspect"
+        for statement in card["statements"]
+    )
+    candidate = AtomicClue(card["character"], statement["type"], statement["family"], statement["args"], statement["text"])
+    probe = probe_candidate_with_cpsat(puzzle, candidate, expected)
+    assert probe["available"] is True
+    assert probe["target_valid"] is True
+    assert probe["solution_count"] >= 1
 
 
 def test_generation_report_explains_acceptance_and_rejections(tmp_path: Path) -> None:

@@ -5,7 +5,7 @@
 - CP-SAT (`ortools`) es el motor exacto principal.
 - El antiguo solver artesanal se retiró en Git.
 - El generador sintético CP-SAT escribe casos 10x10+ con `generate-scale`.
-- CP-SAT acepta `extra_statements` para evaluar pistas candidatas sin crear tarjetas definitivas.
+- CP-SAT acepta `extra_statements` y `probe_candidate_with_cpsat()` para evaluar pistas candidatas sin crear tarjetas definitivas.
 
 ## Gaps principales
 
@@ -30,7 +30,7 @@
    Cargar personajes desde tablero/perfil o generar N personajes por tamaño. Quitar la regla `rows == len(CHARACTERS)`.
 
 2. Reemplazar máscaras globales por consultas CP-SAT.
-   Para cada pista candidata: añadir la pista al modelo base y preguntar si conserva la solución objetivo y cuántas alternativas deja, con límite 2. El primitivo `extra_statements` ya existe; falta conectarlo al selector.
+   Para cada pista candidata: añadir la pista al modelo base y preguntar si conserva la solución objetivo y cuántas alternativas deja, con límite 2. El probe ya existe; falta conectarlo al selector.
 
 3. Rehacer el selector sobre conteos CP-SAT.
    Mantener el beam search existente, pero cambiar su señal de `mask bitset` a `solution_count <= 2` y `target still valid`.
