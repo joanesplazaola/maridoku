@@ -387,6 +387,13 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
 
     result = generate_scaling_case(10, 9001, tmp_path)
     assert result["puzzle"]["board"]["rows"] == 10
+    assert len(result["puzzle"]["board"]["objects"]) >= 4
+    families = {
+        statement["family"]
+        for card in result["puzzle"]["cards"]
+        for statement in card["statements"]
+    }
+    assert {"object_occupancy", "object_line", "object_adjacency"} <= families
     assert result["diagnostics"]["exact_validation"]["unique"] is True
     assert result["solution"]["murderer"] == "person_02"
     assert (tmp_path / "puzzle.json").exists()

@@ -16,6 +16,54 @@ NAMES = [
 ]
 
 
+OBJECT_NAMES = {
+    "plant": "Planta",
+    "table": "Mesa",
+    "rug": "Alfombra",
+    "sofa": "Sofá",
+}
+
+
+def _object(type_: str, row: int, column: int, suffix: str, *, occupiable: bool = False) -> dict[str, Any]:
+    return {
+        "id": f"{type_}-{suffix}",
+        "type": type_,
+        "name": OBJECT_NAMES[type_],
+        "cells": [[row, column]],
+        "row": row,
+        "column": column,
+        "layer": "furniture",
+        "occupiable": occupiable,
+        "blocks_character": not occupiable,
+    }
+
+
+def _free_neighbor(row: int, column: int, size: int, occupied: set[tuple[int, int]]) -> tuple[int, int]:
+    for next_row, next_column in (
+        (row, column + 1),
+        (row + 1, column),
+        (row, column - 1),
+        (row - 1, column),
+    ):
+        if 0 <= next_row < size and 0 <= next_column < size and (next_row, next_column) not in occupied:
+            return next_row, next_column
+    raise RuntimeError("No hay casilla vecina libre para colocar objeto editorial.")
+
+
+def _free_in_row(row: int, size: int, occupied: set[tuple[int, int]]) -> tuple[int, int]:
+    for column in range(size):
+        if (row, column) not in occupied:
+            return row, column
+    raise RuntimeError("No hay casilla libre en la fila para colocar objeto editorial.")
+
+
+def _free_in_column(column: int, size: int, occupied: set[tuple[int, int]]) -> tuple[int, int]:
+    for row in range(size):
+        if (row, column) not in occupied:
+            return row, column
+    raise RuntimeError("No hay casilla libre en la columna para colocar objeto editorial.")
+
+
 def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
     """Create a deterministic, unique synthetic puzzle for solver scalability tests.
 
@@ -41,22 +89,46 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
         for index in range(size)
     ]
 
+    solution_cells = {
+        (row_perm[index], column_perm[index])
+        for index in range(size)
+    }
     crime_cells = {
         (row_perm[0], column_perm[0]),
         (row_perm[murderer_index], column_perm[murderer_index]),
     }
     other_cells = {(row, column) for row in range(size) for column in range(size)} - crime_cells
+    plant_cell = (row_perm[3 % size], column_perm[3 % size])
+    blocked_for_objects = set(solution_cells) | crime_cells
+    table_cell = _free_in_row(row_perm[4 % size], size, blocked_for_objects | {plant_cell})
+    rug_cell = _free_in_column(column_perm[5 % size], size, blocked_for_objects | {plant_cell, table_cell})
+    sofa_cell = _free_neighbor(row_perm[6 % size], column_perm[6 % size], size, blocked_for_objects | {plant_cell, table_cell, rug_cell})
+    object_cells = {
+        "plant": plant_cell,
+        "table": table_cell,
+        "rug": rug_cell,
+        "sofa": sofa_cell,
+    }
     board = {
         "id": f"scale_{size}x{size}",
-        "name": f"Benchmark sintético {size}×{size}",
+        "name": f"Murdoku escalable {size}×{size}",
         "rows": size,
         "columns": size,
-        "room_groups": [],
+        "room_groups": [{
+            "id": "investigation_area",
+            "name": "Zona de investigación",
+            "rooms": ["rest"],
+        }],
         "rooms": [
             {"id": "crime_room", "name": "Sala del crimen", "cells": sorted(crime_cells)},
-            {"id": "rest", "name": "Resto del edificio", "cells": sorted(other_cells)},
+            {"id": "rest", "name": "Ala de invitados", "cells": sorted(other_cells)},
         ],
-        "objects": [],
+        "objects": [
+            _object("plant", *object_cells["plant"], "gallery", occupiable=True),
+            _object("table", *object_cells["table"], "study"),
+            _object("rug", *object_cells["rug"], "lounge", occupiable=True),
+            _object("sofa", *object_cells["sofa"], "lounge", occupiable=True),
+        ],
     }
 
     victim = characters[0]
@@ -121,6 +193,38 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
                     ),
                 },
             ]
+            if index == 3:
+                statements[0] = {
+                    "id": f"card-{character['id']}-statement-1",
+                    "type": "unique_on_object",
+                    "family": "object_occupancy",
+                    "args": {"character": character["id"], "object_type": "plant"},
+                    "text": f"{character['name']} era la única persona sobre una planta.",
+                }
+            elif index == 4:
+                statements[0] = {
+                    "id": f"card-{character['id']}-statement-1",
+                    "type": "object_same_row_in_room",
+                    "family": "object_line",
+                    "args": {"character": character["id"], "object_type": "table"},
+                    "text": f"Había una mesa en la misma fila que {character['name']}, dentro de su habitación.",
+                }
+            elif index == 5:
+                statements[1] = {
+                    "id": f"card-{character['id']}-statement-2",
+                    "type": "object_same_column_in_room",
+                    "family": "object_line",
+                    "args": {"character": character["id"], "object_type": "rug"},
+                    "text": f"Había una alfombra en la misma columna que {character['name']}, dentro de su habitación.",
+                }
+            elif index == 6:
+                statements[1] = {
+                    "id": f"card-{character['id']}-statement-2",
+                    "type": "adjacent_object",
+                    "family": "object_adjacency",
+                    "args": {"character": character["id"], "object_type": "sofa"},
+                    "text": f"{character['name']} estaba junto a un sofá.",
+                }
         cards.append({
             "id": f"card-{character['id']}",
             "character": character["id"],
