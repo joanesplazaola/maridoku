@@ -488,39 +488,29 @@ def make_scaling_candidate_pools(
 
 
 def _editorialize_clues(puzzle: dict[str, Any], expected: dict[str, tuple[int, int]]) -> list[str]:
-    """Replace chain clues when a more thematic clue preserves the exact solution."""
-    room_at = _room_at(puzzle["board"]["rooms"])
-    candidates = [
-        (3, "unique_on_object", "object_occupancy", {"object_type": "plant"}, "era la única persona junto a la planta."),
-        (4, "object_same_row_in_room", "object_line", {"object_type": "table"}, "estaba en la misma fila y habitación que la mesa."),
-        (5, "object_same_column_in_room", "object_line", {"object_type": "rug"}, "estaba en la misma columna y habitación que la alfombra."),
-        (6, "adjacent_object", "object_adjacency", {"object_type": "sofa"}, "estaba justo al lado del sofá."),
-        (
-            2,
-            "room",
-            "room_exact",
-            {"room": room_at[expected["person_03"]]},
-            f"estaba en {next(room['name'] for room in puzzle['board']['rooms'] if room['id'] == room_at[expected['person_03']])}.",
-        ),
-    ]
+    """Replace synthetic chain clues with pool candidates validated by CP-SAT."""
+    pools = make_scaling_candidate_pools(puzzle, expected)
     solver = get_solver("ortools")
     accepted: list[str] = []
-    for index, type_, family, args, text in candidates:
-        if index >= len(puzzle["cards"]) - 1:
-            continue
-        card = puzzle["cards"][index]
+    cards = {card["character"]: card for card in puzzle["cards"] if card["role"] == "suspect"}
+    for character_id, candidates in pools.items():
+        card = cards[character_id]
         original = card["statements"][0]
-        card["statements"][0] = {
-            "id": original["id"],
-            "type": type_,
-            "family": family,
-            "args": {"character": card["character"], **args},
-            "text": f"{card['character_name']} {text}",
-        }
-        result = solver.solve(puzzle, limit=2)
-        if result.unique and result.solutions[0] == expected:
-            accepted.append(type_)
-        else:
+        thematic = sorted(
+            candidates,
+            key=lambda statement: (
+                statement["family"] in {"coordinate", "relative_distance"},
+                statement["family"] == "room_exact",
+            ),
+        )
+        for candidate in thematic:
+            if candidate["type"] == original["type"] and candidate["args"] == original["args"]:
+                continue
+            card["statements"][0] = {**candidate, "id": original["id"]}
+            result = solver.solve(puzzle, limit=2)
+            if result.unique and result.solutions[0] == expected:
+                accepted.append(candidate["type"])
+                break
             card["statements"][0] = original
     return accepted
 
