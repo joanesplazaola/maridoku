@@ -74,8 +74,6 @@ def run_benchmark(
                 "generation_targets_attempted": diagnostics.get("generation_targets_attempted", 1),
                 "generation_rejection_summary": diagnostics.get("generation_rejection_summary", {}),
                 "selector_method": diagnostics.get("global_selector", {}).get("method", "unknown"),
-                "dependency_depth": diagnostics.get("card_dependency_graph", {}).get("max_dependency_depth", 0),
-                "dependency_edges": diagnostics.get("card_dependency_graph", {}).get("edge_count", 0),
                 "exact_unique": diagnostics.get("exact_validation", {}).get("unique", False),
                 "exact_matches_solution": diagnostics.get("exact_validation", {}).get("matches_solution", False),
                 "exact_elapsed_ms": diagnostics.get("exact_validation", {}).get("stats", {}).get("elapsed_ms"),
@@ -218,14 +216,6 @@ def run_benchmark_suite(
         },
         "difficulty_distribution": dict(sorted(labels.items())),
         "all_cards_necessary_cases": sum(bool(case["all_cards_necessary"]) for case in combined_cases),
-        "dependency_depth": {
-            "mean": round(statistics.mean(case["dependency_depth"] for case in combined_cases), 2) if combined_cases else None,
-            "max": max((case["dependency_depth"] for case in combined_cases), default=None),
-        },
-        "dependency_edges": {
-            "mean": round(statistics.mean(case["dependency_edges"] for case in combined_cases), 2) if combined_cases else None,
-            "max": max((case["dependency_edges"] for case in combined_cases), default=None),
-        },
         "human_solver_match_cases": sum(bool(case["human_solver_matches_solution"]) for case in combined_cases),
         "exact_unique_cases": sum(bool(case["exact_unique"]) for case in combined_cases),
         "exact_match_cases": sum(bool(case["exact_matches_solution"]) for case in combined_cases),
@@ -253,7 +243,7 @@ def run_benchmark_suite(
         "board", "seed", "generation_seconds", "difficulty", "difficulty_score",
         "requires_hypothesis", "double_card_count", "total_statement_count",
         "all_cards_necessary", "human_solver_matches_solution", "selector_method",
-        "generation_targets_attempted", "dependency_depth", "dependency_edges",
+        "generation_targets_attempted",
     ]
     with (output_dir / "benchmark_suite.csv").open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)

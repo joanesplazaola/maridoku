@@ -22,7 +22,6 @@ validador independiente + solucionador deductivo
 
 - `clue_catalog.py`: contrato lógico de los tipos de pista.
 - `selector.py`: búsqueda de conjuntos completos de tarjetas.
-- `dependency.py`: estructura de dependencia entre tarjetas.
 - `engine.py`: orquestación, generación y diagnósticos.
 - `validator.py`: segundo solucionador, deliberadamente separado.
 - `human_solver.py`: propagación deductiva y dificultad provisional.

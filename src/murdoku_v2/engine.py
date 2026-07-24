@@ -12,7 +12,6 @@ import numpy as np
 
 from .clue_catalog import AtomicClue, CLUE_SPECS, atomic_mask, catalog_json
 from .selector import global_select_cards, quality_reasons
-from .dependency import analyze_card_dependencies
 
 
 CHARACTERS = [
@@ -1438,26 +1437,6 @@ def generate(
             "statements": statements,
         })
 
-    base_rooms = room_flat[base_solutions]
-    victim_room_values = base_rooms[:, [victim_index]]
-    victim_mask_over_base = np.sum(base_rooms == victim_room_values, axis=1) == 2
-    dependency_masks = {
-        f"card-{victim['id']}": _bool_mask_to_bits(victim_mask_over_base),
-        **{card_id: _bool_mask_to_bits(mask) for card_id, mask in chosen_card_masks_over_base.items()},
-    }
-    dependency_metadata = {
-        card["id"]: {
-            "role": card["role"],
-            "character": card["character"],
-            "families": [statement["family"] for statement in card["statements"]],
-        }
-        for card in cards_json
-    }
-    dependency_graph = analyze_card_dependencies(
-        dependency_masks, (1 << len(base_solutions)) - 1, dependency_metadata,
-        first_card_id=f"card-{victim['id']}",
-    )
-
     puzzle = {
         "schema_version": 8,
         "id": f"case-{board['id']}-{seed}",
@@ -1624,7 +1603,6 @@ def generate(
         "global_selector": chosen_selection_report,
         "cpsat_candidate_probe_sample": chosen_cpsat_candidate_probe,
         "cpsat_card_set_validation": chosen_cpsat_card_set_validation,
-        "card_dependency_graph": dependency_graph,
         "generation_targets_attempted": len(attempt_reports),
         "generation_rejection_summary": dict(__import__("collections").Counter(
             reason for attempt in attempt_reports for reason in attempt.get("reasons", [])
