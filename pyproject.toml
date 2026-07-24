@@ -1,21 +1,15 @@
 [project]
 name = "murdoku-v2-gamma-cpsat"
 version = "2.2.0a1"
-description = "Motor V2-gamma de Murdoku con Google OR-Tools CP-SAT y validación multi-solver"
+description = "Generador y validador de Murdoku con Google OR-Tools CP-SAT"
 requires-python = ">=3.11"
 dependencies = [
   "numpy>=2.0",
   "ortools==9.15.6755",
   "pydantic>=2.10",
-  "networkx>=3.4",
-  "rich>=13.9",
 ]
 
 [project.optional-dependencies]
-z3 = ["z3-solver>=4.13"]
-solvers = [
-  "z3-solver>=4.13",
-]
 dev = ["pytest>=8.0"]
 
 [project.scripts]

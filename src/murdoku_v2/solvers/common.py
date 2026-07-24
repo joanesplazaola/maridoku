@@ -3,8 +3,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Iterable
 
-import networkx as nx
-
 from ..models import validate_puzzle
 from ..validator import _matches_statement
 
@@ -34,7 +32,6 @@ class SolverContext:
     object_cells_by_type: dict[str, set[int]]
     occupiable_cells_by_type: dict[str, set[int]]
     geometry: dict[int, dict[str, bool]]
-    graph: nx.Graph
 
     def to_positions(self, assigned: dict[str, int]) -> dict[str, tuple[int, int]]:
         return {character: divmod(cell, self.n) for character, cell in assigned.items()}
@@ -108,20 +105,7 @@ def build_context(
             }
 
     statements = active_statements(puzzle, exclude_card_id, exclude_statement_id)
-    graph = nx.Graph()
     character_ids = [character["id"] for character in puzzle["characters"]]
-    graph.add_nodes_from(character_ids)
-    victim = puzzle["victim"]
-    for other in character_ids:
-        if other != victim:
-            graph.add_edge(victim, other, kind="victim_rule")
-    for statement in statements:
-        subject = statement["args"].get("character")
-        reference = statement["args"].get("reference")
-        if subject and reference:
-            graph.add_edge(subject, reference, kind=statement["type"])
-        elif subject:
-            graph.nodes[subject]["unary_weight"] = graph.nodes[subject].get("unary_weight", 0) + 1
 
     return SolverContext(
         puzzle=puzzle,
@@ -137,7 +121,6 @@ def build_context(
         object_cells_by_type=object_cells_by_type,
         occupiable_cells_by_type=occupiable_cells_by_type,
         geometry=geometry,
-        graph=graph,
     )
 
 

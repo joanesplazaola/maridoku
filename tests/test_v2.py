@@ -484,15 +484,11 @@ def test_pydantic_contract_rejects_an_invalid_object_footprint() -> None:
         validate_puzzle(malformed)
 
 
-def test_optional_solver_adapters_fail_explicitly_when_not_installed() -> None:
-    import json
-
+def test_solver_registry_uses_cpsat() -> None:
+    import pytest
     from murdoku_v2.solvers.registry import get_solver
 
-    puzzle = json.loads((PROJECT / "examples/board_restaurant/puzzle.json").read_text(encoding="utf-8"))
-    for name in ("z3", "ortools"):
-        solver = get_solver(name)
-        result = solver.solve(puzzle)
-        if not solver.is_available():
-            assert result.available is False
-            assert result.message
+    assert get_solver("auto").name == "ortools-cp-sat"
+    assert get_solver("ortools").name == "ortools-cp-sat"
+    with pytest.raises(ValueError, match="Solucionador desconocido"):
+        get_solver("z3")

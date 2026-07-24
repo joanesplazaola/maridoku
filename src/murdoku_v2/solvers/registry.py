@@ -3,11 +3,9 @@ from __future__ import annotations
 from typing import Any
 
 from .ortools_solver import ORToolsSolver
-from .z3_solver import Z3Solver
 
 
 SOLVER_TYPES = {
-    "z3": Z3Solver,
     "ortools": ORToolsSolver,
 }
 
@@ -26,10 +24,7 @@ def availability() -> list[dict[str, Any]]:
         {
             "name": name,
             "available": solver_type.is_available(),
-            "role": {
-                "z3": "adaptador SMT opcional",
-                "ortools": "motor exacto principal CP-SAT",
-            }[name],
+            "role": "motor exacto principal CP-SAT",
         }
         for name, solver_type in SOLVER_TYPES.items()
     ]

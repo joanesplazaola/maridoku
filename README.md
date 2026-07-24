@@ -6,7 +6,6 @@ Esta rama usa **Google OR-Tools CP-SAT** como motor exacto principal.
 ## Contenido
 
 - `ORToolsSolver`: modelo exacto CP-SAT para las 22 familias de pistas actuales.
-- `Z3Solver`: punto de integración experimental.
 - Cinco tableros manuales y casos ya generados.
 - Benchmark de construcción del modelo, primera solución y unicidad.
 
@@ -19,12 +18,6 @@ Esta rama usa **Google OR-Tools CP-SAT** como motor exacto principal.
 
 ```bash
 uv sync --extra dev
-```
-
-Para instalar también Z3:
-
-```bash
-uv sync --extra solvers --extra dev
 ```
 
 Con `venv` y `pip`:

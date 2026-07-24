@@ -4,9 +4,6 @@ import argparse
 import json
 from pathlib import Path
 
-from rich.console import Console
-from rich.table import Table
-
 from .benchmark import run_benchmark, run_benchmark_suite
 from .clue_catalog import catalog_json
 from .engine import generate
@@ -16,9 +13,6 @@ from .render import render_file
 from .scaling import generate_scaling_case, run_scaling_benchmark
 from .solvers.registry import availability, get_solver
 from .targeted import generate_targeted
-
-
-console = Console()
 
 
 def _json(data) -> None:
@@ -77,7 +71,7 @@ def main() -> None:
     validate_parser = subparsers.add_parser("validate", help="Valida un caso con el motor elegido")
     validate_parser.add_argument("--puzzle", type=Path, default=Path("generated/puzzle.json"))
     validate_parser.add_argument("--solution", type=Path, default=Path("generated/solution.json"))
-    validate_parser.add_argument("--solver", choices=["auto", "ortools", "z3"], default="auto")
+    validate_parser.add_argument("--solver", choices=["auto", "ortools"], default="auto")
 
     explain_parser = subparsers.add_parser("explain", help="Regenera la explicación deductiva")
     explain_parser.add_argument("--puzzle", type=Path, default=Path("generated/puzzle.json"))
@@ -107,7 +101,7 @@ def main() -> None:
 
     scale_parser = subparsers.add_parser("scale-benchmark", help="Prueba 6×6, 8×8, 10×10 y 12×12")
     scale_parser.add_argument("--sizes", nargs="+", type=int, default=[6, 8, 10, 12])
-    scale_parser.add_argument("--solver", choices=["ortools", "z3"], default="ortools")
+    scale_parser.add_argument("--solver", choices=["ortools"], default="ortools")
     scale_parser.add_argument("--repetitions", type=int, default=3)
     scale_parser.add_argument("--output", type=Path, default=Path("scaling_benchmark.json"))
 
@@ -181,14 +175,7 @@ def main() -> None:
         )
         _json(report)
     elif args.command == "solvers":
-        table = Table(title="Motores disponibles")
-        table.add_column("Motor")
-        table.add_column("Disponible")
-        table.add_column("Papel")
-        for item in availability():
-            table.add_row(item["name"], "sí" if item["available"] else "no", item["role"])
-        console.print(table)
-        console.print("CP-SAT viene instalado por defecto; Z3 es opcional con [bold]uv sync --extra solvers[/bold]")
+        _json(availability())
     elif args.command == "object-catalog":
         _json(object_catalog_json())
     else:

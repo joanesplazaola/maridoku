@@ -1,4 +1,4 @@
-# Arquitectura multi-solver
+# Motor exacto
 
 ## OR-Tools CP-SAT
 
@@ -18,7 +18,3 @@ El `PuzzleModel` valida antes de resolver:
 - una o dos afirmaciones por tarjeta;
 - afirmaciones centradas en el propietario de la tarjeta;
 - geometría y objetos dentro del tablero.
-
-## Z3
-
-Se mantiene como adaptador experimental opcional.
