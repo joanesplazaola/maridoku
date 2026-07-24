@@ -36,9 +36,10 @@ Objetivo: probar puzles completos sin herramientas de desarrollo.
 - [ ] Adaptar tablero y tarjetas a escritorio, tableta y móvil.
 - [ ] Cubrir navegación por teclado, foco visible, contraste y lectores de pantalla.
 - [ ] Registrar finalización, errores, ayudas y tiempo de resolución sin datos personales.
+- [ ] Publicar una preview estática en GitHub Pages mediante GitHub Actions.
 
 Criterio de salida: una sesión completa funciona con ratón, táctil y teclado en
-Chrome, Firefox y Safari actuales.
+Chrome, Firefox y Safari actuales, y la misma build está accesible en GitHub Pages.
 
 ## P2: calidad editorial
 
@@ -60,7 +61,8 @@ Objetivo: convertir generación, revisión y entrega en un flujo repetible.
 - [ ] Crear un manifiesto por puzle con versión, seed, solución y métricas editoriales.
 - [ ] Separar datos privados de solución de los datos enviados al jugador.
 - [ ] Añadir revisión editorial, aprobación y retirada de puzles.
-- [ ] Automatizar tests, build y despliegue desde Git.
+- [ ] Exigir tests y build correctos antes de desplegar GitHub Pages.
+- [ ] Promover a producción únicamente artefactos generados por un commit identificado.
 - [ ] Definir analítica, privacidad, backups y respuesta ante errores de contenido.
 
 Criterio de salida: un puzle aprobado pasa de seed a producción y puede retirarse
