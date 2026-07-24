@@ -41,12 +41,6 @@ La fila `ortools` debe indicar `sí`.
 uv run pytest -q
 ```
 
-Resultado esperado con OR-Tools instalado:
-
-```text
-22 passed
-```
-
 Las pruebas CP-SAT validan:
 
 - Unicidad de los escenarios de referencia.

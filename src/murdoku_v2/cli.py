@@ -50,7 +50,7 @@ def _validate_with_solver(puzzle_path: Path, solution_path: Path, solver_name: s
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Generador local Murdoku V2-beta")
+    parser = argparse.ArgumentParser(description="Generador local de Murdoku")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     generate_parser = subparsers.add_parser("generate", help="Genera un caso JSON")

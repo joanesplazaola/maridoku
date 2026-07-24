@@ -1,55 +1,73 @@
-# Roadmap
+# Roadmap de producto
 
 ## Estado actual
 
-- CP-SAT (`ortools`) es el motor exacto principal.
-- El antiguo solver artesanal se retiró en Git.
-- El generador CP-SAT escalable escribe casos 8x8+ seed-dependientes con `generate-scale`, varias habitaciones y objetos con huellas reales `1x1`, `1x2` y en L; las pistas de objetos/habitación se aceptan solo si conservan la unicidad.
-- CP-SAT acepta `base_statements`, `extra_statements`, `probe_candidate_with_cpsat()` y `probe_candidates_with_cpsat()` para evaluar pistas candidatas sin crear tarjetas definitivas.
-- El generador editorial registra una muestra CP-SAT vs NumPy de candidatos supervivientes en diagnostics.
-- El set de tarjetas elegido se valida con CP-SAT antes de aceptar un caso.
-- La CLI renderiza puzzles a una hoja HTML imprimible para pruebas humanas.
-- El render dibuja una sola pieza por objeto multicelda, respeta orientación/capa y dispone de assets para los 11 tipos del catálogo.
-- `object_catalog.py` define 11 tipos y sus huellas admitidas (`1x1`, `1x2`, `2x2`, `L3`); la CLI los expone con `object-catalog` y Pydantic rechaza objetos desconectados o que atraviesan paredes.
-- El selector editorial estable está separado en `selector.py` y usa máscaras bitset con `int.bit_count()` para elegir sets completos de tarjetas.
-- Existe una ruta experimental `--cpsat-selector` basada en conteos CP-SAT capados a 2; reporta `solve_calls`/`cache_hits` y cae al selector estable cuando no encuentra set.
+- [x] CP-SAT es el único motor exacto y valida solución y unicidad.
+- [x] Hay generación editorial 6x6 y generación escalable sintética 8x8+.
+- [x] El catálogo formal cubre 22 familias de pistas.
+- [x] El catálogo visual cubre 11 objetos con huellas `1x1`, `1x2`, `2x2` y `L3`.
+- [x] Los tableros, objetos y puzles se validan con Pydantic.
+- [x] Existe una hoja HTML autocontenida para revisión editorial.
+- [ ] El generador editorial escala más allá de 6 personajes.
+- [ ] Existe un jugador interactivo usable.
+- [ ] La dificultad está calibrada con personas.
+- [ ] Existe un flujo reproducible de publicación y regresión de contenido.
 
-## Gaps principales
+## P0: generador escalable
 
-1. Generación editorial limitada a 6 personajes.
-   `engine.py` usa `CHARACTERS` fijo y exige `rows == len(CHARACTERS)`.
+Objetivo: producir 8x8 y 10x10 variados sin enumerar `(n!)²`.
 
-2. Selector basado en universo enumerado.
-   La selección por máscaras ya es rápida para 6x6, pero `enumerate_base_solutions()` aún crea `(n!)^2` asignaciones y las máscaras dependen de ese universo. Esto bloquea 8x8+ aunque CP-SAT ya resuelva esos tamaños.
+- [ ] Parametrizar personajes y retirar el límite fijo de 6x6.
+- [ ] Hacer del selector CP-SAT la ruta principal y eliminar el selector por máscaras.
+- [ ] Sustituir las cadenas sintéticas por selección completa del catálogo de pistas.
+- [ ] Definir presupuestos de tiempo y tasas mínimas de éxito para 6x6, 8x8 y 10x10.
+- [ ] Conservar un conjunto pequeño de seeds de regresión en `examples/`.
 
-3. Solver humano enumerativo.
-   `human_solver.py` reutiliza `enumerate_base_solutions()`, así que la explicación/dificultad tampoco escala.
+Criterio de salida: 100 casos consecutivos por tamaño, todos únicos, sin pistas
+redundantes y dentro del presupuesto publicado.
 
-4. Tests deben cubrir propiedades, no enumeración.
-   La suite normal debe seguir barata: unicidad, solución esperada, exclusiones y escalado sintético.
+## P1: jugador web
 
-5. Fixtures actuales regenerados.
-   `examples/` y `generated/` usan `exact_validation` y diagnostics CP-SAT; los informes V2-alpha/beta quedan como historia.
+Objetivo: probar puzles completos sin herramientas de desarrollo.
 
-6. Variedad editorial grande aún limitada.
-   El 8x8+ ya mezcla pistas espaciales, de habitación y de objetos, pero conserva parte de la cadena de distancias como garantía. Falta seleccionar el conjunto completo con CP-SAT y medir dificultad humana.
+- [ ] Seleccionar sospechoso y colocarlo, moverlo o retirarlo del tablero.
+- [ ] Mostrar restricciones de fila, columna y ocupación mientras se juega.
+- [ ] Añadir deshacer, reiniciar, comprobación y persistencia local.
+- [ ] Adaptar tablero y tarjetas a escritorio, tableta y móvil.
+- [ ] Cubrir navegación por teclado, foco visible, contraste y lectores de pantalla.
+- [ ] Registrar finalización, errores, ayudas y tiempo de resolución sin datos personales.
 
-## Próximos pasos
+Criterio de salida: una sesión completa funciona con ratón, táctil y teclado en
+Chrome, Firefox y Safari actuales.
 
-1. Parametrizar personajes.
-   Cargar personajes desde tablero/perfil o generar N personajes por tamaño. Quitar la regla `rows == len(CHARACTERS)`.
+## P2: calidad editorial
 
-2. Reemplazar máscaras globales por consultas CP-SAT.
-   Para cada pista candidata o conjunto de pistas: añadirlas al modelo base y preguntar si conserva la solución objetivo y cuántas alternativas deja, con límite 2. Los probes ya existen y el generador ya registra una muestra comparativa; falta reemplazar el filtro completo.
+Objetivo: que dificultad y claridad sean propiedades medidas, no etiquetas heurísticas.
 
-3. Rehacer el selector sobre conteos CP-SAT.
-   Optimizar/cachear `--cpsat-selector` hasta hacerlo default. La aceptación del set completo ya está en CP-SAT; la búsqueda parcial ya existe experimentalmente y evita shortlists de una sola familia, pero todavía puede quedarse en sets no únicos y caer al selector de máscara estable.
+- [ ] Crear un propagador no enumerativo para explicaciones y pistas.
+- [ ] Versionar la redacción y traducciones fuera de la lógica.
+- [ ] Ejecutar pruebas ciegas y calibrar fácil, medio, difícil y experto.
+- [ ] Detectar ambigüedad lingüística, pistas dominantes y soluciones por descarte técnico.
+- [ ] Revisar licencia y procedencia de todos los recursos visuales.
 
-4. Separar explicación humana de generación grande.
-   Mantener explicación completa para 6x6; para 8x8+ devolver diagnóstico estructural hasta que haya propagador no enumerativo.
+Criterio de salida: cada nivel cumple su rango de tiempo, abandono y ayudas en
+una muestra de prueba definida.
 
-5. Medir casos reales grandes.
-   Añadir benchmarks de generación 8x8, 10x10 y 13x13 con tableros editoriales ricos cuando el selector CP-SAT sustituya las máscaras.
+## P3: publicación
 
-6. Preparar paquete de prueba.
-   Mantener `scripts/bootstrap.*` como smoke reproducible: sync, tests, generación editorial, HTML imprimible y generación 13x13.
+Objetivo: convertir generación, revisión y entrega en un flujo repetible.
+
+- [ ] Crear un manifiesto por puzle con versión, seed, solución y métricas editoriales.
+- [ ] Separar datos privados de solución de los datos enviados al jugador.
+- [ ] Añadir revisión editorial, aprobación y retirada de puzles.
+- [ ] Automatizar tests, build y despliegue desde Git.
+- [ ] Definir analítica, privacidad, backups y respuesta ante errores de contenido.
+
+Criterio de salida: un puzle aprobado pasa de seed a producción y puede retirarse
+sin editar archivos manualmente.
+
+## Fuera de alcance por ahora
+
+- Cuentas, pagos y multijugador antes de validar el jugador.
+- Más motores exactos mientras CP-SAT cumpla los presupuestos.
+- Un sistema de diseño independiente antes de estabilizar la interacción.

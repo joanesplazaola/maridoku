@@ -1,4 +1,4 @@
-# Arquitectura V2-alpha
+# Arquitectura
 
 ## Flujo
 
@@ -32,14 +32,3 @@ validador independiente + solucionador deductivo
 Primero busca una combinación completa con una afirmación por sospechoso mediante DFS global. No confirma una pista antes de comprobar que el resto de tarjetas puede completar el conjunto.
 
 Cuando las tarjetas simples no bastan, construye opciones de tarjeta doble y realiza una búsqueda por haz sobre tarjetas completas. Las dos afirmaciones compiten como una sola opción editorial y se comprueba después que ambas sean necesarias.
-
-## Grafo de dependencias
-
-Se añade una arista `A → B` cuando la ganancia de información de B aumenta al haber aplicado previamente A. Se registra:
-
-- orden determinista de aplicación;
-- fuerza de la dependencia en bits;
-- profundidad máxima;
-- número de tarjetas dependientes.
-
-Es una métrica estructural estable, no una afirmación de que modele perfectamente a una persona.

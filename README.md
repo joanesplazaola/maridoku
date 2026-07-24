@@ -1,4 +1,4 @@
-# Murdoku V2-gamma — CP-SAT
+# Murdoku
 
 Repositorio local del motor de generación y validación de puzles Murdoku.
 Esta rama usa **Google OR-Tools CP-SAT** como motor exacto principal.
@@ -6,7 +6,7 @@ Esta rama usa **Google OR-Tools CP-SAT** como motor exacto principal.
 ## Contenido
 
 - `ORToolsSolver`: modelo exacto CP-SAT para las 22 familias de pistas actuales.
-- Cinco tableros manuales y casos ya generados.
+- Cinco tableros manuales y fixtures de regresión.
 - Benchmark de construcción del modelo, primera solución y unicidad.
 
 ## Requisitos

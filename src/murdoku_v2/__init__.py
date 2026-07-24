@@ -1,1 +1,1 @@
-"""Murdoku V2-beta engine."""
+"""Murdoku puzzle generator and validator."""
