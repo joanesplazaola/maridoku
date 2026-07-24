@@ -85,8 +85,16 @@ def _stylesheet() -> str:
         "__RUG_L__": assets.joinpath("furniture/rug-l.webp"),
         "__SOFA__": assets.joinpath("furniture/sofa.webp"),
         "__BED__": assets.joinpath("furniture/bed.webp"),
+        "__BED_HORIZONTAL__": assets.joinpath("furniture/bed-horizontal.webp"),
         "__CHAIR__": assets.joinpath("furniture/chair.webp"),
         "__TV__": assets.joinpath("furniture/tv.webp"),
+        "__DINING_TABLE__": assets.joinpath("furniture/dining-table.webp"),
+        "__DINING_TABLE_HORIZONTAL__": assets.joinpath("furniture/dining-table-horizontal.webp"),
+        "__BOOKSHELF__": assets.joinpath("furniture/bookshelf.webp"),
+        "__BOOKSHELF_HORIZONTAL__": assets.joinpath("furniture/bookshelf-horizontal.webp"),
+        "__WARDROBE__": assets.joinpath("furniture/wardrobe.webp"),
+        "__WARDROBE_HORIZONTAL__": assets.joinpath("furniture/wardrobe-horizontal.webp"),
+        "__COUNTER_L__": assets.joinpath("furniture/counter-l.webp"),
     }
     for marker, asset in replacements.items():
         data = base64.b64encode(asset.read_bytes()).decode("ascii")

@@ -6,6 +6,7 @@ import time
 from pathlib import Path
 from typing import Any
 
+from .object_catalog import OBJECT_CATALOG
 from .solvers.registry import get_solver
 
 
@@ -15,14 +16,6 @@ NAMES = [
     "Marta", "Nicolás", "Olga", "Pablo",
 ]
 
-
-OBJECT_NAMES = {
-    "plant": "Planta",
-    "table": "Mesa",
-    "rug": "Alfombra",
-    "sofa": "Sofá",
-    "bed": "Cama",
-}
 
 ROOM_NAMES = [
     ("library", "Biblioteca"),
@@ -36,16 +29,20 @@ ROOM_NAMES = [
 ]
 
 
-def _object(type_: str, cells: set[tuple[int, int]], suffix: str, *, occupiable: bool = False) -> dict[str, Any]:
+def _object(
+    type_: str, cells: set[tuple[int, int]], suffix: str, *, occupiable: bool | None = None,
+) -> dict[str, Any]:
+    spec = OBJECT_CATALOG[type_]
+    occupiable = spec.occupiable if occupiable is None else occupiable
     row, column = min(cells)
     return {
         "id": f"{type_}-{suffix}",
         "type": type_,
-        "name": OBJECT_NAMES[type_],
+        "name": spec.name,
         "cells": [list(cell) for cell in sorted(cells)],
         "row": row,
         "column": column,
-        "layer": "furniture",
+        "layer": spec.layer,
         "occupiable": occupiable,
         "blocks_character": not occupiable,
     }
@@ -209,7 +206,8 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
     rooms = _scaling_rooms(size, crime_room_cells)
     room_at = _room_at(rooms)
     plant_cell = (row_perm[3 % size], column_perm[3 % size])
-    blocked_for_objects = set(solution_cells) | crime_room_cells
+    label_cells = {tuple(room["label_anchor"]) for room in rooms}
+    blocked_for_objects = set(solution_cells) | crime_room_cells | label_cells
     table_cells = _place_footprint(
         [{(0, 0)}],
         size,
@@ -254,6 +252,48 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
         "sofa": sofa_cells,
         "bed": bed_cells,
     }
+    occupied = blocked_for_objects | table_cells | rug_cells | sofa_cells | bed_cells
+    if size >= 8:
+        for type_, shapes in (
+            ("dining_table", [{(0, 0), (1, 0)}, {(0, 0), (0, 1)}]),
+            ("bookshelf", [{(0, 0), (0, 1)}, {(0, 0), (1, 0)}]),
+            ("wardrobe", [{(0, 0), (1, 0)}, {(0, 0), (0, 1)}]),
+            (
+                "counter",
+                [
+                    {(0, 0), (0, 1), (1, 0)},
+                    {(0, 0), (0, 1), (1, 1)},
+                    {(0, 0), (1, 0), (1, 1)},
+                    {(0, 1), (1, 0), (1, 1)},
+                ],
+            ),
+        ):
+            room_ids = sorted(
+                (room["id"] for room in rooms if room["id"] != "crime_room"),
+                key=lambda room_id: sum(room_at[cell] == room_id for cell in occupied),
+            )
+            for room_id in room_ids:
+                try:
+                    cells = _place_footprint(shapes, size, room_at, occupied, room_id=room_id)
+                    break
+                except RuntimeError:
+                    continue
+            else:
+                raise RuntimeError(f"No hay espacio para colocar {type_}.")
+            object_cells[type_] = cells
+            occupied |= cells
+    objects = [
+        _object("plant", object_cells["plant"], "gallery", occupiable=True),
+        _object("table", object_cells["table"], "study"),
+        _object("rug", object_cells["rug"], "lounge", occupiable=True),
+        _object("sofa", object_cells["sofa"], "lounge", occupiable=True),
+        _object("bed", object_cells["bed"], "bedroom"),
+    ]
+    objects.extend(
+        _object(type_, cells, "editorial")
+        for type_, cells in object_cells.items()
+        if type_ in {"dining_table", "bookshelf", "wardrobe", "counter"}
+    )
     board = {
         "id": f"scale_{size}x{size}",
         "name": f"Murdoku escalable {size}×{size}",
@@ -265,13 +305,7 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
             "rooms": [room["id"] for room in rooms if room["id"] != "crime_room"],
         }],
         "rooms": rooms,
-        "objects": [
-            _object("plant", object_cells["plant"], "gallery", occupiable=True),
-            _object("table", object_cells["table"], "study"),
-            _object("rug", object_cells["rug"], "lounge", occupiable=True),
-            _object("sofa", object_cells["sofa"], "lounge", occupiable=True),
-            _object("bed", object_cells["bed"], "bedroom"),
-        ],
+        "objects": objects,
     }
 
     victim = characters[0]

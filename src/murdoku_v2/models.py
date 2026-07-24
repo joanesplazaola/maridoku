@@ -4,6 +4,8 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from .object_catalog import OBJECT_CATALOG, footprint_kind
+
 
 class CharacterModel(BaseModel):
     model_config = ConfigDict(extra="allow")
@@ -71,9 +73,33 @@ class BoardModel(BaseModel):
             unknown = set(group.rooms) - room_ids
             if unknown:
                 raise ValueError(f"El grupo {group.id} referencia habitaciones inexistentes: {sorted(unknown)}")
+        room_at = {cell: room.id for room in self.rooms for cell in room.cells}
         for obj in self.objects:
             if any(cell not in expected for cell in obj.cells):
                 raise ValueError(f"El objeto {obj.id} sale del tablero.")
+            cells = set(obj.cells)
+            if len(cells) != len(obj.cells):
+                raise ValueError(f"El objeto {obj.id} repite casillas.")
+            if len({room_at[cell] for cell in cells}) != 1:
+                raise ValueError(f"El objeto {obj.id} atraviesa paredes.")
+            connected = {next(iter(cells))}
+            while frontier := {
+                neighbor
+                for row, column in connected
+                for neighbor in ((row - 1, column), (row + 1, column), (row, column - 1), (row, column + 1))
+                if neighbor in cells - connected
+            }:
+                connected |= frontier
+            if connected != cells:
+                raise ValueError(f"El objeto {obj.id} tiene una huella desconectada.")
+            spec = OBJECT_CATALOG.get(obj.type)
+            if spec is None:
+                raise ValueError(f"El objeto {obj.id} usa un tipo fuera del catálogo: {obj.type}.")
+            footprint = footprint_kind(obj.cells)
+            if footprint not in spec.footprints:
+                raise ValueError(
+                    f"El objeto {obj.id} usa huella {footprint}; {obj.type} admite {spec.footprints}."
+                )
         return self
 
 

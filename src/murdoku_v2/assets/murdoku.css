@@ -305,37 +305,56 @@ td {
 }
 .object-chair { background-image: url("__CHAIR__"); }
 .object-tv { background-image: url("__TV__"); }
+.object-dining-table { background-image: url("__DINING_TABLE__"); }
+.object-bookshelf { background-image: url("__BOOKSHELF__"); }
+.object-wardrobe { background-image: url("__WARDROBE__"); }
+.object-counter { background-image: url("__COUNTER_L__"); }
 
 .object-placement.vertical .object {
   transform: rotate(90deg);
 }
 
-.object-placement.vertical .object-bed {
-  transform: none;
-}
+.object-placement.vertical .object-bed,
+.object-placement.vertical .object-dining-table,
+.object-placement.vertical .object-bookshelf,
+.object-placement.vertical .object-wardrobe { transform: none; }
 
 .object-placement:not(.vertical) .object-bed {
-  transform: rotate(-90deg);
+  background-image: url("__BED_HORIZONTAL__");
+}
+.object-placement:not(.vertical) .object-dining-table {
+  background-image: url("__DINING_TABLE_HORIZONTAL__");
+}
+.object-placement:not(.vertical) .object-bookshelf {
+  background-image: url("__BOOKSHELF_HORIZONTAL__");
+}
+.object-placement:not(.vertical) .object-wardrobe {
+  background-image: url("__WARDROBE_HORIZONTAL__");
 }
 
-.shape-l-missing-0-0 .object {
+.shape-l-missing-0-0 .object-rug {
   background-image: url("__RUG_L__");
   transform: rotate(-90deg);
 }
 
-.shape-l-missing-0-1 .object {
+.shape-l-missing-0-1 .object-rug {
   background-image: url("__RUG_L__");
 }
 
-.shape-l-missing-1-0 .object {
+.shape-l-missing-1-0 .object-rug {
   background-image: url("__RUG_L__");
   transform: rotate(180deg);
 }
 
-.shape-l-missing-1-1 .object {
+.shape-l-missing-1-1 .object-rug {
   background-image: url("__RUG_L__");
   transform: rotate(90deg);
 }
+
+.shape-l-missing-1-0 .object-counter { transform: none; }
+.shape-l-missing-0-0 .object-counter { transform: rotate(90deg); }
+.shape-l-missing-0-1 .object-counter { transform: rotate(180deg); }
+.shape-l-missing-1-1 .object-counter { transform: rotate(-90deg); }
 
 .legend {
   display: flex;

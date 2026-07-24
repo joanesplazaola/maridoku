@@ -11,6 +11,7 @@ from .benchmark import run_benchmark, run_benchmark_suite
 from .clue_catalog import catalog_json
 from .engine import generate
 from .human_solver import analyze_puzzle
+from .object_catalog import catalog_json as object_catalog_json
 from .render import render_file
 from .scaling import generate_scaling_case, run_scaling_benchmark
 from .solvers.registry import availability, get_solver
@@ -112,6 +113,7 @@ def main() -> None:
 
     subparsers.add_parser("solvers", help="Muestra motores y librerías disponibles")
     subparsers.add_parser("catalog", help="Muestra el catálogo formal de pistas")
+    subparsers.add_parser("object-catalog", help="Muestra el catálogo de objetos y huellas")
 
     args = parser.parse_args()
     if args.command == "generate":
@@ -187,6 +189,8 @@ def main() -> None:
             table.add_row(item["name"], "sí" if item["available"] else "no", item["role"])
         console.print(table)
         console.print("CP-SAT viene instalado por defecto; Z3 es opcional con [bold]uv sync --extra solvers[/bold]")
+    elif args.command == "object-catalog":
+        _json(object_catalog_json())
     else:
         _json(catalog_json())
 

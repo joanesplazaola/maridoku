@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 
 from murdoku_v2.clue_catalog import AtomicClue, CLUE_SPECS, atomic_mask, catalog_json
+from murdoku_v2.object_catalog import OBJECT_CATALOG, catalog_json as object_catalog_json, footprint_kind
 from murdoku_v2.engine import (
     CHARACTERS,
     _diverse_candidate_options,
@@ -24,6 +25,15 @@ from murdoku_v2.validator import validate_files
 
 
 PROJECT = Path(__file__).resolve().parents[1]
+
+
+def test_object_catalog_defines_supported_footprints() -> None:
+    assert len(OBJECT_CATALOG) == len(object_catalog_json()) == 11
+    assert OBJECT_CATALOG["table"].footprints == ("1x1", "1x2")
+    assert OBJECT_CATALOG["bed"].footprints == ("1x2",)
+    assert OBJECT_CATALOG["counter"].footprints == ("1x2", "L3")
+    assert footprint_kind([(0, 0), (0, 1), (1, 0)]) == "L3"
+    assert footprint_kind([(0, 0), (0, 2)]) == "custom"
 
 
 def test_formal_catalog_has_one_exact_semantics_for_every_generated_type() -> None:
@@ -389,12 +399,16 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     assert result["puzzle"]["board"]["rows"] == 10
     assert len(result["puzzle"]["board"]["rooms"]) >= 5
     objects = {obj["type"]: obj for obj in result["puzzle"]["board"]["objects"]}
-    assert len(objects) >= 5
+    assert len(objects) >= 9
     assert len(objects["plant"]["cells"]) == 1
     assert len(objects["table"]["cells"]) == 1
     assert len(objects["rug"]["cells"]) == 3
     assert len(objects["sofa"]["cells"]) == 2
     assert len(objects["bed"]["cells"]) == 2
+    assert len(objects["dining_table"]["cells"]) == 2
+    assert len(objects["bookshelf"]["cells"]) == 2
+    assert len(objects["wardrobe"]["cells"]) == 2
+    assert len(objects["counter"]["cells"]) == 3
     assert result["diagnostics"]["exact_validation"]["unique"] is True
     assert len(result["diagnostics"]["editorial_clues"]) >= 3
     assert len({"object_occupancy", "object_line", "object_adjacency"} & {
@@ -451,6 +465,21 @@ def test_pydantic_contract_rejects_a_card_with_the_wrong_subject() -> None:
     puzzle = json.loads((PROJECT / "examples/board_restaurant/puzzle.json").read_text(encoding="utf-8"))
     malformed = copy.deepcopy(puzzle)
     malformed["cards"][0]["statements"][0]["args"]["character"] = malformed["cards"][1]["character"]
+    with pytest.raises(ValidationError):
+        validate_puzzle(malformed)
+
+
+def test_pydantic_contract_rejects_an_invalid_object_footprint() -> None:
+    import copy
+
+    import pytest
+    from pydantic import ValidationError
+
+    from murdoku_v2.models import validate_puzzle
+
+    puzzle = json.loads((PROJECT / "examples/board_restaurant/puzzle.json").read_text(encoding="utf-8"))
+    malformed = copy.deepcopy(puzzle)
+    malformed["board"]["objects"][0]["cells"] = [[0, 0], [0, 2]]
     with pytest.raises(ValidationError):
         validate_puzzle(malformed)
 

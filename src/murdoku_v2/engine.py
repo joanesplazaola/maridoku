@@ -252,7 +252,7 @@ def _plural_gender(gender: str, count: int) -> str:
 
 
 def _object_article(object_type: str) -> str:
-    return "un" if object_type in {"sofa"} else "una"
+    return "un" if object_type in {"sofa", "wardrobe", "counter"} else "una"
 
 
 def _unique_object_text(character: dict[str, Any], object_type: str) -> str:

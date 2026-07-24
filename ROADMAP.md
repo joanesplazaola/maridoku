@@ -9,7 +9,8 @@
 - El generador editorial registra una muestra CP-SAT vs NumPy de candidatos supervivientes en diagnostics.
 - El set de tarjetas elegido se valida con CP-SAT antes de aceptar un caso.
 - La CLI renderiza puzzles a una hoja HTML imprimible para pruebas humanas.
-- El render dibuja una sola pieza por objeto multicelda, respeta orientación/capa y dispone de assets para los siete tipos del catálogo.
+- El render dibuja una sola pieza por objeto multicelda, respeta orientación/capa y dispone de assets para los 11 tipos del catálogo.
+- `object_catalog.py` define 11 tipos y sus huellas admitidas (`1x1`, `1x2`, `2x2`, `L3`); la CLI los expone con `object-catalog` y Pydantic rechaza objetos desconectados o que atraviesan paredes.
 - El selector editorial estable está separado en `selector.py` y usa máscaras bitset con `int.bit_count()` para elegir sets completos de tarjetas.
 - Existe una ruta experimental `--cpsat-selector` basada en conteos CP-SAT capados a 2; reporta `solve_calls`/`cache_hits` y cae al selector estable cuando no encuentra set.
 
