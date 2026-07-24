@@ -35,7 +35,7 @@ Objetivo: producir 8x8 y 10x10 variados sin enumerar `(n!)²`.
 
 1. [x] Extraer personajes y objetivo parametrizados desde `scaling.py`.
 2. [ ] Extraer la construcción parametrizada del tablero escalable.
-3. [ ] Generar pools editoriales verdaderos sin `enumerate_base_solutions()`.
+3. [x] Generar pools editoriales verdaderos sin `enumerate_base_solutions()`.
 4. [ ] Seleccionar pistas y demostrar unicidad exclusivamente mediante CP-SAT.
 5. [ ] Comprobar necesidad retirando cada tarjeta y cada afirmación con CP-SAT.
 6. [ ] Sustituir las cadenas sintéticas por familias variadas del catálogo formal.

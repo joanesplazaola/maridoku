@@ -406,6 +406,32 @@ def test_scaling_characters_and_targets_are_parameterized() -> None:
         assert all(character["role"] == "suspect" for character in characters[1:])
 
 
+def test_scaling_candidate_pools_need_no_global_enumeration() -> None:
+    from murdoku_v2.scaling import (
+        make_scaling_candidate_pools,
+        make_scaling_puzzle,
+        make_scaling_target,
+    )
+    from murdoku_v2.validator import _matches_statement
+
+    for size in (6, 8, 10):
+        puzzle = make_scaling_puzzle(size, seed=91)
+        target = make_scaling_target(size, seed=91)
+        pools = make_scaling_candidate_pools(puzzle, target)
+        assert len(pools) == size - 1
+        assert all(len(pool) >= 6 for pool in pools.values())
+        assert all(
+            _matches_statement(statement, target, puzzle)
+            for pool in pools.values()
+            for statement in pool
+        )
+        assert {"coordinate", "room_exact", "relative_distance", "room_relation"} <= {
+            statement["family"]
+            for pool in pools.values()
+            for statement in pool
+        }
+
+
 def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     from murdoku_v2.scaling import generate_scaling_case
 

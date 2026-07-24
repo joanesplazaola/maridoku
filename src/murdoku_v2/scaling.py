@@ -414,6 +414,79 @@ def expected_scaling_solution(size: int, seed: int = 0) -> dict[str, tuple[int, 
     return make_scaling_target(size, seed)
 
 
+def make_scaling_candidate_pools(
+    puzzle: dict[str, Any],
+    target: dict[str, tuple[int, int]],
+) -> dict[str, list[dict[str, Any]]]:
+    """Build target-true editorial candidates without enumerating other solutions."""
+    from .validator import _matches_statement
+
+    room_at = _room_at(puzzle["board"]["rooms"])
+    room_names = {room["id"]: room["name"] for room in puzzle["board"]["rooms"]}
+    suspects = [character for character in puzzle["characters"] if character["role"] == "suspect"]
+    pools: dict[str, list[dict[str, Any]]] = {}
+    for index, character in enumerate(suspects):
+        character_id = character["id"]
+        name = character["name"]
+        row, column = target[character_id]
+        room_id = room_at[(row, column)]
+        reference = suspects[(index + 1) % len(suspects)]
+        reference_row, reference_column = target[reference["id"]]
+        candidates = [
+            ("exact_row", "coordinate", {"row": row}, f"{name} estaba en la fila {row + 1}."),
+            ("exact_column", "coordinate", {"column": column}, f"{name} estaba en la columna {column + 1}."),
+            ("room", "room_exact", {"room": room_id}, f"{name} estaba en {room_names[room_id]}."),
+            (
+                "relative_row_distance",
+                "relative_distance",
+                {"reference": reference["id"], "delta": row - reference_row},
+                f"{name} estaba a otra altura que {reference['name']}.",
+            ),
+            (
+                "relative_column_distance",
+                "relative_distance",
+                {"reference": reference["id"], "delta": column - reference_column},
+                f"{name} estaba a otro lado de {reference['name']}.",
+            ),
+            (
+                "same_room" if room_id == room_at[(reference_row, reference_column)] else "different_room",
+                "room_relation",
+                {"reference": reference["id"]},
+                f"{name} estaba en una habitación {'igual' if room_id == room_at[(reference_row, reference_column)] else 'distinta'} a {reference['name']}.",
+            ),
+        ]
+        for obj in puzzle["board"].get("objects", []):
+            cells = {tuple(cell) for cell in obj["cells"]}
+            if (row, column) in cells and obj.get("occupiable", False):
+                candidates.append((
+                    "unique_on_object",
+                    "object_occupancy",
+                    {"object_type": obj["type"]},
+                    f"{name} estaba junto a {obj['name'].lower()}.",
+                ))
+            if any(abs(row - obj_row) + abs(column - obj_column) == 1 for obj_row, obj_column in cells):
+                candidates.append((
+                    "adjacent_object",
+                    "object_adjacency",
+                    {"object_type": obj["type"]},
+                    f"{name} estaba al lado de {obj['name'].lower()}.",
+                ))
+
+        pool = []
+        for candidate_index, (type_, family, args, text) in enumerate(candidates, start=1):
+            statement = {
+                "id": f"candidate-{character_id}-{candidate_index}",
+                "type": type_,
+                "family": family,
+                "args": {"character": character_id, **args},
+                "text": text,
+            }
+            if _matches_statement(statement, target, puzzle):
+                pool.append(statement)
+        pools[character_id] = pool
+    return pools
+
+
 def _editorialize_clues(puzzle: dict[str, Any], expected: dict[str, tuple[int, int]]) -> list[str]:
     """Replace chain clues when a more thematic clue preserves the exact solution."""
     room_at = _room_at(puzzle["board"]["rooms"])
