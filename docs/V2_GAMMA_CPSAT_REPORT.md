@@ -64,10 +64,10 @@ La búsqueda se configura de forma reproducible con:
 
 ## Pruebas ejecutadas
 
-Resultado en este entorno:
+Resultado actual en este entorno:
 
 ```text
-16 passed
+28 passed
 ```
 
 ## Cómo ejecutar la prueba real

@@ -18,7 +18,8 @@
 Objetivo: producir 8x8 y 10x10 variados sin enumerar `(n!)²`.
 
 - [ ] Parametrizar personajes y retirar el límite fijo de 6x6.
-- [ ] Hacer del selector CP-SAT la ruta principal y eliminar el selector por máscaras.
+- [x] Hacer del selector CP-SAT la ruta principal.
+- [ ] Eliminar el selector por máscaras y su universo exhaustivo.
 - [ ] Sustituir las cadenas sintéticas por selección completa del catálogo de pistas.
 - [ ] Definir presupuestos de tiempo y tasas mínimas de éxito para 6x6, 8x8 y 10x10.
 - [ ] Conservar un conjunto pequeño de seeds de regresión en `examples/`.

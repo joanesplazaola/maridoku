@@ -1225,7 +1225,7 @@ def select_cards_with_cpsat_counts(
 def generate(
     board_path: Path, seed: int, output_dir: Path, selection_profile: str = "any",
     max_target_attempts: int = 24,
-    use_cpsat_selector: bool = False,
+    use_cpsat_selector: bool = True,
 ) -> dict[str, Any]:
     selection_profile = _normalise_profile(selection_profile)
     if max_target_attempts < 1:
@@ -1338,25 +1338,26 @@ def generate(
             for candidates in pools.values()
             for atom in candidates
         }
-        cards, selection_report = global_select_cards(
-            pools, bit_masks, target_index, len(valid_solutions), rng, selection_profile
-        )
+        if use_cpsat_selector:
+            cards, selection_report = select_cards_with_cpsat_counts(
+                board, seed, victim_index, target, pools, selection_profile
+            )
+            attempt_report["cpsat_selector"] = selection_report
+            if cards is None:
+                cards, fallback_report = global_select_cards(
+                    pools, bit_masks, target_index, len(valid_solutions), rng, selection_profile
+                )
+                fallback_report["primary_selector"] = selection_report
+                selection_report = fallback_report
+        else:
+            cards, selection_report = global_select_cards(
+                pools, bit_masks, target_index, len(valid_solutions), rng, selection_profile
+            )
         attempt_report["selector"] = selection_report
         if cards is None:
             attempt_report["reasons"].append("no_global_card_set")
             attempt_reports.append(attempt_report)
             continue
-
-        if use_cpsat_selector:
-            cpsat_cards, cpsat_selection_report = select_cards_with_cpsat_counts(
-                board, seed, victim_index, target, pools, selection_profile
-            )
-            attempt_report["cpsat_selector"] = cpsat_selection_report
-            if cpsat_cards is not None:
-                cards = cpsat_cards
-                selection_report = cpsat_selection_report
-                selection_report["fallback_selector"] = attempt_report["selector"]
-                attempt_report["selector"] = selection_report
 
         card_set_validation = validate_card_set_with_cpsat(board, seed, victim_index, target, cards)
         attempt_report["cpsat_card_set_validation"] = card_set_validation

@@ -61,7 +61,7 @@ def main() -> None:
     generate_parser.add_argument("--max-attempts", type=int, default=16)
     generate_parser.add_argument("--strict", action="store_true")
     generate_parser.add_argument("--target-attempts", type=int, default=24)
-    generate_parser.add_argument("--cpsat-selector", action="store_true")
+    generate_parser.add_argument("--mask-selector", action="store_true", help=argparse.SUPPRESS)
 
     generate_scale_parser = subparsers.add_parser("generate-scale", help="Genera un caso escalable CP-SAT")
     generate_scale_parser.add_argument("--size", type=int, default=10)
@@ -117,7 +117,7 @@ def main() -> None:
                 args.seed,
                 args.output,
                 max_target_attempts=args.target_attempts,
-                use_cpsat_selector=args.cpsat_selector,
+                use_cpsat_selector=not args.mask_selector,
             )
         else:
             result = generate_targeted(

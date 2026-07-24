@@ -88,7 +88,7 @@ def test_same_engine_generates_valid_cases_on_five_manual_boards(tmp_path: Path)
         diagnostics = result["diagnostics"]
         assert result["puzzle"]["schema_version"] == 8
         assert diagnostics["final_solution_count"] == 1
-        assert diagnostics["cpsat_selector_enabled"] is False
+        assert diagnostics["cpsat_selector_enabled"] is True
         assert diagnostics["all_cards_necessary"] is True
         assert diagnostics["all_suspect_statements_necessary"] is True
         assert diagnostics["human_solver_matches_solution"] is True
@@ -109,7 +109,11 @@ def test_same_engine_generates_valid_cases_on_five_manual_boards(tmp_path: Path)
             for item in items
         )
         assert diagnostics["formal_clue_catalog_size"] == 22
-        assert diagnostics["global_selector"]["method"].startswith("global_")
+        selector = diagnostics["global_selector"]
+        assert selector["method"] == "cpsat_count_beam" or (
+            selector["method"].startswith("global_")
+            and selector["primary_selector"]["method"] == "cpsat_count_beam"
+        )
         assert (output / "generation_report.json").exists()
         assert validate_files(output / "puzzle.json", output / "solution.json") == {
             "solution_count_up_to_two": 1,
@@ -296,7 +300,7 @@ def test_generation_report_explains_acceptance_and_rejections(tmp_path: Path) ->
     assert report["summary"]["accepted"] is True
     assert report["summary"]["targets_attempted"] >= 1
     assert report["targets"][-1]["status"] == "accepted"
-    assert report["targets"][-1]["selector"]["method"].startswith("global_")
+    assert report["targets"][-1]["selector"]["method"].startswith(("cpsat_", "global_"))
     # The JSON on disk is part of the public diagnostic contract.
     disk = json.loads((tmp_path / "generation_report.json").read_text(encoding="utf-8"))
     assert disk == report
