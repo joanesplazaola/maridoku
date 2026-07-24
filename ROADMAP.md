@@ -36,7 +36,7 @@ Objetivo: probar puzles completos sin herramientas de desarrollo.
 - [ ] Adaptar tablero y tarjetas a escritorio, tableta y móvil.
 - [ ] Cubrir navegación por teclado, foco visible, contraste y lectores de pantalla.
 - [ ] Registrar finalización, errores, ayudas y tiempo de resolución sin datos personales.
-- [ ] Publicar una preview estática en GitHub Pages mediante GitHub Actions.
+- [x] Publicar una preview estática en GitHub Pages mediante GitHub Actions.
 
 Criterio de salida: una sesión completa funciona con ratón, táctil y teclado en
 Chrome, Firefox y Safari actuales, y la misma build está accesible en GitHub Pages.
