@@ -1,6 +1,0 @@
-seed,generation_seconds,difficulty,difficulty_score,requires_hypothesis,propagation_steps,candidate_removals,cross_character_steps,repeated_constraint_uses,branch_count,first_forced_step,double_card_count,total_statement_count,all_cards_necessary,human_solver_matches_solution,requested_difficulty,difficulty_match,generation_attempts
-7015,0.5239,hard,72,False,12,210,10,5,0,3,0,6,True,True,any,True,1
-7016,0.644,expert,92,True,14,209,10,5,1,11,0,6,True,True,any,True,1
-7017,0.8285,expert,100,False,18,210,15,11,0,14,0,6,True,True,any,True,1
-7018,0.5233,medium,48,False,9,210,6,2,0,2,0,6,True,True,any,True,1
-7019,1.2546,expert,98,True,15,209,12,7,1,6,0,6,True,True,any,True,1
