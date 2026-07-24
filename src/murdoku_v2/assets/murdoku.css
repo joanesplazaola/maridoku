@@ -183,21 +183,14 @@ td {
   width: calc(100% / var(--cols));
   overflow: visible;
   padding: 5px;
-  border: 1px solid rgb(42 43 38 / 10%);
+  border: 2px solid rgb(32 35 31 / 30%);
   vertical-align: top;
 }
 
-.wall-n { border-top: 4px solid var(--line); }
-.wall-s { border-bottom: 4px solid var(--line); }
-.wall-w { border-left: 4px solid var(--line); }
-.wall-e { border-right: 4px solid var(--line); }
-
-td b {
-  color: rgb(33 35 31 / 36%);
-  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
-  font-size: 8px;
-  font-weight: 500;
-}
+.wall-n { border-top: 5px solid var(--line); }
+.wall-s { border-bottom: 5px solid var(--line); }
+.wall-w { border-left: 5px solid var(--line); }
+.wall-e { border-right: 5px solid var(--line); }
 
 .room-name {
   position: absolute;
@@ -505,9 +498,6 @@ li small {
     font-size: 7px;
   }
 
-  td b {
-    font-size: 6px;
-  }
 }
 
 @media print {

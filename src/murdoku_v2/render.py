@@ -121,7 +121,7 @@ def render_html(puzzle: dict[str, Any]) -> str:
             label_html = f'<span class="room-name">{label}</span>' if label else ""
             cells.append(
                 f"<td class=\"{room_classes[room['id']]} {' '.join(wall_classes)}\">"
-                f"<b>{row + 1}.{column + 1}</b>{label_html}</td>"
+                f"{label_html}</td>"
             )
         rows.append(f"<tr>{''.join(cells)}</tr>")
     furniture = "".join(

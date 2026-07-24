@@ -426,6 +426,7 @@ def test_render_writes_printable_html(tmp_path: Path) -> None:
     assert 'class="furniture-layer"' in html
     assert "--object-width:2" in html
     assert html.count('aria-label="Alfombra"') == 4
+    assert ">1.1<" not in html
     assert 'class="legend"' in html
     assert 'object object-table' in html
     assert 'object object-plant' in html
