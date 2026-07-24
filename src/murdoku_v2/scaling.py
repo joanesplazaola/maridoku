@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import random
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
@@ -628,22 +629,20 @@ def _suspect_clues_are_necessary(
     puzzle: dict[str, Any],
     expected: dict[str, tuple[int, int]],
 ) -> bool:
-    solver = get_solver("ortools")
+    probes: list[dict[str, str]] = []
     for card in puzzle["cards"]:
         if card["role"] == "victim":
             continue
-        without_card = solver.solve(puzzle, limit=2, exclude_card_id=card["id"])
-        if len(without_card.solutions) <= 1:
-            return False
+        probes.append({"exclude_card_id": card["id"]})
         for statement in card["statements"]:
-            without_statement = solver.solve(
-                puzzle,
-                limit=2,
-                exclude_statement_id=statement["id"],
-            )
-            if len(without_statement.solutions) <= 1:
-                return False
-    return True
+            probes.append({"exclude_statement_id": statement["id"]})
+
+    def has_alternative(probe: dict[str, str]) -> bool:
+        result = get_solver("ortools").solve(puzzle, limit=2, **probe)
+        return len(result.solutions) > 1
+
+    with ThreadPoolExecutor(max_workers=min(4, len(probes))) as executor:
+        return all(executor.map(has_alternative, probes))
 
 
 def _prune_implied_order_clues(
