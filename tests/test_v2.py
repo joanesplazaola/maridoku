@@ -391,7 +391,7 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     objects = {obj["type"]: obj for obj in result["puzzle"]["board"]["objects"]}
     assert len(objects) >= 5
     assert len(objects["plant"]["cells"]) == 1
-    assert len(objects["table"]["cells"]) == 2
+    assert len(objects["table"]["cells"]) == 1
     assert len(objects["rug"]["cells"]) == 3
     assert len(objects["sofa"]["cells"]) == 2
     assert len(objects["bed"]["cells"]) == 2

@@ -211,7 +211,7 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
     plant_cell = (row_perm[3 % size], column_perm[3 % size])
     blocked_for_objects = set(solution_cells) | crime_room_cells
     table_cells = _place_footprint(
-        [{(0, 0), (0, 1)}, {(0, 0), (1, 0)}, {(0, 0)}],
+        [{(0, 0)}],
         size,
         room_at,
         blocked_for_objects,
