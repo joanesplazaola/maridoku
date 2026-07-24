@@ -13,18 +13,37 @@
 - [ ] La dificultad está calibrada con personas.
 - [ ] Existe un flujo reproducible de publicación y regresión de contenido.
 
+## Dirección técnica
+
+`scaling.py` es la base del futuro generador editorial. La ruta 6x6 de
+`engine.py` queda como referencia temporal para comparar calidad y fixtures,
+pero no recibirá nuevas funciones.
+
+No volveremos a hacer default un selector CP-SAT que dependa del universo
+enumerado o que termine silenciosamente en máscaras. Una nueva etapa solo
+sustituirá a la anterior cuando pase sus criterios de salida sin fallback.
+
+Enfoques descartados:
+
+- beam basado únicamente en conteos CP-SAT capados;
+- ejecutar primero CP-SAT y repetir después toda la selección por máscaras;
+- CEGIS construido sobre los pools y objetivos del generador enumerativo.
+
 ## P0: generador escalable
 
 Objetivo: producir 8x8 y 10x10 variados sin enumerar `(n!)²`.
 
-- [ ] Parametrizar personajes y retirar el límite fijo de 6x6.
-- [ ] Hacer del selector CP-SAT la ruta principal y eliminar el selector por máscaras.
-- [ ] Sustituir las cadenas sintéticas por selección completa del catálogo de pistas.
-- [ ] Definir presupuestos de tiempo y tasas mínimas de éxito para 6x6, 8x8 y 10x10.
-- [ ] Conservar un conjunto pequeño de seeds de regresión en `examples/`.
+1. [ ] Extraer personajes, objetivo y tablero parametrizados desde `scaling.py`.
+2. [ ] Generar pools editoriales verdaderos sin `enumerate_base_solutions()`.
+3. [ ] Seleccionar pistas y demostrar unicidad exclusivamente mediante CP-SAT.
+4. [ ] Comprobar necesidad retirando cada tarjeta y cada afirmación con CP-SAT.
+5. [ ] Sustituir las cadenas sintéticas por familias variadas del catálogo formal.
+6. [ ] Añadir fixtures y presupuestos para 6x6, 8x8 y 10x10.
+7. [ ] Mover `generate` a la ruta escalable y retirar selector, máscaras y universo antiguos.
 
 Criterio de salida: 100 casos consecutivos por tamaño, todos únicos, sin pistas
-redundantes y dentro del presupuesto publicado.
+redundantes y dentro del presupuesto publicado. Ningún caso aceptado puede
+registrar fallback al generador enumerativo.
 
 ## P1: jugador web
 
