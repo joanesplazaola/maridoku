@@ -143,6 +143,69 @@ class ORToolsSolver:
         }
         return SolverResult(solutions, stats)
 
+    def enumerate_solutions(
+        self,
+        puzzle: dict[str, Any],
+        *,
+        limit: int,
+        extra_statements: tuple[dict[str, Any], ...] = (),
+        base_statements: tuple[dict[str, Any], ...] | None = None,
+    ) -> SolverResult:
+        """Collect several solutions from one model search for generator probes."""
+        if limit < 1:
+            raise ValueError("limit debe ser al menos 1")
+        started = time.perf_counter()
+        stats = SolverStats(solver=self.name)
+        if not self.is_available():
+            return SolverResult([], stats, available=False, message="OR-Tools no está instalado.")
+
+        from ortools.sat.python import cp_model
+
+        ctx = self._build_model(
+            puzzle,
+            cp_model,
+            exclude_card_id=None,
+            exclude_statement_id=None,
+            extra_statements=extra_statements,
+            base_statements=base_statements,
+        )
+
+        class Collector(cp_model.CpSolverSolutionCallback):
+            def __init__(self) -> None:
+                super().__init__()
+                self.solutions: list[dict[str, tuple[int, int]]] = []
+
+            def on_solution_callback(self) -> None:
+                self.solutions.append({
+                    character: divmod(int(self.value(ctx.cell[character])), ctx.n)
+                    for character in ctx.character_ids
+                })
+                if len(self.solutions) >= limit:
+                    self.stop_search()
+
+        collector = Collector()
+        solver = cp_model.CpSolver()
+        solver.parameters.num_search_workers = 1
+        solver.parameters.random_seed = int(puzzle.get("seed", 0)) & 0x7FFFFFFF
+        solver.parameters.randomize_search = False
+        solver.parameters.enumerate_all_solutions = True
+        if self.max_time_seconds is not None:
+            solver.parameters.max_time_in_seconds = self.max_time_seconds
+        status = solver.solve(ctx.model, collector)
+        stats.nodes = self._numeric_stat(solver, "num_branches")
+        stats.backtracks = self._numeric_stat(solver, "num_conflicts")
+        stats.constraint_checks = len(active_statements(
+            puzzle, extra_statements=extra_statements, base_statements=base_statements
+        ))
+        stats.elapsed_ms = (time.perf_counter() - started) * 1000
+        stats.metadata = {
+            "mode": "bounded_enumeration",
+            "limit": limit,
+            "status": self._status_name(solver, status),
+            "constraint_count": len(ctx.model.proto.constraints),
+        }
+        return SolverResult(collector.solutions, stats)
+
 
     @staticmethod
     def _status_name(solver: Any, status: Any) -> str:

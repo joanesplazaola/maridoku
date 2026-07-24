@@ -87,3 +87,19 @@ def test_cpsat_can_solve_from_explicit_statement_set():
     assert result.available
     assert len(result.solutions) == 2
     assert result.stats.constraint_checks == 1
+
+
+@pytest.mark.skipif(not ORToolsSolver.is_available(), reason="OR-Tools no está instalado")
+def test_cpsat_bounded_enumeration_reuses_one_search():
+    puzzle = json.loads((ROOT / "examples" / "board_restaurant" / "puzzle.json").read_text(encoding="utf-8"))
+    victim_statement = puzzle["cards"][0]["statements"][0]
+    result = ORToolsSolver().enumerate_solutions(
+        puzzle,
+        limit=12,
+        base_statements=(victim_statement,),
+    )
+
+    assert len(result.solutions) == 12
+    assert len(canonical(result.solutions)) == 12
+    assert result.stats.constraint_checks == 1
+    assert result.stats.metadata["mode"] == "bounded_enumeration"

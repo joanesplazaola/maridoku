@@ -940,7 +940,7 @@ def probe_candidates_with_cpsat(
         for index, candidate in enumerate(candidates)
     )
     statements = tuple(base_statements or ()) + extra_statements
-    result = ORToolsSolver().solve(
+    result = ORToolsSolver().enumerate_solutions(
         puzzle,
         limit=limit,
         extra_statements=extra_statements,
