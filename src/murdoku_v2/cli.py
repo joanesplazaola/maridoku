@@ -10,7 +10,11 @@ from .engine import generate
 from .human_solver import analyze_puzzle
 from .object_catalog import catalog_json as object_catalog_json
 from .render import render_file
-from .scaling import generate_scaling_case, run_scaling_benchmark
+from .scaling import (
+    generate_scaling_case,
+    run_scaling_benchmark,
+    run_scaling_generation_regression,
+)
 from .solvers.registry import availability, get_solver
 from .targeted import generate_targeted
 
@@ -105,6 +109,13 @@ def main() -> None:
     scale_parser.add_argument("--repetitions", type=int, default=3)
     scale_parser.add_argument("--output", type=Path, default=Path("scaling_benchmark.json"))
 
+    regression_parser = subparsers.add_parser("scale-regression", help="Valida generación escalable por seeds")
+    regression_parser.add_argument("--sizes", nargs="+", type=int, default=[6, 8, 10])
+    regression_parser.add_argument("--start-seed", type=int, default=0)
+    regression_parser.add_argument("--count-per-size", type=int, default=100)
+    regression_parser.add_argument("--budget-seconds", type=float, default=30.0)
+    regression_parser.add_argument("--output", type=Path, default=Path("scaling_regression.json"))
+
     subparsers.add_parser("solvers", help="Muestra motores y librerías disponibles")
     subparsers.add_parser("catalog", help="Muestra el catálogo formal de pistas")
     subparsers.add_parser("object-catalog", help="Muestra el catálogo de objetos y huellas")
@@ -174,6 +185,15 @@ def main() -> None:
             args.sizes, solver_name=args.solver, repetitions=args.repetitions, output=args.output,
         )
         _json(report)
+    elif args.command == "scale-regression":
+        report = run_scaling_generation_regression(
+            args.sizes,
+            start_seed=args.start_seed,
+            count_per_size=args.count_per_size,
+            budget_seconds=args.budget_seconds,
+            output=args.output,
+        )
+        _json(report["summary"])
     elif args.command == "solvers":
         _json(availability())
     elif args.command == "object-catalog":

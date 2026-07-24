@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import random
+import tempfile
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -816,6 +817,66 @@ def run_scaling_benchmark(
         "results": rows,
         "all_available_cases_unique": all(row["unique"] for row in rows if row["available"]),
     }
+    if output:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    return report
+
+
+def run_scaling_generation_regression(
+    sizes: list[int],
+    *,
+    start_seed: int,
+    count_per_size: int,
+    budget_seconds: float,
+    output: Path | None = None,
+) -> dict[str, Any]:
+    if count_per_size < 1:
+        raise ValueError("count_per_size debe ser al menos 1")
+    rows: list[dict[str, Any]] = []
+    with tempfile.TemporaryDirectory(prefix="murdoku-scale-regression-") as temp_root:
+        root = Path(temp_root)
+        for size in sizes:
+            for offset in range(count_per_size):
+                seed = start_seed + offset
+                started = time.perf_counter()
+                try:
+                    result = generate_scaling_case(size, seed, root / f"{size}-{seed}")
+                    error = None
+                except Exception as exc:
+                    result = None
+                    error = f"{type(exc).__name__}: {exc}"
+                elapsed = time.perf_counter() - started
+                diagnostics = result["diagnostics"] if result else {}
+                rows.append({
+                    "size": size,
+                    "seed": seed,
+                    "success": result is not None,
+                    "elapsed_seconds": round(elapsed, 3),
+                    "within_budget": elapsed <= budget_seconds,
+                    "unique": diagnostics.get("exact_validation", {}).get("unique", False),
+                    "necessary": diagnostics.get("all_suspect_clues_necessary", False),
+                    "target_attempts": diagnostics.get("target_attempts"),
+                    "error": error,
+                })
+    report = {
+        "sizes": sizes,
+        "start_seed": start_seed,
+        "count_per_size": count_per_size,
+        "budget_seconds": budget_seconds,
+        "cases": rows,
+        "summary": {
+            "total": len(rows),
+            "successful": sum(row["success"] for row in rows),
+            "all_unique": all(row["unique"] for row in rows),
+            "all_necessary": all(row["necessary"] for row in rows),
+            "all_within_budget": all(row["within_budget"] for row in rows),
+        },
+    }
+    report["summary"]["accepted"] = all(
+        report["summary"][key]
+        for key in ("all_unique", "all_necessary", "all_within_budget")
+    )
     if output:
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")

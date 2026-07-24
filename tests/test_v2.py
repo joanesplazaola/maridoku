@@ -491,6 +491,27 @@ def test_scaling_generator_retries_redundant_targets(tmp_path: Path) -> None:
     assert result["diagnostics"]["rejected_target_seeds"] == [0]
 
 
+def test_scaling_generation_regression_reports_acceptance(tmp_path: Path) -> None:
+    from murdoku_v2.scaling import run_scaling_generation_regression
+
+    report = run_scaling_generation_regression(
+        [6],
+        start_seed=1,
+        count_per_size=1,
+        budget_seconds=30,
+        output=tmp_path / "report.json",
+    )
+    assert report["summary"] == {
+        "total": 1,
+        "successful": 1,
+        "all_unique": True,
+        "all_necessary": True,
+        "all_within_budget": True,
+        "accepted": True,
+    }
+    assert (tmp_path / "report.json").exists()
+
+
 def test_render_writes_printable_html(tmp_path: Path) -> None:
     from murdoku_v2.render import render_file
 

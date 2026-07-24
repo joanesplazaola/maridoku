@@ -51,6 +51,15 @@ Smoke completo:
 uv run murdoku-v2 scale-benchmark --sizes 10 13 --solver ortools --repetitions 2
 ```
 
+Gate de generación real, unicidad, necesidad y presupuesto:
+
+```bash
+uv run murdoku-v2 scale-regression \
+  --sizes 6 8 10 \
+  --count-per-size 100 \
+  --budget-seconds 30
+```
+
 ## Validar un caso con CP-SAT
 
 ```bash
