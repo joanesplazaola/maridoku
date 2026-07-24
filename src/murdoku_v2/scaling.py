@@ -242,7 +242,7 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
         ),
     )
     bed_cells = _place_footprint(
-        [{(0, 0), (0, 1)}, {(0, 0), (1, 0)}, {(0, 0)}],
+        [{(0, 0), (1, 0)}, {(0, 0), (0, 1)}, {(0, 0)}],
         size,
         room_at,
         blocked_for_objects | table_cells | rug_cells | sofa_cells,

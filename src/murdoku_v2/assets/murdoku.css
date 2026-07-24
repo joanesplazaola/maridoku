@@ -310,6 +310,14 @@ td {
   transform: rotate(90deg);
 }
 
+.object-placement.vertical .object-bed {
+  transform: none;
+}
+
+.object-placement:not(.vertical) .object-bed {
+  transform: rotate(-90deg);
+}
+
 .shape-l-missing-0-0 .object {
   background-image: url("__RUG_L__");
   transform: rotate(-90deg);
