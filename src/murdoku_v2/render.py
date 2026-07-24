@@ -16,15 +16,6 @@ def _room_lookup(board: dict[str, Any]) -> dict[tuple[int, int], dict[str, Any]]
     }
 
 
-def _object_lookup(board: dict[str, Any]) -> dict[tuple[int, int], list[dict[str, Any]]]:
-    result: dict[tuple[int, int], list[dict[str, Any]]] = {}
-    for obj in board.get("objects", []):
-        cells = obj.get("cells") or [[obj.get("row"), obj.get("column")]]
-        for cell in cells:
-            result.setdefault(tuple(cell), []).append(obj)
-    return result
-
-
 def _statement_tag(statement: dict[str, Any]) -> str:
     family = statement.get("family", "")
     return {
@@ -52,6 +43,36 @@ def _object_marker(obj: dict[str, Any]) -> str:
     return f'<span class="object {_object_class(obj)}" role="img" aria-label="{name}" title="{name}"></span>'
 
 
+def _object_placement(obj: dict[str, Any]) -> str:
+    cells = {tuple(cell) for cell in (obj.get("cells") or [[obj["row"], obj["column"]]])}
+    min_row = min(row for row, _ in cells)
+    max_row = max(row for row, _ in cells)
+    min_column = min(column for _, column in cells)
+    max_column = max(column for _, column in cells)
+    height = max_row - min_row + 1
+    width = max_column - min_column + 1
+    missing = {
+        (row - min_row, column - min_column)
+        for row in range(min_row, max_row + 1)
+        for column in range(min_column, max_column + 1)
+        if (row, column) not in cells
+    }
+    shape = ""
+    if height == width == 2 and len(cells) == 3:
+        shape = f" shape-l-missing-{next(iter(missing))[0]}-{next(iter(missing))[1]}"
+    if height > width:
+        shape += " vertical"
+    layer = " floor-object" if obj.get("layer") == "floor" else ""
+    style = (
+        f"--object-row:{min_row + 1};--object-column:{min_column + 1};"
+        f"--object-height:{height};--object-width:{width}"
+    )
+    return (
+        f'<div class="object-placement{layer}{shape}" style="{style}">'
+        f"{_object_marker(obj)}</div>"
+    )
+
+
 def _stylesheet() -> str:
     assets = files("murdoku_v2").joinpath("assets")
     css = assets.joinpath("murdoku.css").read_text(encoding="utf-8")
@@ -62,6 +83,9 @@ def _stylesheet() -> str:
         "__TABLE__": assets.joinpath("furniture/table.webp"),
         "__RUG__": assets.joinpath("furniture/rug.webp"),
         "__SOFA__": assets.joinpath("furniture/sofa.webp"),
+        "__BED__": assets.joinpath("furniture/bed.webp"),
+        "__CHAIR__": assets.joinpath("furniture/chair.webp"),
+        "__TV__": assets.joinpath("furniture/tv.webp"),
     }
     for marker, asset in replacements.items():
         data = base64.b64encode(asset.read_bytes()).decode("ascii")
@@ -72,7 +96,6 @@ def _stylesheet() -> str:
 def render_html(puzzle: dict[str, Any]) -> str:
     board = puzzle["board"]
     rooms = _room_lookup(board)
-    objects = _object_lookup(board)
     room_classes = {room["id"]: f"room-{index % 6}" for index, room in enumerate(board["rooms"])}
     room_labels = {
         room["id"]: tuple(room.get("label_anchor", room["cells"][0]))
@@ -93,15 +116,17 @@ def render_html(puzzle: dict[str, Any]) -> str:
                 }.items()
                 if neighbor not in rooms or rooms[neighbor]["id"] != room["id"]
             ]
-            cell_objects = objects.get((row, column), [])
             label = html.escape(room["name"]) if room_labels[room["id"]] == (row, column) else ""
             label_html = f'<span class="room-name">{label}</span>' if label else ""
-            markers = "".join(_object_marker(obj) for obj in cell_objects)
             cells.append(
                 f"<td class=\"{room_classes[room['id']]} {' '.join(wall_classes)}\">"
-                f"<b>{row + 1}.{column + 1}</b>{label_html}<div class=\"objects\">{markers}</div></td>"
+                f"<b>{row + 1}.{column + 1}</b>{label_html}</td>"
             )
         rows.append(f"<tr>{''.join(cells)}</tr>")
+    furniture = "".join(
+        _object_placement(obj)
+        for obj in sorted(board.get("objects", []), key=lambda item: item.get("layer") != "floor")
+    )
 
     cards = []
     gender_slots = {"woman": 0, "man": 0}
@@ -152,7 +177,10 @@ def render_html(puzzle: dict[str, Any]) -> str:
       <aside class="board-wrap">
         <div class="board-heading"><span>Plano de la escena</span><i>N</i></div>
         <div class="board-frame">
-          <table aria-label="Tablero" style="--cols: {int(board['columns'])}">{''.join(rows)}</table>
+          <div class="board-stage" style="--cols: {int(board['columns'])}">
+            <table aria-label="Tablero" style="--cols: {int(board['columns'])}">{''.join(rows)}</table>
+            <div class="furniture-layer" aria-label="Mobiliario">{furniture}</div>
+          </div>
         </div>
         <ul class="legend" aria-label="Objetos">{legend}</ul>
       </aside>

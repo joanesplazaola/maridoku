@@ -21,6 +21,7 @@ OBJECT_NAMES = {
     "table": "Mesa",
     "rug": "Alfombra",
     "sofa": "Sofá",
+    "bed": "Cama",
 }
 
 ROOM_NAMES = [
@@ -35,18 +36,40 @@ ROOM_NAMES = [
 ]
 
 
-def _object(type_: str, row: int, column: int, suffix: str, *, occupiable: bool = False) -> dict[str, Any]:
+def _object(type_: str, cells: set[tuple[int, int]], suffix: str, *, occupiable: bool = False) -> dict[str, Any]:
+    row, column = min(cells)
     return {
         "id": f"{type_}-{suffix}",
         "type": type_,
         "name": OBJECT_NAMES[type_],
-        "cells": [[row, column]],
+        "cells": [list(cell) for cell in sorted(cells)],
         "row": row,
         "column": column,
         "layer": "furniture",
         "occupiable": occupiable,
         "blocks_character": not occupiable,
     }
+
+
+def _place_footprint(
+    shapes: list[set[tuple[int, int]]],
+    size: int,
+    room_at: dict[tuple[int, int], str],
+    occupied: set[tuple[int, int]],
+    *,
+    room_id: str | None = None,
+    predicate: Any = lambda cells: True,
+) -> set[tuple[int, int]]:
+    for shape in shapes:
+        for row in range(size):
+            for column in range(size):
+                cells = {(row + dr, column + dc) for dr, dc in shape}
+                if any(cell not in room_at for cell in cells) or cells & occupied:
+                    continue
+                rooms = {room_at[cell] for cell in cells}
+                if len(rooms) == 1 and (room_id is None or rooms == {room_id}) and predicate(cells):
+                    return cells
+    raise RuntimeError("No hay espacio para colocar la huella editorial.")
 
 
 def _neighbors(row: int, column: int, size: int) -> list[tuple[int, int]]:
@@ -60,18 +83,6 @@ def _neighbors(row: int, column: int, size: int) -> list[tuple[int, int]]:
         )
         if 0 <= next_row < size and 0 <= next_column < size
     ]
-
-
-def _free_neighbor(row: int, column: int, size: int, occupied: set[tuple[int, int]]) -> tuple[int, int]:
-    for next_row, next_column in (
-        (row, column + 1),
-        (row + 1, column),
-        (row, column - 1),
-        (row - 1, column),
-    ):
-        if 0 <= next_row < size and 0 <= next_column < size and (next_row, next_column) not in occupied:
-            return next_row, next_column
-    raise RuntimeError("No hay casilla vecina libre para colocar objeto editorial.")
 
 
 def _crime_path(size: int, start: tuple[int, int], end: tuple[int, int], blocked: set[tuple[int, int]]) -> set[tuple[int, int]]:
@@ -156,32 +167,6 @@ def _room_at(rooms: list[dict[str, Any]]) -> dict[tuple[int, int], str]:
     }
 
 
-def _free_in_room_row(
-    row: int, room_id: str, rooms: list[dict[str, Any]], occupied: set[tuple[int, int]],
-) -> tuple[int, int]:
-    for room in rooms:
-        if room["id"] != room_id:
-            continue
-        for cell_row, cell_column in room["cells"]:
-            cell = (cell_row, cell_column)
-            if cell_row == row and cell not in occupied:
-                return cell
-    raise RuntimeError("No hay casilla libre en la fila y habitación para colocar objeto editorial.")
-
-
-def _free_in_room_column(
-    column: int, room_id: str, rooms: list[dict[str, Any]], occupied: set[tuple[int, int]],
-) -> tuple[int, int]:
-    for room in rooms:
-        if room["id"] != room_id:
-            continue
-        for cell_row, cell_column in room["cells"]:
-            cell = (cell_row, cell_column)
-            if cell_column == column and cell not in occupied:
-                return cell
-    raise RuntimeError("No hay casilla libre en la columna y habitación para colocar objeto editorial.")
-
-
 def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
     """Create a deterministic, unique synthetic puzzle for solver scalability tests.
 
@@ -225,24 +210,49 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
     room_at = _room_at(rooms)
     plant_cell = (row_perm[3 % size], column_perm[3 % size])
     blocked_for_objects = set(solution_cells) | crime_room_cells
-    table_cell = _free_in_room_row(
-        row_perm[4 % size],
-        room_at[(row_perm[4 % size], column_perm[4 % size])],
-        rooms,
-        blocked_for_objects | {plant_cell},
+    table_cells = _place_footprint(
+        [{(0, 0), (0, 1)}, {(0, 0), (1, 0)}, {(0, 0)}],
+        size,
+        room_at,
+        blocked_for_objects,
+        room_id=room_at[(row_perm[4 % size], column_perm[4 % size])],
+        predicate=lambda cells: any(row == row_perm[4 % size] for row, _ in cells),
     )
-    rug_cell = _free_in_room_column(
-        column_perm[5 % size],
-        room_at[(row_perm[5 % size], column_perm[5 % size])],
-        rooms,
-        blocked_for_objects | {plant_cell, table_cell},
+    rug_cells = _place_footprint(
+        [
+            {(0, 0), (0, 1), (1, 0)},
+            {(0, 0), (0, 1), (1, 0), (1, 1)},
+            {(0, 0), (0, 1)},
+            {(0, 0)},
+        ],
+        size,
+        room_at,
+        (blocked_for_objects - {(row_perm[5 % size], column_perm[5 % size])}) | table_cells,
+        room_id=room_at[(row_perm[5 % size], column_perm[5 % size])],
+        predicate=lambda cells: any(column == column_perm[5 % size] for _, column in cells),
     )
-    sofa_cell = _free_neighbor(row_perm[6 % size], column_perm[6 % size], size, blocked_for_objects | {plant_cell, table_cell, rug_cell})
+    sofa_cells = _place_footprint(
+        [{(0, 0), (0, 1)}, {(0, 0), (1, 0)}, {(0, 0)}],
+        size,
+        room_at,
+        blocked_for_objects | table_cells | rug_cells,
+        predicate=lambda cells: any(
+            abs(row_perm[6 % size] - row) + abs(column_perm[6 % size] - column) == 1
+            for row, column in cells
+        ),
+    )
+    bed_cells = _place_footprint(
+        [{(0, 0), (0, 1)}, {(0, 0), (1, 0)}, {(0, 0)}],
+        size,
+        room_at,
+        blocked_for_objects | table_cells | rug_cells | sofa_cells,
+    )
     object_cells = {
-        "plant": plant_cell,
-        "table": table_cell,
-        "rug": rug_cell,
-        "sofa": sofa_cell,
+        "plant": {plant_cell},
+        "table": table_cells,
+        "rug": rug_cells,
+        "sofa": sofa_cells,
+        "bed": bed_cells,
     }
     board = {
         "id": f"scale_{size}x{size}",
@@ -256,10 +266,11 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
         }],
         "rooms": rooms,
         "objects": [
-            _object("plant", *object_cells["plant"], "gallery", occupiable=True),
-            _object("table", *object_cells["table"], "study"),
-            _object("rug", *object_cells["rug"], "lounge", occupiable=True),
-            _object("sofa", *object_cells["sofa"], "lounge", occupiable=True),
+            _object("plant", object_cells["plant"], "gallery", occupiable=True),
+            _object("table", object_cells["table"], "study"),
+            _object("rug", object_cells["rug"], "lounge", occupiable=True),
+            _object("sofa", object_cells["sofa"], "lounge", occupiable=True),
+            _object("bed", object_cells["bed"], "bedroom"),
         ],
     }
 

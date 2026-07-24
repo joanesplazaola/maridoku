@@ -4,11 +4,12 @@
 
 - CP-SAT (`ortools`) es el motor exacto principal.
 - El antiguo solver artesanal se retiró en Git.
-- El generador CP-SAT escalable escribe casos 8x8+ seed-dependientes con `generate-scale`, varias habitaciones, objetos visibles y pistas de objetos/habitación aceptadas solo si conservan la unicidad.
+- El generador CP-SAT escalable escribe casos 8x8+ seed-dependientes con `generate-scale`, varias habitaciones y objetos con huellas reales `1x1`, `1x2` y en L; las pistas de objetos/habitación se aceptan solo si conservan la unicidad.
 - CP-SAT acepta `base_statements`, `extra_statements`, `probe_candidate_with_cpsat()` y `probe_candidates_with_cpsat()` para evaluar pistas candidatas sin crear tarjetas definitivas.
 - El generador editorial registra una muestra CP-SAT vs NumPy de candidatos supervivientes en diagnostics.
 - El set de tarjetas elegido se valida con CP-SAT antes de aceptar un caso.
 - La CLI renderiza puzzles a una hoja HTML imprimible para pruebas humanas.
+- El render dibuja una sola pieza por objeto multicelda, respeta orientación/capa y dispone de assets para los siete tipos del catálogo.
 - El selector editorial estable está separado en `selector.py` y usa máscaras bitset con `int.bit_count()` para elegir sets completos de tarjetas.
 - Existe una ruta experimental `--cpsat-selector` basada en conteos CP-SAT capados a 2; reporta `solve_calls`/`cache_hits` y cae al selector estable cuando no encuentra set.
 

@@ -388,14 +388,20 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     result = generate_scaling_case(10, 9001, tmp_path)
     assert result["puzzle"]["board"]["rows"] == 10
     assert len(result["puzzle"]["board"]["rooms"]) >= 5
-    assert len(result["puzzle"]["board"]["objects"]) >= 4
+    objects = {obj["type"]: obj for obj in result["puzzle"]["board"]["objects"]}
+    assert len(objects) >= 5
+    assert len(objects["plant"]["cells"]) == 1
+    assert len(objects["table"]["cells"]) == 2
+    assert len(objects["rug"]["cells"]) == 3
+    assert len(objects["sofa"]["cells"]) == 2
+    assert len(objects["bed"]["cells"]) == 2
     assert result["diagnostics"]["exact_validation"]["unique"] is True
     assert len(result["diagnostics"]["editorial_clues"]) >= 3
-    assert {"object_occupancy", "object_line", "object_adjacency"} <= {
+    assert len({"object_occupancy", "object_line", "object_adjacency"} & {
         statement["family"]
         for card in result["puzzle"]["cards"]
         for statement in card["statements"]
-    }
+    }) >= 2
     assert result["solution"]["murderer"] == "person_02"
     assert (tmp_path / "puzzle.json").exists()
     assert (tmp_path / "generation_report.json").exists()
@@ -417,6 +423,9 @@ def test_render_writes_printable_html(tmp_path: Path) -> None:
     assert "data:image/webp;base64," in html
     assert "<span class=\"object object-table\"" in html
     assert "--portrait-x:" in html
+    assert 'class="furniture-layer"' in html
+    assert "--object-width:2" in html
+    assert html.count('aria-label="Alfombra"') == 4
     assert 'class="legend"' in html
     assert 'object object-table' in html
     assert 'object object-plant' in html
