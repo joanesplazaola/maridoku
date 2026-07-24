@@ -191,17 +191,11 @@ def make_scaling_target(size: int, seed: int = 0) -> dict[str, tuple[int, int]]:
     }
 
 
-def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
-    """Create a deterministic, unique synthetic puzzle for solver scalability tests.
-
-    It deliberately uses only public clue types. The last suspect anchors the chain with
-    exact row/column clues; every preceding suspect is fixed relative to the next. The
-    victim is fixed by the remaining row/column plus the victim-room rule.
-    """
-    characters = make_scaling_characters(size)
+def make_scaling_board(size: int, seed: int = 0) -> dict[str, Any]:
+    """Create deterministic rooms and furniture around the scalable target."""
     target = make_scaling_target(size, seed)
-    row_perm = [target[character["id"]][0] for character in characters]
-    column_perm = [target[character["id"]][1] for character in characters]
+    row_perm = [row for row, _ in target.values()]
+    column_perm = [column for _, column in target.values()]
     murderer_index = 1
 
     solution_cells = {
@@ -322,6 +316,21 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
         "rooms": rooms,
         "objects": objects,
     }
+    return board
+
+
+def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
+    """Create a deterministic, unique synthetic puzzle for solver scalability tests.
+
+    It deliberately uses only public clue types. The last suspect anchors the chain with
+    exact row/column clues; every preceding suspect is fixed relative to the next. The
+    victim is fixed by the remaining row/column plus the victim-room rule.
+    """
+    characters = make_scaling_characters(size)
+    target = make_scaling_target(size, seed)
+    row_perm = [target[character["id"]][0] for character in characters]
+    column_perm = [target[character["id"]][1] for character in characters]
+    board = make_scaling_board(size, seed)
 
     victim = characters[0]
     cards: list[dict[str, Any]] = [{

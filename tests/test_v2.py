@@ -393,7 +393,11 @@ def test_ortools_scales_to_twelve_characters() -> None:
 
 
 def test_scaling_characters_and_targets_are_parameterized() -> None:
-    from murdoku_v2.scaling import make_scaling_characters, make_scaling_target
+    from murdoku_v2.scaling import (
+        make_scaling_board,
+        make_scaling_characters,
+        make_scaling_target,
+    )
 
     for size in (6, 8, 10):
         characters = make_scaling_characters(size)
@@ -404,6 +408,10 @@ def test_scaling_characters_and_targets_are_parameterized() -> None:
         assert {column for _, column in target.values()} == set(range(size))
         assert characters[0]["role"] == "victim"
         assert all(character["role"] == "suspect" for character in characters[1:])
+        board = make_scaling_board(size, seed=73)
+        assert board["rows"] == board["columns"] == size
+        assert sum(len(room["cells"]) for room in board["rooms"]) == size * size
+        assert board == make_scaling_board(size, seed=73)
 
 
 def test_scaling_candidate_pools_need_no_global_enumeration() -> None:
