@@ -467,12 +467,13 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     assert len(objects["wardrobe"]["cells"]) == 2
     assert len(objects["counter"]["cells"]) == 3
     assert result["diagnostics"]["exact_validation"]["unique"] is True
-    assert len(result["diagnostics"]["editorial_clues"]) >= 3
-    assert len({"object_occupancy", "object_line", "object_adjacency"} & {
+    assert result["diagnostics"]["all_suspect_clues_necessary"] is True
+    assert {
         statement["family"]
         for card in result["puzzle"]["cards"]
         for statement in card["statements"]
-    }) >= 2
+        if card["role"] == "suspect"
+    } == {"relative_order"}
     assert result["solution"]["murderer"] == "person_02"
     assert (tmp_path / "puzzle.json").exists()
     assert (tmp_path / "generation_report.json").exists()

@@ -565,44 +565,128 @@ def make_scaling_candidate_pools(
     return pools
 
 
-def _editorialize_clues(puzzle: dict[str, Any], expected: dict[str, tuple[int, int]]) -> list[str]:
-    """Replace synthetic chain clues with pool candidates validated by CP-SAT."""
-    pools = make_scaling_candidate_pools(puzzle, expected)
-    solver = get_solver("ortools")
-    accepted: list[str] = []
-    cards = {card["character"]: card for card in puzzle["cards"] if card["role"] == "suspect"}
-    for character_id, candidates in pools.items():
-        card = cards[character_id]
-        original = card["statements"][0]
-        thematic = sorted(
-            candidates,
-            key=lambda statement: (
-                statement["family"] in {"coordinate", "relative_distance"},
-                statement["family"] == "room_exact",
-            ),
-        )
-        for candidate in thematic:
-            if candidate["type"] == original["type"] and candidate["args"] == original["args"]:
+def _make_order_cards(
+    puzzle: dict[str, Any],
+    target: dict[str, tuple[int, int]],
+) -> list[dict[str, Any]]:
+    characters = {character["id"]: character for character in puzzle["characters"]}
+    victim_id = puzzle["victim"]
+    statements: dict[str, list[dict[str, Any]]] = {
+        character_id: []
+        for character_id in characters
+        if character_id != victim_id
+    }
+    for dimension, type_, directions in (
+        (0, "relative_row_order", ("north", "south")),
+        (1, "relative_column_order", ("west", "east")),
+    ):
+        order = sorted(target, key=lambda character_id: target[character_id][dimension])
+        victim_index = order.index(victim_id)
+        for index, character_id in enumerate(order):
+            if character_id == victim_id:
                 continue
-            card["statements"][0] = {**candidate, "id": original["id"]}
-            result = solver.solve(puzzle, limit=2)
-            if result.unique and result.solutions[0] == expected:
-                accepted.append(candidate["type"])
-                break
-            card["statements"][0] = original
-    return accepted
+            reference = order[index + 1] if index < victim_index else order[index - 1]
+            relation = directions[int(target[character_id][dimension] > target[reference][dimension])]
+            direction_text = {
+                "north": "al norte",
+                "south": "al sur",
+                "west": "al oeste",
+                "east": "al este",
+            }[relation]
+            statements[character_id].append({
+                "id": "",
+                "type": type_,
+                "family": "relative_order",
+                "args": {
+                    "character": character_id,
+                    "reference": reference,
+                    "relation": relation,
+                },
+                "text": (
+                    f"{characters[character_id]['name']} estaba {direction_text} "
+                    f"de {characters[reference]['name']}."
+                ),
+            })
+
+    victim_card = next(card for card in puzzle["cards"] if card["role"] == "victim")
+    cards = [victim_card]
+    for character_id, character_statements in statements.items():
+        card_id = f"card-{character_id}"
+        for index, statement in enumerate(character_statements, start=1):
+            statement["id"] = f"{card_id}-statement-{index}"
+        cards.append({
+            "id": card_id,
+            "character": character_id,
+            "character_name": characters[character_id]["name"],
+            "role": "suspect",
+            "statements": character_statements,
+        })
+    return cards
+
+
+def _suspect_clues_are_necessary(
+    puzzle: dict[str, Any],
+    expected: dict[str, tuple[int, int]],
+) -> bool:
+    solver = get_solver("ortools")
+    for card in puzzle["cards"]:
+        if card["role"] == "victim":
+            continue
+        without_card = solver.solve(puzzle, limit=2, exclude_card_id=card["id"])
+        if len(without_card.solutions) <= 1:
+            return False
+        for statement in card["statements"]:
+            without_statement = solver.solve(
+                puzzle,
+                limit=2,
+                exclude_statement_id=statement["id"],
+            )
+            if len(without_statement.solutions) <= 1:
+                return False
+    return True
+
+
+def _prune_implied_order_clues(
+    puzzle: dict[str, Any],
+    expected: dict[str, tuple[int, int]],
+) -> list[str]:
+    solver = get_solver("ortools")
+    removed: list[str] = []
+    changed = True
+    while changed:
+        changed = False
+        for card in puzzle["cards"]:
+            if card["role"] == "victim" or len(card["statements"]) <= 1:
+                continue
+            for index in range(len(card["statements"]) - 1, -1, -1):
+                if len(card["statements"]) <= 1:
+                    break
+                statement = card["statements"].pop(index)
+                result = solver.solve(puzzle, limit=2)
+                if result.unique and result.solutions[0] == expected:
+                    removed.append(statement["id"])
+                    changed = True
+                else:
+                    card["statements"].insert(index, statement)
+    return removed
 
 
 def generate_scaling_case(size: int, seed: int, output: Path) -> dict[str, Any]:
     puzzle = make_scaling_puzzle(size, seed)
     expected = expected_scaling_solution(size, seed)
-    editorial_clues = _editorialize_clues(puzzle, expected)
+    puzzle["cards"] = _make_order_cards(puzzle, expected)
+    removed_order_clues = _prune_implied_order_clues(puzzle, expected)
+    if not _suspect_clues_are_necessary(puzzle, expected):
+        raise RuntimeError("No se pudo construir una base de pistas necesaria.")
+    editorial_clues: list[str] = []
     solver = get_solver("ortools")
     started = time.perf_counter()
     result = solver.solve(puzzle, limit=2)
     elapsed_ms = (time.perf_counter() - started) * 1000
     if not result.available or not result.unique or result.solutions[0] != expected:
         raise RuntimeError("CP-SAT no validó el caso escalable generado.")
+    if not _suspect_clues_are_necessary(puzzle, expected):
+        raise RuntimeError("El caso escalable contiene pistas de sospechoso redundantes.")
 
     room_at = {
         tuple(cell): room["id"]
@@ -636,6 +720,8 @@ def generate_scaling_case(size: int, seed: int, output: Path) -> dict[str, Any]:
         },
         "generation_ms": round(elapsed_ms, 3),
         "human_solver_available": False,
+        "all_suspect_clues_necessary": True,
+        "removed_implied_order_clues": removed_order_clues,
     }
     explanation = {
         "puzzle_id": puzzle["id"],
