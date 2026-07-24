@@ -392,6 +392,20 @@ def test_ortools_scales_to_twelve_characters() -> None:
         assert result.solutions[0] == expected_scaling_solution(size)
 
 
+def test_scaling_characters_and_targets_are_parameterized() -> None:
+    from murdoku_v2.scaling import make_scaling_characters, make_scaling_target
+
+    for size in (6, 8, 10):
+        characters = make_scaling_characters(size)
+        target = make_scaling_target(size, seed=73)
+        assert len(characters) == len(target) == size
+        assert list(target) == [character["id"] for character in characters]
+        assert {row for row, _ in target.values()} == set(range(size))
+        assert {column for _, column in target.values()} == set(range(size))
+        assert characters[0]["role"] == "victim"
+        assert all(character["role"] == "suspect" for character in characters[1:])
+
+
 def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     from murdoku_v2.scaling import generate_scaling_case
 

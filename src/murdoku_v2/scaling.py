@@ -164,22 +164,10 @@ def _room_at(rooms: list[dict[str, Any]]) -> dict[tuple[int, int], str]:
     }
 
 
-def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
-    """Create a deterministic, unique synthetic puzzle for solver scalability tests.
-
-    It deliberately uses only public clue types. The last suspect anchors the chain with
-    exact row/column clues; every preceding suspect is fixed relative to the next. The
-    victim is fixed by the remaining row/column plus the victim-room rule.
-    """
+def make_scaling_characters(size: int) -> list[dict[str, Any]]:
     if size < 4 or size > len(NAMES):
-        raise ValueError(f"El benchmark sintético admite tamaños entre 4 y {len(NAMES)}.")
-    rng = random.Random(seed)
-    row_perm = list(range(size))
-    column_perm = list(range(size))
-    rng.shuffle(row_perm)
-    rng.shuffle(column_perm)
-    murderer_index = 1
-    characters = [
+        raise ValueError(f"El generador escalable admite tamaños entre 4 y {len(NAMES)}.")
+    return [
         {
             "id": f"person_{index + 1:02d}",
             "name": NAMES[index],
@@ -188,6 +176,33 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
         }
         for index in range(size)
     ]
+
+
+def make_scaling_target(size: int, seed: int = 0) -> dict[str, tuple[int, int]]:
+    characters = make_scaling_characters(size)
+    rng = random.Random(seed)
+    rows = list(range(size))
+    columns = list(range(size))
+    rng.shuffle(rows)
+    rng.shuffle(columns)
+    return {
+        character["id"]: (rows[index], columns[index])
+        for index, character in enumerate(characters)
+    }
+
+
+def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
+    """Create a deterministic, unique synthetic puzzle for solver scalability tests.
+
+    It deliberately uses only public clue types. The last suspect anchors the chain with
+    exact row/column clues; every preceding suspect is fixed relative to the next. The
+    victim is fixed by the remaining row/column plus the victim-room rule.
+    """
+    characters = make_scaling_characters(size)
+    target = make_scaling_target(size, seed)
+    row_perm = [target[character["id"]][0] for character in characters]
+    column_perm = [target[character["id"]][1] for character in characters]
+    murderer_index = 1
 
     solution_cells = {
         (row_perm[index], column_perm[index])
@@ -396,15 +411,7 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
 
 
 def expected_scaling_solution(size: int, seed: int = 0) -> dict[str, tuple[int, int]]:
-    rng = random.Random(seed)
-    row_perm = list(range(size))
-    column_perm = list(range(size))
-    rng.shuffle(row_perm)
-    rng.shuffle(column_perm)
-    return {
-        f"person_{index + 1:02d}": (row_perm[index], column_perm[index])
-        for index in range(size)
-    }
+    return make_scaling_target(size, seed)
 
 
 def _editorialize_clues(puzzle: dict[str, Any], expected: dict[str, tuple[int, int]]) -> list[str]:

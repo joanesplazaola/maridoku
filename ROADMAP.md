@@ -33,13 +33,14 @@ Enfoques descartados:
 
 Objetivo: producir 8x8 y 10x10 variados sin enumerar `(n!)²`.
 
-1. [ ] Extraer personajes, objetivo y tablero parametrizados desde `scaling.py`.
-2. [ ] Generar pools editoriales verdaderos sin `enumerate_base_solutions()`.
-3. [ ] Seleccionar pistas y demostrar unicidad exclusivamente mediante CP-SAT.
-4. [ ] Comprobar necesidad retirando cada tarjeta y cada afirmación con CP-SAT.
-5. [ ] Sustituir las cadenas sintéticas por familias variadas del catálogo formal.
-6. [ ] Añadir fixtures y presupuestos para 6x6, 8x8 y 10x10.
-7. [ ] Mover `generate` a la ruta escalable y retirar selector, máscaras y universo antiguos.
+1. [x] Extraer personajes y objetivo parametrizados desde `scaling.py`.
+2. [ ] Extraer la construcción parametrizada del tablero escalable.
+3. [ ] Generar pools editoriales verdaderos sin `enumerate_base_solutions()`.
+4. [ ] Seleccionar pistas y demostrar unicidad exclusivamente mediante CP-SAT.
+5. [ ] Comprobar necesidad retirando cada tarjeta y cada afirmación con CP-SAT.
+6. [ ] Sustituir las cadenas sintéticas por familias variadas del catálogo formal.
+7. [ ] Añadir fixtures y presupuestos para 6x6, 8x8 y 10x10.
+8. [ ] Mover `generate` a la ruta escalable y retirar selector, máscaras y universo antiguos.
 
 Criterio de salida: 100 casos consecutivos por tamaño, todos únicos, sin pistas
 redundantes y dentro del presupuesto publicado. Ningún caso aceptado puede
