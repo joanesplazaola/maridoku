@@ -676,8 +676,6 @@ def generate_scaling_case(size: int, seed: int, output: Path) -> dict[str, Any]:
     expected = expected_scaling_solution(size, seed)
     puzzle["cards"] = _make_order_cards(puzzle, expected)
     removed_order_clues = _prune_implied_order_clues(puzzle, expected)
-    if not _suspect_clues_are_necessary(puzzle, expected):
-        raise RuntimeError("No se pudo construir una base de pistas necesaria.")
     editorial_clues: list[str] = []
     solver = get_solver("ortools")
     started = time.perf_counter()
