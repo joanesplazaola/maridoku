@@ -439,12 +439,15 @@ def test_render_writes_printable_html(tmp_path: Path) -> None:
     assert "--portrait-x:" in html
     assert 'class="furniture-layer"' in html
     assert "--object-width:2" in html
-    assert html.count('aria-label="Alfombra"') == 4
+    assert html.count('aria-label="Alfombra"') == 2
     assert ">1.1<" not in html
-    assert 'class="legend"' in html
     assert 'object object-table' in html
     assert 'object object-plant' in html
     assert "case-board_restaurant" in html
+    assert "<small>Distancia</small>" not in html
+    assert "Alicia estaba 1 columna" not in html
+    assert "Estaba 1 columna al este de Elena." in html
+    assert "misma fila que ella" in html
 
 
 def test_scaling_generator_depends_on_seed() -> None:

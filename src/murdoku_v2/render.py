@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import html
 import json
+import re
 from importlib.resources import files
 from pathlib import Path
 from typing import Any
@@ -16,21 +17,12 @@ def _room_lookup(board: dict[str, Any]) -> dict[tuple[int, int], dict[str, Any]]
     }
 
 
-def _statement_tag(statement: dict[str, Any]) -> str:
-    family = statement.get("family", "")
-    return {
-        "murder_rule": "Crimen",
-        "relative_distance": "Distancia",
-        "relative_order": "Orden",
-        "coordinate": "Posición",
-        "object_occupancy": "Objeto",
-        "object_line": "Objeto",
-        "object_adjacency": "Objeto",
-        "room_population": "Sala",
-        "room_exact": "Sala",
-        "room_choice": "Sala",
-        "room_relation": "Habitación",
-    }.get(family, "Pista")
+def _display_statement(text: str, character_name: str, gender: str) -> str:
+    if text.startswith(character_name):
+        shortened = text[len(character_name):].lstrip(" ,:")
+        return shortened[:1].upper() + shortened[1:]
+    pronoun = "ella" if gender == "woman" else "él"
+    return re.sub(rf"\b{re.escape(character_name)}\b", pronoun, text)
 
 
 def _object_class(obj: dict[str, Any]) -> str:
@@ -141,13 +133,12 @@ def render_html(puzzle: dict[str, Any]) -> str:
     gender_slots = {"woman": 0, "man": 0}
     gender_by_character = {character["id"]: character.get("gender", "woman") for character in puzzle["characters"]}
     for card in puzzle["cards"]:
+        gender = gender_by_character.get(card["character"], "woman")
         statements = "".join(
-            f"<li><small>{html.escape(_statement_tag(statement))}</small>"
-            f"{html.escape(statement['text'])}</li>"
+            f"<li>{html.escape(_display_statement(statement['text'], card['character_name'], gender))}</li>"
             for statement in card["statements"]
         )
         role = "Victima" if card["role"] == "victim" else "Sospechoso"
-        gender = gender_by_character.get(card["character"], "woman")
         portrait_column = min(gender_slots.get(gender, 0), 3)
         gender_slots[gender] = portrait_column + 1
         portrait_x = (0, 33.333, 66.667, 100)[portrait_column]
@@ -159,11 +150,6 @@ def render_html(puzzle: dict[str, Any]) -> str:
             f"<div><h2>{html.escape(card['character_name'])}</h2><p>{role}</p></div></header>"
             f"<ol>{statements}</ol></article>"
         )
-    legend = "".join(
-        f"<li>{_object_marker(obj)}{html.escape(obj.get('name') or obj.get('type') or 'Objeto')}</li>"
-        for obj in board.get("objects", [])
-    )
-
     return f"""<!doctype html>
 <html lang="es">
 <head>
@@ -191,7 +177,6 @@ def render_html(puzzle: dict[str, Any]) -> str:
             <div class="furniture-layer" aria-label="Mobiliario">{furniture}</div>
           </div>
         </div>
-        <ul class="legend" aria-label="Objetos">{legend}</ul>
       </aside>
       <main><div class="section-heading"><span>Declaraciones</span><small>{len(cards)} expedientes</small></div>{''.join(cards)}</main>
     </div>

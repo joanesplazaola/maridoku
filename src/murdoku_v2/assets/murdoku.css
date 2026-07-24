@@ -356,29 +356,6 @@ td {
 .shape-l-missing-0-1 .object-counter { transform: rotate(180deg); }
 .shape-l-missing-1-1 .object-counter { transform: rotate(-90deg); }
 
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px 15px;
-  margin: 14px 0 0;
-  padding: 0 2px;
-  list-style: none;
-  color: var(--muted);
-}
-
-.legend li {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-}
-
-.legend .object {
-  width: 34px;
-  height: 34px;
-  filter: none;
-}
-
 main {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -444,7 +421,7 @@ main {
 .card h2 {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0;
 }
@@ -452,7 +429,7 @@ main {
 .card p {
   margin: 2px 0 0;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -467,20 +444,8 @@ ol {
 
 li {
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 13px;
-  line-height: 1.35;
-}
-
-li small {
-  display: inline-block;
-  margin: 0 6px 2px 0;
-  padding: 2px 5px;
-  border: 1px solid rgb(41 44 39 / 25%);
-  color: var(--green);
-  font-family: Inter, sans-serif;
-  font-size: 7px;
-  font-weight: 800;
-  text-transform: uppercase;
+  font-size: 16px;
+  line-height: 1.45;
 }
 
 @media (max-width: 900px) {
