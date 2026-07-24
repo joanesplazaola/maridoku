@@ -468,6 +468,8 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     assert len(objects["counter"]["cells"]) == 3
     assert result["diagnostics"]["exact_validation"]["unique"] is True
     assert result["diagnostics"]["all_suspect_clues_necessary"] is True
+    assert result["diagnostics"]["requested_seed"] == 9001
+    assert result["diagnostics"]["target_attempts"] >= 1
     assert {
         statement["family"]
         for card in result["puzzle"]["cards"]
@@ -477,6 +479,16 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     assert result["solution"]["murderer"] == "person_02"
     assert (tmp_path / "puzzle.json").exists()
     assert (tmp_path / "generation_report.json").exists()
+
+
+def test_scaling_generator_retries_redundant_targets(tmp_path: Path) -> None:
+    from murdoku_v2.scaling import generate_scaling_case
+
+    result = generate_scaling_case(8, 0, tmp_path)
+    assert result["diagnostics"]["requested_seed"] == 0
+    assert result["diagnostics"]["effective_seed"] == 1
+    assert result["diagnostics"]["target_attempts"] == 2
+    assert result["diagnostics"]["rejected_target_seeds"] == [0]
 
 
 def test_render_writes_printable_html(tmp_path: Path) -> None:

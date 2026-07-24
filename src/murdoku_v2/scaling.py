@@ -670,20 +670,37 @@ def _prune_implied_order_clues(
     return removed
 
 
-def generate_scaling_case(size: int, seed: int, output: Path) -> dict[str, Any]:
-    puzzle = make_scaling_puzzle(size, seed)
-    expected = expected_scaling_solution(size, seed)
-    puzzle["cards"] = _make_order_cards(puzzle, expected)
-    removed_order_clues = _prune_implied_order_clues(puzzle, expected)
+def generate_scaling_case(
+    size: int,
+    seed: int,
+    output: Path,
+    *,
+    max_target_attempts: int = 16,
+) -> dict[str, Any]:
+    if max_target_attempts < 1:
+        raise ValueError("max_target_attempts debe ser al menos 1")
+    generation_started = time.perf_counter()
     editorial_clues: list[str] = []
     solver = get_solver("ortools")
-    started = time.perf_counter()
-    result = solver.solve(puzzle, limit=2)
-    elapsed_ms = (time.perf_counter() - started) * 1000
-    if not result.available or not result.unique or result.solutions[0] != expected:
-        raise RuntimeError("CP-SAT no validó el caso escalable generado.")
-    if not _suspect_clues_are_necessary(puzzle, expected):
-        raise RuntimeError("El caso escalable contiene pistas de sospechoso redundantes.")
+    rejected_targets: list[int] = []
+    for target_attempt in range(max_target_attempts):
+        effective_seed = seed + target_attempt
+        puzzle = make_scaling_puzzle(size, effective_seed)
+        expected = expected_scaling_solution(size, effective_seed)
+        puzzle["cards"] = _make_order_cards(puzzle, expected)
+        removed_order_clues = _prune_implied_order_clues(puzzle, expected)
+        result = solver.solve(puzzle, limit=2)
+        if (
+            result.available
+            and result.unique
+            and result.solutions[0] == expected
+            and _suspect_clues_are_necessary(puzzle, expected)
+        ):
+            break
+        rejected_targets.append(effective_seed)
+    else:
+        raise RuntimeError("No se encontró una base escalable única y necesaria.")
+    elapsed_ms = (time.perf_counter() - generation_started) * 1000
 
     room_at = {
         tuple(cell): room["id"]
@@ -709,6 +726,10 @@ def generate_scaling_case(size: int, seed: int, output: Path) -> dict[str, Any]:
         "puzzle_id": puzzle["id"],
         "generator": "scaling_editorial",
         "size": size,
+        "requested_seed": seed,
+        "effective_seed": effective_seed,
+        "target_attempts": target_attempt + 1,
+        "rejected_target_seeds": rejected_targets,
         "editorial_clues": editorial_clues,
         "exact_validation": {
             "unique": result.unique,
