@@ -82,6 +82,7 @@ def _stylesheet() -> str:
         "__PLANT__": assets.joinpath("furniture/plant.webp"),
         "__TABLE__": assets.joinpath("furniture/table.webp"),
         "__RUG__": assets.joinpath("furniture/rug.webp"),
+        "__RUG_L__": assets.joinpath("furniture/rug-l.webp"),
         "__SOFA__": assets.joinpath("furniture/sofa.webp"),
         "__BED__": assets.joinpath("furniture/bed.webp"),
         "__CHAIR__": assets.joinpath("furniture/chair.webp"),

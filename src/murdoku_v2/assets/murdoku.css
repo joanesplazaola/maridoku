@@ -318,19 +318,22 @@ td b {
 }
 
 .shape-l-missing-0-0 .object {
-  clip-path: polygon(50% 0, 100% 0, 100% 100%, 0 100%, 0 50%, 50% 50%);
+  background-image: url("__RUG_L__");
+  transform: rotate(-90deg);
 }
 
 .shape-l-missing-0-1 .object {
-  clip-path: polygon(0 0, 50% 0, 50% 50%, 100% 50%, 100% 100%, 0 100%);
+  background-image: url("__RUG_L__");
 }
 
 .shape-l-missing-1-0 .object {
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 100%, 50% 50%, 0 50%);
+  background-image: url("__RUG_L__");
+  transform: rotate(180deg);
 }
 
 .shape-l-missing-1-1 .object {
-  clip-path: polygon(0 0, 100% 0, 100% 50%, 50% 50%, 50% 100%, 0 100%);
+  background-image: url("__RUG_L__");
+  transform: rotate(90deg);
 }
 
 .legend {
