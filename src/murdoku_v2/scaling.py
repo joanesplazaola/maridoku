@@ -423,6 +423,11 @@ def make_scaling_candidate_pools(
 
     room_at = _room_at(puzzle["board"]["rooms"])
     room_names = {room["id"]: room["name"] for room in puzzle["board"]["rooms"]}
+    characters = {character["id"]: character for character in puzzle["characters"]}
+    groups = {
+        group["id"]: set(group["rooms"])
+        for group in puzzle["board"].get("room_groups", [])
+    }
     suspects = [character for character in puzzle["characters"] if character["role"] == "suspect"]
     pools: dict[str, list[dict[str, Any]]] = {}
     for index, character in enumerate(suspects):
@@ -432,6 +437,11 @@ def make_scaling_candidate_pools(
         room_id = room_at[(row, column)]
         reference = suspects[(index + 1) % len(suspects)]
         reference_row, reference_column = target[reference["id"]]
+        room_occupants = [
+            other_id
+            for other_id, position in target.items()
+            if room_at[position] == room_id
+        ]
         candidates = [
             ("exact_row", "coordinate", {"row": row}, f"{name} estaba en la fila {row + 1}."),
             ("exact_column", "coordinate", {"column": column}, f"{name} estaba en la columna {column + 1}."),
@@ -454,7 +464,52 @@ def make_scaling_candidate_pools(
                 {"reference": reference["id"]},
                 f"{name} estaba en una habitación {'igual' if room_id == room_at[(reference_row, reference_column)] else 'distinta'} a {reference['name']}.",
             ),
+            (
+                "room_population",
+                "room_population",
+                {"count": len(room_occupants)},
+                f"Había {len(room_occupants)} personas en la habitación de {name}.",
+            ),
         ]
+        if row != reference_row:
+            candidates.append((
+                "relative_row_order",
+                "relative_order",
+                {
+                    "reference": reference["id"],
+                    "relation": "north" if row < reference_row else "south",
+                },
+                f"{name} estaba {'al norte' if row < reference_row else 'al sur'} de {reference['name']}.",
+            ))
+        if column != reference_column:
+            candidates.append((
+                "relative_column_order",
+                "relative_order",
+                {
+                    "reference": reference["id"],
+                    "relation": "west" if column < reference_column else "east",
+                },
+                f"{name} estaba {'al oeste' if column < reference_column else 'al este'} de {reference['name']}.",
+            ))
+        for gender in ("woman", "man"):
+            count = sum(
+                other_id != character_id and characters[other_id]["gender"] == gender
+                for other_id in room_occupants
+            )
+            candidates.append((
+                "companion_gender_count",
+                "room_composition",
+                {"gender": gender, "count": count},
+                f"{name} compartía habitación con {count} {'mujeres' if gender == 'woman' else 'hombres'}.",
+            ))
+        for group_id, group_rooms in groups.items():
+            if room_id in group_rooms:
+                candidates.append((
+                    "in_room_group",
+                    "room_group",
+                    {"group": group_id},
+                    f"{name} estaba en la zona {group_id.replace('_', ' ')}.",
+                ))
         for obj in puzzle["board"].get("objects", []):
             cells = {tuple(cell) for cell in obj["cells"]}
             if (row, column) in cells and obj.get("occupiable", False):
@@ -470,6 +525,20 @@ def make_scaling_candidate_pools(
                     "object_adjacency",
                     {"object_type": obj["type"]},
                     f"{name} estaba al lado de {obj['name'].lower()}.",
+                ))
+            if any(obj_row == row and room_at[(obj_row, obj_column)] == room_id for obj_row, obj_column in cells):
+                candidates.append((
+                    "object_same_row_in_room",
+                    "object_line",
+                    {"object_type": obj["type"]},
+                    f"{name} estaba en la misma fila y habitación que {obj['name'].lower()}.",
+                ))
+            if any(obj_column == column and room_at[(obj_row, obj_column)] == room_id for obj_row, obj_column in cells):
+                candidates.append((
+                    "object_same_column_in_room",
+                    "object_line",
+                    {"object_type": obj["type"]},
+                    f"{name} estaba en la misma columna y habitación que {obj['name'].lower()}.",
                 ))
 
         pool = []

@@ -419,13 +419,22 @@ def test_scaling_candidate_pools_need_no_global_enumeration() -> None:
         target = make_scaling_target(size, seed=91)
         pools = make_scaling_candidate_pools(puzzle, target)
         assert len(pools) == size - 1
-        assert all(len(pool) >= 6 for pool in pools.values())
+        assert all(len(pool) >= 11 for pool in pools.values())
         assert all(
             _matches_statement(statement, target, puzzle)
             for pool in pools.values()
             for statement in pool
         )
-        assert {"coordinate", "room_exact", "relative_distance", "room_relation"} <= {
+        assert {
+            "coordinate",
+            "room_exact",
+            "relative_distance",
+            "relative_order",
+            "room_relation",
+            "room_population",
+            "room_composition",
+            "room_group",
+        } <= {
             statement["family"]
             for pool in pools.values()
             for statement in pool
