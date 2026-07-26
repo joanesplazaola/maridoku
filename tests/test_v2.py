@@ -47,13 +47,17 @@ def test_ortools_matches_all_reference_cases() -> None:
         assert result.solutions == [expected]
 
 
-def test_ortools_scales_to_twelve_characters() -> None:
+def test_engine_and_renderer_cover_sizes_five_to_sixteen() -> None:
+    from murdoku_v2.render import render_html
     from murdoku_v2.scaling import expected_scaling_solution, make_scaling_puzzle
     from murdoku_v2.solvers.ortools_solver import ORToolsSolver
 
-    result = ORToolsSolver().solve(make_scaling_puzzle(12), limit=2)
-    assert result.unique
-    assert result.solutions == [expected_scaling_solution(12)]
+    for size in range(5, 17):
+        puzzle = make_scaling_puzzle(size)
+        result = ORToolsSolver().solve(puzzle, limit=2)
+        assert result.unique
+        assert result.solutions == [expected_scaling_solution(size)]
+        assert f"--cols:{size};--rows:{size}" in render_html(puzzle)
 
 
 def test_scaling_board_and_target_are_parameterized() -> None:

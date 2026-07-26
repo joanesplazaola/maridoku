@@ -173,8 +173,8 @@ def _room_at(rooms: list[dict[str, Any]]) -> dict[tuple[int, int], str]:
 
 
 def make_scaling_characters(size: int) -> list[dict[str, Any]]:
-    if size < 4 or size > len(NAMES):
-        raise ValueError(f"El generador escalable admite tamaños entre 4 y {len(NAMES)}.")
+    if size < 5 or size > len(NAMES):
+        raise ValueError(f"El benchmark admite tamaños entre 5 y {len(NAMES)}.")
     return [
         {
             "id": f"person_{index + 1:02d}",

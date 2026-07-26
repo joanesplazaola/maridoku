@@ -50,7 +50,7 @@ Las pruebas CP-SAT validan:
 ## 4. Ejecutar el benchmark principal
 
 ```bash
-uv run murdoku-v2 scale-benchmark --sizes 6 8 10 12 --solver ortools --repetitions 3
+uv run murdoku-v2 scale-benchmark --sizes 5 8 12 16 --solver ortools --repetitions 3
 ```
 
 Para una prueba rápida:

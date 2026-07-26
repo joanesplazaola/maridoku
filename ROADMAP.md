@@ -43,7 +43,7 @@ editorial automatizado.
 - [x] Modelar zonas superpuestas y pistas de borde.
 - [x] Modelar secuencias temáticas para mecánicas especiales.
 - [x] Admitir tableros rectangulares con personajes según el lado menor.
-- [ ] Verificar generación y render en tamaños de 5×5 a 16×16.
+- [x] Verificar motor y render en tamaños de 5×5 a 16×16.
 - [x] Sustituir la generación editorial de `scaling.py` por variantes sobre una escena fija.
 - [ ] Crear tres casos de referencia: fácil, medio y difícil.
 

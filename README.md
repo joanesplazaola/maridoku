@@ -52,7 +52,7 @@ Smoke completo:
 ## Benchmark de escalado CP-SAT
 
 ```bash
-uv run murdoku-v2 scale-benchmark --sizes 10 13 --solver ortools --repetitions 2
+uv run murdoku-v2 scale-benchmark --sizes 5 8 12 16 --solver ortools --repetitions 2
 ```
 
 Smoke para desarrollo:

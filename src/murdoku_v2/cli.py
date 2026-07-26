@@ -93,8 +93,8 @@ def main() -> None:
     render_parser.add_argument("--puzzle", type=Path, default=Path("generated/puzzle.json"))
     render_parser.add_argument("--output", type=Path, default=Path("generated/puzzle.html"))
 
-    scale_parser = subparsers.add_parser("scale-benchmark", help="Prueba 6×6, 8×8, 10×10 y 12×12")
-    scale_parser.add_argument("--sizes", nargs="+", type=int, default=[6, 8, 10, 12])
+    scale_parser = subparsers.add_parser("scale-benchmark", help="Prueba el motor entre 5×5 y 16×16")
+    scale_parser.add_argument("--sizes", nargs="+", type=int, default=[5, 8, 12, 16])
     scale_parser.add_argument("--solver", choices=["ortools"], default="ortools")
     scale_parser.add_argument("--repetitions", type=int, default=3)
     scale_parser.add_argument("--output", type=Path, default=Path("scaling_benchmark.json"))
