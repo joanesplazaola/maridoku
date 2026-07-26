@@ -515,6 +515,20 @@ def test_scaling_generation_regression_reports_acceptance(tmp_path: Path) -> Non
     assert (tmp_path / "report.json").exists()
 
 
+def test_editorial_manifest_can_be_approved_then_retired(tmp_path: Path) -> None:
+    import pytest
+
+    from murdoku_v2.publication import set_editorial_status
+    from murdoku_v2.scaling import generate_scaling_case
+
+    generate_scaling_case(6, 1, tmp_path)
+    manifest_path = tmp_path / "manifest.json"
+    assert set_editorial_status(manifest_path, "approved")["editorial_status"] == "approved"
+    assert set_editorial_status(manifest_path, "retired")["editorial_status"] == "retired"
+    with pytest.raises(ValueError):
+        set_editorial_status(manifest_path, "approved")
+
+
 def test_render_writes_printable_html(tmp_path: Path) -> None:
     from murdoku_v2.render import render_file
 

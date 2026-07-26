@@ -8,6 +8,7 @@ from .benchmark import run_benchmark, run_benchmark_suite
 from .clue_catalog import catalog_json
 from .explainer import explain_puzzle
 from .object_catalog import catalog_json as object_catalog_json
+from .publication import set_editorial_status
 from .render import render_file
 from .scaling import (
     generate_scaling_case,
@@ -121,6 +122,10 @@ def main() -> None:
     regression_parser.add_argument("--budget-seconds", type=float, default=30.0)
     regression_parser.add_argument("--output", type=Path, default=Path("scaling_regression.json"))
 
+    editorial_parser = subparsers.add_parser("editorial-status", help="Aprueba o retira un puzle")
+    editorial_parser.add_argument("--manifest", type=Path, required=True)
+    editorial_parser.add_argument("--status", choices=["approved", "retired"], required=True)
+
     subparsers.add_parser("solvers", help="Muestra motores y librerías disponibles")
     subparsers.add_parser("catalog", help="Muestra el catálogo formal de pistas")
     subparsers.add_parser("object-catalog", help="Muestra el catálogo de objetos y huellas")
@@ -171,6 +176,8 @@ def main() -> None:
             output=args.output,
         )
         _json(report["summary"])
+    elif args.command == "editorial-status":
+        _json(set_editorial_status(args.manifest, args.status))
     elif args.command == "solvers":
         _json(availability())
     elif args.command == "object-catalog":
