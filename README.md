@@ -3,6 +3,9 @@
 Repositorio local del motor de generación y validación de puzles Murdoku.
 Esta rama usa **Google OR-Tools CP-SAT** como motor exacto principal.
 
+La web publica un catálogo de 50 niveles: 20 fáciles de 6x6, 20 medios de
+8x8 y 10 difíciles de 10x10, con progreso local y sin soluciones privadas.
+
 ## Contenido
 
 - `ORToolsSolver`: modelo exacto CP-SAT para las 22 familias de pistas actuales.

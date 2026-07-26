@@ -317,7 +317,7 @@ def make_scaling_board(size: int, seed: int = 0) -> dict[str, Any]:
     )
     board = {
         "id": f"scale_{size}x{size}",
-        "name": f"Murdoku escalable {size}×{size}",
+        "name": "Murdoku",
         "rows": size,
         "columns": size,
         "room_groups": [{
