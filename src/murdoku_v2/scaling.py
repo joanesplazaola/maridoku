@@ -567,7 +567,7 @@ def make_scaling_candidate_pools(
     return pools
 
 
-def _make_order_cards(
+def _make_editorial_cards(
     puzzle: dict[str, Any],
     target: dict[str, tuple[int, int]],
 ) -> list[dict[str, Any]]:
@@ -578,9 +578,9 @@ def _make_order_cards(
         for character_id in characters
         if character_id != victim_id
     }
-    for dimension, type_, directions in (
-        (0, "relative_row_order", ("north", "south")),
-        (1, "relative_column_order", ("west", "east")),
+    for dimension, coordinate_type, order_type, directions in (
+        (0, "exact_row", "relative_row_order", ("north", "south")),
+        (1, "exact_column", "relative_column_order", ("west", "east")),
     ):
         order = sorted(target, key=lambda character_id: target[character_id][dimension])
         victim_index = order.index(victim_id)
@@ -588,26 +588,53 @@ def _make_order_cards(
             if character_id == victim_id:
                 continue
             reference = order[index + 1] if index < victim_index else order[index - 1]
-            relation = directions[int(target[character_id][dimension] > target[reference][dimension])]
+            value = target[character_id][dimension]
+            reference_value = target[reference][dimension]
+            relation = directions[int(value > reference_value)]
             direction_text = {
                 "north": "al norte",
                 "south": "al sur",
                 "west": "al oeste",
                 "east": "al este",
             }[relation]
-            statements[character_id].append({
-                "id": "",
-                "type": type_,
-                "family": "relative_order",
-                "args": {
+            if value in {0, len(order) - 1}:
+                statement_type = coordinate_type
+                family = "coordinate"
+                args = {"character": character_id, coordinate_type.removeprefix("exact_"): value}
+                text = (
+                    f"{characters[character_id]['name']} estaba en la "
+                    f"{'fila' if dimension == 0 else 'columna'} {value + 1}."
+                )
+            elif index % 2:
+                statement_type = order_type.replace("_order", "_distance")
+                family = "relative_distance"
+                args = {
+                    "character": character_id,
+                    "reference": reference,
+                    "delta": value - reference_value,
+                }
+                text = (
+                    f"{characters[character_id]['name']} estaba justo {direction_text} "
+                    f"de {characters[reference]['name']}."
+                )
+            else:
+                statement_type = order_type
+                family = "relative_order"
+                args = {
                     "character": character_id,
                     "reference": reference,
                     "relation": relation,
-                },
-                "text": (
+                }
+                text = (
                     f"{characters[character_id]['name']} estaba {direction_text} "
                     f"de {characters[reference]['name']}."
-                ),
+                )
+            statements[character_id].append({
+                "id": "",
+                "type": statement_type,
+                "family": family,
+                "args": args,
+                "text": text,
             })
 
     victim_card = next(card for card in puzzle["cards"] if card["role"] == "victim")
@@ -646,7 +673,7 @@ def _suspect_clues_are_necessary(
         return all(executor.map(has_alternative, probes))
 
 
-def _prune_implied_order_clues(
+def _prune_implied_clues(
     puzzle: dict[str, Any],
     expected: dict[str, tuple[int, int]],
 ) -> list[str]:
@@ -692,8 +719,8 @@ def generate_scaling_case(
             rejected_targets.append(effective_seed)
             continue
         expected = expected_scaling_solution(size, effective_seed)
-        puzzle["cards"] = _make_order_cards(puzzle, expected)
-        removed_order_clues = _prune_implied_order_clues(puzzle, expected)
+        puzzle["cards"] = _make_editorial_cards(puzzle, expected)
+        removed_clues = _prune_implied_clues(puzzle, expected)
         result = solver.solve(puzzle, limit=2)
         if (
             result.available
@@ -744,7 +771,7 @@ def generate_scaling_case(
         "generation_ms": round(elapsed_ms, 3),
         "human_solver_available": False,
         "all_suspect_clues_necessary": True,
-        "removed_implied_order_clues": removed_order_clues,
+        "removed_implied_clues": removed_clues,
     }
     explanation = {
         "puzzle_id": puzzle["id"],

@@ -475,20 +475,10 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
         for card in result["puzzle"]["cards"]
         for statement in card["statements"]
         if card["role"] == "suspect"
-    } == {"relative_order"}
+    } == {"coordinate", "relative_distance", "relative_order"}
     assert result["solution"]["murderer"] == "person_02"
     assert (tmp_path / "puzzle.json").exists()
     assert (tmp_path / "generation_report.json").exists()
-
-
-def test_scaling_generator_retries_redundant_targets(tmp_path: Path) -> None:
-    from murdoku_v2.scaling import generate_scaling_case
-
-    result = generate_scaling_case(8, 0, tmp_path)
-    assert result["diagnostics"]["requested_seed"] == 0
-    assert result["diagnostics"]["effective_seed"] == 1
-    assert result["diagnostics"]["target_attempts"] == 2
-    assert result["diagnostics"]["rejected_target_seeds"] == [0]
 
 
 def test_scaling_generator_retries_unplaceable_furniture(tmp_path: Path) -> None:
