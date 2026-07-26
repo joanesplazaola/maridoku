@@ -24,7 +24,7 @@ editorial automatizado.
 
 ## P1: lenguaje de casos
 
-- [ ] Separar formalmente plantilla de escena, solución y pistas.
+- [x] Separar formalmente plantilla de escena, solución y pistas.
 - [ ] Corregir toda semántica espacial contra el glosario, incluida “al lado”.
 - [ ] Ampliar objetos solo cuando una escena aprobada los necesite.
 - [ ] Añadir pistas generales y mecánicas especiales al contrato CP-SAT.

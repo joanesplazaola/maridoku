@@ -8,6 +8,7 @@ from importlib.resources import files
 from pathlib import Path
 from typing import Any
 
+from .models import load_puzzle
 
 def _room_lookup(board: dict[str, Any]) -> dict[tuple[int, int], dict[str, Any]]:
     return {
@@ -201,7 +202,7 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
     <header class="titlebar">
       <div class="masthead">
         <span class="eyebrow">Archivo de investigación</span>
-        <h1>{html.escape(board.get('name') or puzzle['id'])}</h1>
+        <h1>{html.escape(puzzle.get('title') or board.get('name') or puzzle['id'])}</h1>
         <p class="subtitle">{html.escape(puzzle.get('story') or 'Una víctima. Una habitación. Un asesino entre los presentes.')}</p>
       </div>
       <div class="case-id"><span>Caso</span>{html.escape(puzzle['id'])}</div>
@@ -236,6 +237,6 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
 
 
 def render_file(puzzle_path: Path, output: Path) -> None:
-    puzzle = json.loads(puzzle_path.read_text(encoding="utf-8"))
+    puzzle = load_puzzle(puzzle_path)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(render_html(puzzle), encoding="utf-8")

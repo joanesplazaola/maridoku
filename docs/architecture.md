@@ -3,32 +3,22 @@
 ## Flujo
 
 ```text
-board.json
-   ↓ validación estructural
-asignaciones base fila/columna
-   ↓ regla de la víctima
-objetivos candidatos
-   ↓ catálogo formal de pistas verdaderas
-máscaras lógicas cacheadas
-   ↓ selector global de tarjetas
-contrato de aceptación
-   ↓
-puzzle.json + solution.json + diagnostics.json
-   ↓
-validador independiente + solucionador deductivo
+board.json + case.json
+        ↓ load_puzzle()
+puzle público autocontenido
+        ↓
+validación Pydantic + CP-SAT
+        ↓
+HTML sin solution.json
 ```
 
 ## Separación de responsabilidades
 
+- `boards/*.json`: geometría, habitaciones y objetos de una escena fija.
+- `examples/*/case.json`: personajes, víctima y pistas; referencia una escena.
+- `examples/*/solution.json`: posiciones y asesino privados.
+- `models.py`: composición y validación del contrato público.
 - `clue_catalog.py`: contrato lógico de los tipos de pista.
-- `selector.py`: búsqueda de conjuntos completos de tarjetas.
-- `engine.py`: orquestación, generación y diagnósticos.
-- `validator.py`: segundo solucionador, deliberadamente separado.
-- `human_solver.py`: propagación deductiva y dificultad provisional.
-- `benchmark.py`: ejecución masiva y estadísticas.
-
-## Selector global
-
-Primero busca una combinación completa con una afirmación por sospechoso mediante DFS global. No confirma una pista antes de comprobar que el resto de tarjetas puede completar el conjunto.
-
-Cuando las tarjetas simples no bastan, construye opciones de tarjeta doble y realiza una búsqueda por haz sobre tarjetas completas. Las dos afirmaciones compiten como una sola opción editorial y se comprueba después que ambas sean necesarias.
+- `solvers/ortools_solver.py`: solución exacta, unicidad y necesidad.
+- `render.py`: documento público autocontenido.
+- `scaling.py`: benchmark sintético; no produce contenido publicable.

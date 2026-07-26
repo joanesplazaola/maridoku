@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -159,3 +161,12 @@ class PuzzleModel(BaseModel):
 def validate_puzzle(data: dict[str, Any]) -> PuzzleModel:
     """Validate and normalise the public puzzle JSON contract."""
     return PuzzleModel.model_validate(data)
+
+
+def load_puzzle(path: Path) -> dict[str, Any]:
+    """Load a self-contained puzzle or compose a case with its fixed scene."""
+    puzzle = json.loads(path.read_text(encoding="utf-8"))
+    scene = puzzle.pop("scene", None)
+    if scene:
+        puzzle["board"] = json.loads((path.parent / scene).read_text(encoding="utf-8"))
+    return puzzle

@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .clue_catalog import catalog_json
 from .explainer import explain_puzzle
+from .models import load_puzzle
 from .object_catalog import catalog_json as object_catalog_json
 from .publication import set_editorial_status
 from .render import render_file
@@ -34,7 +35,7 @@ def _generation_summary(result: dict) -> dict:
 
 
 def _validate_with_solver(puzzle_path: Path, solution_path: Path, solver_name: str) -> dict:
-    puzzle = json.loads(puzzle_path.read_text(encoding="utf-8"))
+    puzzle = load_puzzle(puzzle_path)
     expected = json.loads(solution_path.read_text(encoding="utf-8"))
     result = get_solver(solver_name).solve(puzzle, limit=2)
     expected_positions = {
@@ -124,7 +125,7 @@ def main() -> None:
     elif args.command == "validate":
         _json(_validate_with_solver(args.puzzle, args.solution, args.solver))
     elif args.command == "explain":
-        puzzle = json.loads(args.puzzle.read_text(encoding="utf-8"))
+        puzzle = load_puzzle(args.puzzle)
         explanation = explain_puzzle(puzzle)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(explanation, ensure_ascii=False, indent=2), encoding="utf-8")

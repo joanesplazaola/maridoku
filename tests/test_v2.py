@@ -27,10 +27,15 @@ def test_catalogs_define_the_public_contract() -> None:
 
 
 def test_ortools_matches_all_reference_cases() -> None:
+    from murdoku_v2.models import load_puzzle
     from murdoku_v2.solvers.ortools_solver import ORToolsSolver
 
-    for puzzle_path in sorted((PROJECT / "examples").glob("*/puzzle.json")):
-        puzzle = json.loads(puzzle_path.read_text(encoding="utf-8"))
+    paths = [
+        *sorted((PROJECT / "examples").glob("*/puzzle.json")),
+        PROJECT / "examples/board_restaurant/case.json",
+    ]
+    for puzzle_path in paths:
+        puzzle = load_puzzle(puzzle_path)
         solution = json.loads((puzzle_path.parent / "solution.json").read_text(encoding="utf-8"))
         expected = {
             character: (position["row"], position["column"])
@@ -148,7 +153,7 @@ def test_render_writes_an_interactive_printable_html(tmp_path: Path) -> None:
     from murdoku_v2.render import render_file
 
     output = tmp_path / "puzzle.html"
-    render_file(PROJECT / "examples/board_restaurant/puzzle.json", output)
+    render_file(PROJECT / "examples/board_restaurant/case.json", output)
     html = output.read_text(encoding="utf-8")
     assert 'class="sheet"' in html
     assert '<table aria-label="Tablero" style="--cols:' in html
@@ -182,9 +187,10 @@ def test_site_builder_publishes_only_reference_cases_without_solutions(tmp_path:
 
 
 def test_reference_case_meets_editorial_acceptance() -> None:
+    from murdoku_v2.models import load_puzzle
     from murdoku_v2.solvers.ortools_solver import ORToolsSolver
 
-    puzzle = json.loads((PROJECT / "examples/board_restaurant/puzzle.json").read_text(encoding="utf-8"))
+    puzzle = load_puzzle(PROJECT / "examples/board_restaurant/case.json")
     solution = json.loads((PROJECT / "examples/board_restaurant/solution.json").read_text(encoding="utf-8"))
     expected = {
         character: (position["row"], position["column"])
@@ -212,12 +218,26 @@ def test_reference_case_meets_editorial_acceptance() -> None:
     )
 
 
+def test_reference_case_composes_a_fixed_scene() -> None:
+    from murdoku_v2.models import load_puzzle
+
+    case_path = PROJECT / "examples/board_restaurant/case.json"
+    source = json.loads(case_path.read_text(encoding="utf-8"))
+    scene = json.loads((case_path.parent / source["scene"]).read_text(encoding="utf-8"))
+    solution = json.loads((case_path.parent / "solution.json").read_text(encoding="utf-8"))
+    solution["positions"]["alicia"]["row"] = 0
+
+    assert "board" not in source
+    assert load_puzzle(case_path)["board"] == scene
+    assert "board" not in solution
+
+
 def test_pydantic_contract_rejects_invalid_content() -> None:
     import copy
 
-    from murdoku_v2.models import validate_puzzle
+    from murdoku_v2.models import load_puzzle, validate_puzzle
 
-    puzzle = json.loads((PROJECT / "examples/board_restaurant/puzzle.json").read_text(encoding="utf-8"))
+    puzzle = load_puzzle(PROJECT / "examples/board_restaurant/case.json")
     wrong_subject = copy.deepcopy(puzzle)
     wrong_subject["cards"][0]["statements"][0]["args"]["character"] = wrong_subject["cards"][1]["character"]
     with pytest.raises(ValidationError):

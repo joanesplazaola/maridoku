@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import pytest
 
+from murdoku_v2.models import load_puzzle
 from murdoku_v2.solvers.ortools_solver import ORToolsSolver
 from murdoku_v2.validator import _matches_statement
 
@@ -16,9 +16,12 @@ def canonical(solutions):
 
 
 @pytest.mark.skipif(not ORToolsSolver.is_available(), reason="OR-Tools no está instalado")
-@pytest.mark.parametrize("puzzle_path", sorted((ROOT / "examples").glob("*/puzzle.json")))
+@pytest.mark.parametrize(
+    "puzzle_path",
+    [*sorted((ROOT / "examples").glob("*/puzzle.json")), ROOT / "examples/board_restaurant/case.json"],
+)
 def test_cpsat_solves_reference_cases(puzzle_path: Path):
-    puzzle = json.loads(puzzle_path.read_text(encoding="utf-8"))
+    puzzle = load_puzzle(puzzle_path)
     actual = ORToolsSolver(num_search_workers=1).solve(puzzle, limit=2)
     assert actual.available
     assert actual.unique
@@ -27,7 +30,7 @@ def test_cpsat_solves_reference_cases(puzzle_path: Path):
 
 @pytest.mark.skipif(not ORToolsSolver.is_available(), reason="OR-Tools no está instalado")
 def test_cpsat_card_and_statement_exclusions_are_consistent():
-    puzzle = json.loads((ROOT / "examples" / "board_restaurant" / "puzzle.json").read_text(encoding="utf-8"))
+    puzzle = load_puzzle(ROOT / "examples/board_restaurant/case.json")
     baseline = ORToolsSolver(num_search_workers=1).solve(puzzle, limit=2)
     assert baseline.unique
     baseline_solution = baseline.solutions[0]
@@ -59,7 +62,7 @@ def test_cpsat_card_and_statement_exclusions_are_consistent():
 
 @pytest.mark.skipif(not ORToolsSolver.is_available(), reason="OR-Tools no está instalado")
 def test_cpsat_accepts_candidate_statements_without_mutating_cards():
-    puzzle = json.loads((ROOT / "examples" / "board_restaurant" / "puzzle.json").read_text(encoding="utf-8"))
+    puzzle = load_puzzle(ROOT / "examples/board_restaurant/case.json")
     relaxed = ORToolsSolver(num_search_workers=1).solve(puzzle, limit=2, exclude_card_id="card-fabio")
     assert not relaxed.unique
 
@@ -77,7 +80,7 @@ def test_cpsat_accepts_candidate_statements_without_mutating_cards():
 
 @pytest.mark.skipif(not ORToolsSolver.is_available(), reason="OR-Tools no está instalado")
 def test_cpsat_can_solve_from_explicit_statement_set():
-    puzzle = json.loads((ROOT / "examples" / "board_restaurant" / "puzzle.json").read_text(encoding="utf-8"))
+    puzzle = load_puzzle(ROOT / "examples/board_restaurant/case.json")
     victim_statement = puzzle["cards"][0]["statements"][0]
     result = ORToolsSolver(num_search_workers=1).solve(
         puzzle,
@@ -91,7 +94,7 @@ def test_cpsat_can_solve_from_explicit_statement_set():
 
 @pytest.mark.skipif(not ORToolsSolver.is_available(), reason="OR-Tools no está instalado")
 def test_cpsat_bounded_enumeration_reuses_one_search():
-    puzzle = json.loads((ROOT / "examples" / "board_restaurant" / "puzzle.json").read_text(encoding="utf-8"))
+    puzzle = load_puzzle(ROOT / "examples/board_restaurant/case.json")
     victim_statement = puzzle["cards"][0]["statements"][0]
     result = ORToolsSolver().enumerate_solutions(
         puzzle,

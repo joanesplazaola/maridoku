@@ -1,0 +1,103 @@
+{
+  "schema_version": 8,
+  "id": "ultimo-servicio",
+  "title": "Último servicio",
+  "story": "El restaurante había cerrado cuando encontraron a Bruno. Reconstruye dónde estaba cada persona y descubre quién se quedó a solas con él.",
+  "seed": 5003,
+  "selection_profile": "any",
+  "scene": "../../boards/board_restaurant.json",
+  "characters": [
+    {"id": "alicia", "name": "Alicia", "gender": "woman", "role": "suspect"},
+    {"id": "bruno", "name": "Bruno", "gender": "man", "role": "victim"},
+    {"id": "carla", "name": "Carla", "gender": "woman", "role": "suspect"},
+    {"id": "diego", "name": "Diego", "gender": "man", "role": "suspect"},
+    {"id": "elena", "name": "Elena", "gender": "woman", "role": "suspect"},
+    {"id": "fabio", "name": "Fabio", "gender": "man", "role": "suspect"}
+  ],
+  "victim": "bruno",
+  "rules": {
+    "one_character_per_row": true,
+    "one_character_per_column": true,
+    "one_card_per_character": true
+  },
+  "cards": [
+    {
+      "id": "card-alicia",
+      "character": "alicia",
+      "character_name": "Alicia",
+      "role": "suspect",
+      "statements": [{
+        "id": "card-alicia-statement-1",
+        "type": "relative_column_distance",
+        "family": "relative_distance",
+        "args": {"character": "alicia", "reference": "elena", "delta": 1},
+        "text": "Alicia estaba 1 columna al este de Elena."
+      }]
+    },
+    {
+      "id": "card-bruno",
+      "character": "bruno",
+      "character_name": "Bruno",
+      "role": "victim",
+      "statements": [{
+        "id": "card-bruno-statement-1",
+        "type": "victim_rule",
+        "family": "murder_rule",
+        "args": {"character": "bruno"},
+        "text": "Bruno estaba a solas con otra persona. Esa persona es el asesino."
+      }]
+    },
+    {
+      "id": "card-carla",
+      "character": "carla",
+      "character_name": "Carla",
+      "role": "suspect",
+      "statements": [{
+        "id": "card-carla-statement-1",
+        "type": "object_same_row_in_room",
+        "family": "object_line",
+        "args": {"character": "carla", "object_type": "plant"},
+        "text": "Carla estaba en la misma fila y habitación que una planta."
+      }]
+    },
+    {
+      "id": "card-diego",
+      "character": "diego",
+      "character_name": "Diego",
+      "role": "suspect",
+      "statements": [{
+        "id": "card-diego-statement-1",
+        "type": "room",
+        "family": "room_exact",
+        "args": {"character": "diego", "room": "dining"},
+        "text": "Diego estaba en el comedor."
+      }]
+    },
+    {
+      "id": "card-elena",
+      "character": "elena",
+      "character_name": "Elena",
+      "role": "suspect",
+      "statements": [{
+        "id": "card-elena-statement-1",
+        "type": "object_same_row_in_room",
+        "family": "object_line",
+        "args": {"character": "elena", "object_type": "table"},
+        "text": "Había una mesa en la misma fila que Elena, dentro de su habitación."
+      }]
+    },
+    {
+      "id": "card-fabio",
+      "character": "fabio",
+      "character_name": "Fabio",
+      "role": "suspect",
+      "statements": [{
+        "id": "card-fabio-statement-1",
+        "type": "same_room",
+        "family": "room_relation",
+        "args": {"character": "fabio", "reference": "carla"},
+        "text": "Fabio estaba en la misma habitación que Carla."
+      }]
+    }
+  ]
+}

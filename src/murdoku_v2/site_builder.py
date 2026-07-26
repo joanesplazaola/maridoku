@@ -4,6 +4,7 @@ import html
 import json
 from pathlib import Path
 
+from .models import load_puzzle
 from .render import _stylesheet, render_html
 
 
@@ -12,7 +13,7 @@ REFERENCE_CASES = (
         "number": 1,
         "difficulty": "easy",
         "difficulty_label": "Fácil",
-        "path": Path("examples/board_restaurant/puzzle.json"),
+        "path": Path("examples/board_restaurant/case.json"),
     },
 )
 
@@ -98,7 +99,7 @@ def build_site(output: Path) -> dict[str, object]:
     catalog = []
     project = Path(__file__).resolve().parents[2]
     for index, spec in enumerate(REFERENCE_CASES):
-        puzzle = json.loads((project / spec["path"]).read_text(encoding="utf-8"))
+        puzzle = load_puzzle(project / spec["path"])
         level = {
             **{key: value for key, value in spec.items() if key != "path"},
             "puzzle_id": puzzle["id"],

@@ -82,7 +82,7 @@ conserva el informe durante 90 días, sin bloquear el desarrollo local.
 
 ```bash
 uv run murdoku-v2 validate \
-  --puzzle examples/board_restaurant/puzzle.json \
+  --puzzle examples/board_restaurant/case.json \
   --solution examples/board_restaurant/solution.json \
   --solver ortools
 ```
