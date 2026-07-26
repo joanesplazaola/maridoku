@@ -182,6 +182,7 @@ def select_clues(
                 ),
                 "human_steps": human["step_count"],
                 "human_techniques": human["techniques"],
+                "human_complexity": human["complexity"],
             }
         forbidden.append({statement["id"] for statement in selected})
 

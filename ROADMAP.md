@@ -42,7 +42,7 @@ central propios; ninguno deriva su geometría de la solución.
 
 - [x] Implementar un propagador de candidatos por técnicas humanas.
 - [x] Exigir una ruta deductiva sin ensayo y error además de unicidad exacta.
-- [ ] Medir pasos, profundidad, bifurcaciones y técnica más difícil.
+- [x] Medir pasos, profundidad, bifurcaciones y técnica más difícil.
 - [ ] Calibrar fácil, medio, difícil y experto con pruebas ciegas.
 
 Criterio de salida: la etiqueta de dificultad está respaldada por una ruta

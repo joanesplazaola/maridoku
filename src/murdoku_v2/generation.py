@@ -112,6 +112,7 @@ def generate_variant(
                 "directional": selection["directional"],
                 "human_steps": selection["human_steps"],
                 "human_techniques": selection["human_techniques"],
+                "human_complexity": selection["human_complexity"],
                 "editorial_audit": editorial,
                 "exact_unique": True,
             },

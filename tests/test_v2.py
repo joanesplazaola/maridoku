@@ -154,6 +154,8 @@ def test_reference_case_selects_an_editorial_clue_set() -> None:
     assert selection["witnesses"] <= 50
     assert selection["human_steps"] > 0
     assert {"clue_anchor", "row_matching", "column_matching"} <= set(selection["human_techniques"])
+    assert selection["human_complexity"]["branching_points"] == 0
+    assert not selection["human_complexity"]["calibrated"]
     assert len(selection["families"]) >= 4
     assert selection["directional"] <= 1
     assert sum(statement["family"].startswith(("object_", "room_")) for statement in statements) >= 4
@@ -218,6 +220,14 @@ def test_reference_case_has_a_human_deduction_route() -> None:
     assert result["positions"] == expected
     assert result["difficulty"] == "unrated"
     assert {"clue_anchor", "binary_relation", "victim_companion"} <= set(result["techniques"])
+    complexity = result["complexity"]
+    assert complexity["deduction_steps"] == result["step_count"]
+    assert complexity["propagation_rounds"] >= 1
+    assert complexity["branching_points"] == 0
+    assert complexity["hardest_technique"] in result["techniques"]
+    assert complexity["hardest_level"] == 3
+    assert sum(complexity["technique_counts"].values()) == result["step_count"]
+    assert not complexity["calibrated"]
 
     unsupported = copy.deepcopy(puzzle)
     unsupported["cards"][0]["statements"][0]["type"] = "room_population"
@@ -253,6 +263,7 @@ def test_reference_scene_generates_a_complete_variant_without_a_solution_input()
     assert result["diagnostics"]["directional"] <= 1
     assert len(result["diagnostics"]["families"]) >= 4
     assert result["diagnostics"]["human_steps"] > 0
+    assert result["diagnostics"]["human_complexity"]["branching_points"] == 0
 
     solver = ORToolsSolver()
     exact = solver.solve(generated, limit=2)
@@ -287,6 +298,10 @@ def test_reference_scene_generation_smoke() -> None:
     assert all(variant["puzzle"]["board"] == base["board"] for variant in variants)
     assert all(variant["diagnostics"]["exact_unique"] for variant in variants)
     assert all(variant["diagnostics"]["target_attempt"] <= 50 for variant in variants)
+    assert all(
+        variant["diagnostics"]["human_complexity"]["propagation_rounds"] >= 1
+        for variant in variants
+    )
 
 
 def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:

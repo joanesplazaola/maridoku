@@ -29,7 +29,7 @@ HTML sin solution.json
 - `candidates.py`: pistas verdaderas derivadas de una solución sobre una escena fija.
 - `selection.py`: selección incremental mediante contraejemplos del oráculo exacto.
 - `generation.py`: objetivos por seed y ensamblado de variantes aceptadas.
-- `human.py`: propagación de dominios mediante técnicas humanas explícitas.
+- `human.py`: propagación y métricas de técnicas humanas, todavía sin calibración comercial.
 - `clue_catalog.py`: contrato lógico de los tipos de pista.
 - `solvers/ortools_solver.py`: solución exacta, unicidad y necesidad.
 - `render.py`: documento público autocontenido.

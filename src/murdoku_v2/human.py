@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import Counter
 from typing import Any
 
 from .solvers.common import build_context
@@ -27,6 +28,14 @@ BINARY_TYPES = {
     "different_room",
 }
 SUPPORTED_TYPES = {"victim_rule", *UNARY_TYPES, *BINARY_TYPES}
+TECHNIQUE_LEVEL = {
+    "clue_anchor": 1,
+    "unique_object": 1,
+    "binary_relation": 1,
+    "victim_companion": 2,
+    "row_matching": 3,
+    "column_matching": 3,
+}
 
 
 class _Contradiction(Exception):
@@ -75,6 +84,7 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
         for character in ctx.character_ids
     }
     steps: list[dict[str, Any]] = []
+    current_round = 0
 
     def restrict(
         character: str,
@@ -95,6 +105,7 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
             "character": character,
             "removed": len(before) - len(after),
             "remaining": len(after),
+            "round": current_round,
         })
         return True
 
@@ -177,6 +188,7 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
                         restrict(other, ctx.all_cells - occupied, "unique_object", statement["id"])
 
         for round_number in range(1, 101):
+            current_round = round_number
             changed = False
             for statement in ctx.statements:
                 if statement["type"] not in BINARY_TYPES:
@@ -299,17 +311,33 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
         for statement in ctx.statements
     ):
         solved = False
+    techniques = sorted({step["technique"] for step in steps})
+    hardest = max(
+        techniques,
+        key=lambda technique: (TECHNIQUE_LEVEL[technique], technique),
+        default=None,
+    )
+    complexity = {
+        "deduction_steps": len(steps),
+        "propagation_rounds": max((step["round"] for step in steps), default=0),
+        "branching_points": 0 if solved else None,
+        "hardest_technique": hardest,
+        "hardest_level": TECHNIQUE_LEVEL[hardest] if hardest else 0,
+        "technique_counts": dict(Counter(step["technique"] for step in steps)),
+        "calibrated": False,
+    }
     return {
         "solved": solved,
         "reason": "solved" if solved else "stalled",
         "unsupported_types": [],
         "steps": steps,
         "step_count": len(steps),
-        "techniques": sorted({step["technique"] for step in steps}),
+        "techniques": techniques,
         "positions": positions if solved else {},
         "domains": {
             character: [list(divmod(cell, ctx.n)) for cell in sorted(domain)]
             for character, domain in domains.items()
         },
+        "complexity": complexity,
         "difficulty": "unrated",
     }
