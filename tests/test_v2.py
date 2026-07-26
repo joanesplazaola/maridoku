@@ -130,6 +130,73 @@ def test_reference_case_generates_reproducible_true_candidates() -> None:
         candidate_pools(puzzle, invalid)
 
 
+def test_reference_case_selects_an_editorial_clue_set() -> None:
+    import copy
+
+    from murdoku_v2.editorial import audit_puzzle
+    from murdoku_v2.models import load_puzzle
+    from murdoku_v2.selection import select_clues
+    from murdoku_v2.solvers.ortools_solver import ORToolsSolver
+
+    case_path = PROJECT / "examples/board_restaurant/case.json"
+    puzzle = load_puzzle(case_path)
+    solution = json.loads((case_path.parent / "solution.json").read_text(encoding="utf-8"))
+    target = {
+        character: (position["row"], position["column"])
+        for character, position in solution["positions"].items()
+    }
+    selection = select_clues(puzzle, target)
+    statements = selection["statements"]
+
+    assert selection == select_clues(puzzle, target)
+    assert len(statements) == len(puzzle["characters"]) - 1
+    assert selection["iterations"] <= 40
+    assert selection["witnesses"] <= 50
+    assert len(selection["families"]) >= 4
+    assert selection["directional"] <= 1
+    assert sum(statement["family"].startswith(("object_", "room_")) for statement in statements) >= 4
+    assert all(statement["family"] != "coordinate" for statement in statements)
+    assert all("otra altura" not in statement["text"] and "otro lado" not in statement["text"] for statement in statements)
+    published = {
+        card["character"]: card["statements"][0]
+        for card in puzzle["cards"]
+        if card["role"] == "suspect"
+    }
+    assert all(
+        {
+            "type": statement["type"],
+            "args": statement["args"],
+            "text": statement["text"],
+        } == {
+            "type": published[statement["args"]["character"]]["type"],
+            "args": published[statement["args"]["character"]]["args"],
+            "text": published[statement["args"]["character"]]["text"],
+        }
+        for statement in statements
+    )
+
+    victim_statement = next(card for card in puzzle["cards"] if card["role"] == "victim")["statements"][0]
+    active = (victim_statement, *statements)
+    solver = ORToolsSolver()
+    exact = solver.solve(puzzle, limit=2, base_statements=active)
+    assert exact.unique and exact.solutions == [target]
+    assert all(
+        len(solver.solve(
+            puzzle,
+            limit=2,
+            base_statements=tuple(item for item in active if item["id"] != statement["id"]),
+        ).solutions) > 1
+        for statement in statements
+    )
+
+    selected_puzzle = copy.deepcopy(puzzle)
+    by_character = {statement["args"]["character"]: statement for statement in statements}
+    for card in selected_puzzle["cards"]:
+        if card["role"] == "suspect":
+            card["statements"] = [by_character[card["character"]]]
+    assert audit_puzzle(selected_puzzle)["warnings"] == []
+
+
 def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     from murdoku_v2.scaling import generate_scaling_case
 
@@ -207,8 +274,8 @@ def test_render_writes_an_interactive_printable_html(tmp_path: Path) -> None:
     assert 'class="furniture-layer"' in html
     assert "--object-width:2" in html
     assert ">1.1<" not in html
-    assert "Alicia estaba 1 columna" not in html
-    assert "Estaba 1 columna al este de Elena." in html
+    assert "Alicia estaba en la misma columna" not in html
+    assert "Estaba en la misma columna y habitación que una silla." in html
 
 
 def test_site_builder_publishes_only_reference_cases_without_solutions(tmp_path: Path) -> None:

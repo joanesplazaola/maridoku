@@ -32,6 +32,7 @@
     {
       "id": "kitchen",
       "name": "Cocina",
+      "clue_label": "la cocina",
       "label_anchor": [
         2,
         0
@@ -58,6 +59,7 @@
     {
       "id": "pantry",
       "name": "Despensa",
+      "clue_label": "la despensa",
       "label_anchor": [
         0,
         2
@@ -72,6 +74,7 @@
     {
       "id": "bar",
       "name": "Barra",
+      "clue_label": "la barra",
       "label_anchor": [
         1,
         5
@@ -98,6 +101,7 @@
     {
       "id": "prep",
       "name": "Zona de preparación",
+      "clue_label": "la zona de preparación",
       "label_anchor": [
         2,
         1
@@ -116,6 +120,7 @@
     {
       "id": "dining",
       "name": "Comedor",
+      "clue_label": "el comedor",
       "label_anchor": [
         3,
         4
@@ -162,6 +167,7 @@
     {
       "id": "entry",
       "name": "Entrada",
+      "clue_label": "la entrada",
       "label_anchor": [
         3,
         0
@@ -180,6 +186,7 @@
     {
       "id": "restroom",
       "name": "Aseos",
+      "clue_label": "los aseos",
       "label_anchor": [
         3,
         5
@@ -198,6 +205,7 @@
     {
       "id": "terrace",
       "name": "Terraza",
+      "clue_label": "la terraza",
       "label_anchor": [
         4,
         2
@@ -228,6 +236,7 @@
     {
       "id": "garden",
       "name": "Jardín",
+      "clue_label": "el jardín",
       "label_anchor": [
         5,
         5

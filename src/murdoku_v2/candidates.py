@@ -7,8 +7,8 @@ from .models import validate_puzzle
 from .validator import matches_statement
 
 
-def _object_phrase(name: str) -> str:
-    article = "el" if name.casefold() in {"sofá", "armario", "mostrador", "televisor"} else "la"
+def _object_phrase(type_: str, name: str) -> str:
+    article = "un" if type_ in {"sofa", "wardrobe", "counter", "tv"} else "una"
     return f"{article} {name.casefold()}"
 
 
@@ -42,7 +42,10 @@ def candidate_pools(
     ):
         raise ValueError("La solución debe usar una casilla transitable por fila y columna.")
 
-    room_names = {room["id"]: room["name"] for room in board["rooms"]}
+    room_names = {
+        room["id"]: room.get("clue_label") or room["name"]
+        for room in board["rooms"]
+    }
     groups = {group["id"]: group for group in board.get("room_groups", [])}
     suspects = [character for character in puzzle["characters"] if character["role"] == "suspect"]
     pools: dict[str, list[dict[str, Any]]] = {}
@@ -98,16 +101,20 @@ def candidate_pools(
             if reference["id"] == character_id:
                 continue
             reference_row, reference_column = target[reference["id"]]
+            row_delta = row - reference_row
+            column_delta = column - reference_column
             candidates.extend((
                 (
                     "relative_row_distance",
-                    {"reference": reference["id"], "delta": row - reference_row},
-                    f"{name} estaba a otra altura que {reference['name']}.",
+                    {"reference": reference["id"], "delta": row_delta},
+                    f"{name} estaba {abs(row_delta)} fila{'s' if abs(row_delta) != 1 else ''} "
+                    f"{'al sur' if row_delta > 0 else 'al norte'} de {reference['name']}.",
                 ),
                 (
                     "relative_column_distance",
-                    {"reference": reference["id"], "delta": column - reference_column},
-                    f"{name} estaba a otro lado de {reference['name']}.",
+                    {"reference": reference["id"], "delta": column_delta},
+                    f"{name} estaba {abs(column_delta)} columna{'s' if abs(column_delta) != 1 else ''} "
+                    f"{'al este' if column_delta > 0 else 'al oeste'} de {reference['name']}.",
                 ),
                 (
                     "same_room" if room_id == room_at[(reference_row, reference_column)] else "different_room",
@@ -134,7 +141,7 @@ def candidate_pools(
 
         for obj in board.get("objects", []):
             cells = {tuple(cell) for cell in obj["cells"]}
-            phrase = _object_phrase(obj["name"])
+            phrase = _object_phrase(obj["type"], obj["name"])
             if (row, column) in cells and obj.get("occupiable", False):
                 candidates.append((
                     "unique_on_object",

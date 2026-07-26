@@ -20,6 +20,7 @@ class RoomModel(BaseModel):
     model_config = ConfigDict(extra="allow")
     id: str
     name: str
+    clue_label: str | None = None
     cells: list[tuple[int, int]]
     label_anchor: tuple[int, int] | None = None
 
