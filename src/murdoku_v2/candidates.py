@@ -12,6 +12,32 @@ def _object_phrase(type_: str, name: str) -> str:
     return f"{article} {name.casefold()}"
 
 
+def global_candidate_pool(
+    puzzle: dict[str, Any],
+    target: dict[str, tuple[int, int]],
+) -> list[dict[str, Any]]:
+    """Return true scene-wide clue candidates for profiles that request them."""
+    room_at = {
+        tuple(cell): room["id"]
+        for room in puzzle["board"]["rooms"]
+        for cell in room["cells"]
+    }
+    result = []
+    for room in puzzle["board"]["rooms"]:
+        count = sum(room_at[position] == room["id"] for position in target.values())
+        if count < 2:
+            continue
+        label = room.get("clue_label") or room["name"]
+        result.append({
+            "id": f"candidate-global-{room['id']}",
+            "type": "room_population_at_least",
+            "family": "global_room",
+            "args": {"room": room["id"], "count": count},
+            "text": f"Había al menos {count} personas en {label}.",
+        })
+    return result
+
+
 def candidate_pools(
     puzzle: dict[str, Any],
     target: dict[str, tuple[int, int]],

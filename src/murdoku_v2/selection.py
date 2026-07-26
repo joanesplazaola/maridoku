@@ -6,7 +6,7 @@ from typing import Any
 
 from ortools.sat.python import cp_model
 
-from .candidates import candidate_pools
+from .candidates import candidate_pools, global_candidate_pool
 from .human import solve_human
 from .solvers.registry import get_solver
 from .validator import matches_statement
@@ -39,6 +39,7 @@ def apply_clues(
     by_character = {
         statement["args"]["character"]: statement
         for statement in statements
+        if "character" in statement["args"]
     }
     for card in selected["cards"]:
         if card["role"] == "victim":
@@ -46,6 +47,16 @@ def apply_clues(
         statement = copy.deepcopy(by_character[card["character"]])
         statement["id"] = f"{card['id']}-statement-1"
         card["statements"] = [statement]
+    selected["general_clues"] = [
+        {
+            **copy.deepcopy(statement),
+            "id": f"general-clue-{index}",
+        }
+        for index, statement in enumerate(
+            (statement for statement in statements if "character" not in statement["args"]),
+            start=1,
+        )
+    ]
     return selected
 
 
@@ -54,19 +65,22 @@ def _choose(
     witnesses: list[dict[str, tuple[int, int]]],
     forbidden: list[set[str]],
     puzzle: dict[str, Any],
+    global_pool: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
     model = cp_model.CpModel()
     variables = {
         statement["id"]: model.new_bool_var(statement["id"])
-        for pool in pools.values()
+        for pool in (*pools.values(), global_pool)
         for statement in pool
     }
-    ordered = [statement for pool in pools.values() for statement in pool]
+    ordered = [statement for pool in (*pools.values(), global_pool) for statement in pool]
     for pool in pools.values():
         model.add_exactly_one(variables[statement["id"]] for statement in pool)
+    if global_pool:
+        model.add_exactly_one(variables[statement["id"]] for statement in global_pool)
 
     families: dict[str, list[Any]] = {}
-    for pool in pools.values():
+    for pool in (*pools.values(), global_pool):
         for statement in pool:
             families.setdefault(statement["family"], []).append(variables[statement["id"]])
     family_used = {
@@ -80,8 +94,7 @@ def _choose(
     model.add(sum(family_used.values()) >= min(4, len(pools)))
     model.add(sum(
         variables[statement["id"]]
-        for pool in pools.values()
-        for statement in pool
+        for statement in ordered
         if statement["family"] in DIRECTION_FAMILIES
     ) <= 1)
     model.add(sum(
@@ -118,8 +131,7 @@ def _choose(
     for witness in witnesses:
         eliminated_by = [
             variables[statement["id"]]
-            for pool in pools.values()
-            for statement in pool
+            for statement in ordered
             if not matches_statement(statement, witness, puzzle)
         ]
         model.add(sum(eliminated_by) >= 1)
@@ -154,6 +166,13 @@ def select_clues(
     if max_iterations < 1:
         raise ValueError("max_iterations debe ser al menos 1.")
     pools = candidate_pools(puzzle, target)
+    global_pool = (
+        global_candidate_pool(puzzle, target)
+        if puzzle.get("selection_profile") == "global_room"
+        else []
+    )
+    if puzzle.get("selection_profile") == "global_room" and not global_pool:
+        raise RuntimeError("La escena no produce ninguna pista global de habitación.")
     victim_statements = [
         statement
         for card in puzzle["cards"]
@@ -171,7 +190,7 @@ def select_clues(
     exact = get_solver("ortools")
 
     for iteration in range(1, max_iterations + 1):
-        selected = _choose(pools, witnesses, forbidden, puzzle)
+        selected = _choose(pools, witnesses, forbidden, puzzle, global_pool)
         active = (*victim_statements, *selected)
         result = exact.solve(puzzle, limit=2, base_statements=active)
         alternatives = [solution for solution in result.solutions if solution != target]

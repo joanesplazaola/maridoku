@@ -396,6 +396,43 @@ def test_global_room_count_is_solved_and_rendered_end_to_end() -> None:
         validate_puzzle(invalid)
 
 
+def test_selector_can_require_a_necessary_global_clue() -> None:
+    from murdoku_v2.models import load_puzzle
+    from murdoku_v2.selection import apply_clues, select_clues
+    from murdoku_v2.solvers.ortools_solver import ORToolsSolver
+
+    case_path = PROJECT / "examples/board_restaurant/case.json"
+    puzzle = load_puzzle(case_path)
+    puzzle["selection_profile"] = "global_room"
+    solution = json.loads((case_path.parent / "solution.json").read_text(encoding="utf-8"))
+    expected = {
+        character: (position["row"], position["column"])
+        for character, position in solution["positions"].items()
+    }
+
+    selection = select_clues(puzzle, expected)
+    selected = apply_clues(puzzle, selection["statements"])
+    assert len(selection["statements"]) == len(puzzle["characters"])
+    assert selection["families"]["global_room"] == 1
+    assert len(selected["general_clues"]) == 1
+    assert selection["human_complexity"]["technique_counts"]["global_room_count"] >= 1
+
+    solver = ORToolsSolver()
+    exact = solver.solve(selected, limit=2)
+    assert exact.unique and exact.solutions == [expected]
+    assert all(
+        len(solver.solve(
+            selected,
+            limit=2,
+            exclude_statement_id=statement["id"],
+        ).solutions) > 1
+        for statement in (
+            *selected["general_clues"],
+            *(statement for card in selected["cards"] if card["role"] == "suspect" for statement in card["statements"]),
+        )
+    )
+
+
 def test_reference_scene_generates_a_complete_variant_without_a_solution_input() -> None:
     from murdoku_v2.generation import generate_variant
     from murdoku_v2.models import load_puzzle

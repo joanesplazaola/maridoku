@@ -34,6 +34,7 @@ editorial automatizado.
 - [x] Añadir unicidad junto a objetos y agrupar candidatos por tipo de mobiliario.
 - [x] Añadir relaciones diagonales en generación, CP-SAT, jugador y deducción humana.
 - [x] Separar pistas globales de tarjetas y soportar mínimos por habitación.
+- [x] Seleccionar pistas globales necesarias mediante un perfil editorial explícito.
 - [ ] Corregir toda semántica espacial contra el glosario, incluida “al lado”.
 - [ ] Completar de extremo a extremo los tipos exactos ya modelados antes de añadir otros.
 - [ ] Añadir pistas globales, negativas, diagonales y de unicidad como cortes verticales completos.
