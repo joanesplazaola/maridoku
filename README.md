@@ -71,6 +71,8 @@ uv run murdoku-v2 scale-regression \
 
 El último gate aceptado se conserva en
 `docs/regressions/scaling-100-seeds.json`.
+El workflow manual `Release generation gate` ejecuta el mismo gate en GitHub y
+conserva el informe durante 90 días, sin bloquear el desarrollo local.
 
 ## Validar un caso con CP-SAT
 

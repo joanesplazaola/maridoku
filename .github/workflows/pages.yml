@@ -27,6 +27,12 @@ jobs:
           enable-cache: true
       - run: uv sync --frozen --extra dev
       - run: uv run pytest -q
+      - name: Generation smoke
+        run: |
+          uv run murdoku-v2 scale-regression \
+            --sizes 6 8 10 \
+            --count-per-size 1 \
+            --budget-seconds 30
       - name: Build static preview
         run: |
           mkdir -p _site
