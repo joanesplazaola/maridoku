@@ -6,6 +6,8 @@
 board.json + case.json
         ↓ load_puzzle()
 puzle público autocontenido
+        ↙ candidate_pools(puzle, solución privada)
+ candidatos verdaderos
         ↓
 validación Pydantic + CP-SAT
         ↓
@@ -18,6 +20,7 @@ HTML sin solution.json
 - `examples/*/case.json`: personajes, víctima y pistas; referencia una escena.
 - `examples/*/solution.json`: posiciones y asesino privados.
 - `models.py`: composición y validación del contrato público.
+- `candidates.py`: pistas verdaderas derivadas de una solución sobre una escena fija.
 - `clue_catalog.py`: contrato lógico de los tipos de pista.
 - `solvers/ortools_solver.py`: solución exacta, unicidad y necesidad.
 - `render.py`: documento público autocontenido.

@@ -6,7 +6,7 @@ import pytest
 
 from murdoku_v2.models import load_puzzle
 from murdoku_v2.solvers.ortools_solver import ORToolsSolver
-from murdoku_v2.validator import _matches_statement
+from murdoku_v2.validator import matches_statement
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -40,7 +40,7 @@ def test_cpsat_card_and_statement_exclusions_are_consistent():
         assert actual.available
         assert actual.solutions
         assert all(
-            _matches_statement(statement, baseline_solution, puzzle)
+            matches_statement(statement, baseline_solution, puzzle)
             for other_card in puzzle["cards"]
             if other_card["id"] != card_id
             for statement in other_card["statements"]
@@ -53,7 +53,7 @@ def test_cpsat_card_and_statement_exclusions_are_consistent():
             assert actual_statement.available
             assert actual_statement.solutions
             assert all(
-                _matches_statement(other_statement, baseline_solution, puzzle)
+                matches_statement(other_statement, baseline_solution, puzzle)
                 for other_card in puzzle["cards"]
                 for other_statement in other_card["statements"]
                 if other_statement["id"] != statement_id

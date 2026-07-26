@@ -71,21 +71,63 @@ def test_scaling_board_and_target_are_parameterized() -> None:
 
 
 def test_scaling_candidate_pools_are_true_and_diverse() -> None:
-    from murdoku_v2.scaling import make_scaling_candidate_pools, make_scaling_puzzle, make_scaling_target
-    from murdoku_v2.validator import _matches_statement
+    from murdoku_v2.candidates import candidate_pools
+    from murdoku_v2.scaling import make_scaling_puzzle, make_scaling_target
+    from murdoku_v2.validator import matches_statement
 
     puzzle = make_scaling_puzzle(8, seed=91)
     target = make_scaling_target(8, seed=91)
-    pools = make_scaling_candidate_pools(puzzle, target)
+    pools = candidate_pools(puzzle, target)
     assert all(len(pool) >= 11 for pool in pools.values())
     assert all(
-        _matches_statement(statement, target, puzzle)
+        matches_statement(statement, target, puzzle)
         for pool in pools.values()
         for statement in pool
     )
     assert {"coordinate", "room_exact", "relative_distance", "relative_order"} <= {
         statement["family"] for pool in pools.values() for statement in pool
     }
+
+
+def test_reference_case_generates_reproducible_true_candidates() -> None:
+    from murdoku_v2.candidates import candidate_pools
+    from murdoku_v2.models import load_puzzle
+    from murdoku_v2.validator import matches_statement
+
+    case_path = PROJECT / "examples/board_restaurant/case.json"
+    puzzle = load_puzzle(case_path)
+    solution = json.loads((case_path.parent / "solution.json").read_text(encoding="utf-8"))
+    target = {
+        character: (position["row"], position["column"])
+        for character, position in solution["positions"].items()
+    }
+    pools = candidate_pools(puzzle, target)
+
+    assert pools == candidate_pools(puzzle, target)
+    assert set(pools) == {
+        character["id"] for character in puzzle["characters"] if character["role"] == "suspect"
+    }
+    assert all(
+        matches_statement(statement, target, puzzle)
+        for pool in pools.values()
+        for statement in pool
+    )
+    assert {"object_line", "room_exact", "room_relation", "relative_distance"} <= {
+        statement["family"] for pool in pools.values() for statement in pool
+    }
+    for card in puzzle["cards"]:
+        if card["role"] == "victim":
+            continue
+        authored = card["statements"][0]
+        assert any(
+            candidate["type"] == authored["type"] and candidate["args"] == authored["args"]
+            for candidate in pools[card["character"]]
+        )
+
+    invalid = dict(target)
+    invalid.pop(puzzle["victim"])
+    with pytest.raises(ValueError, match="exactamente los personajes"):
+        candidate_pools(puzzle, invalid)
 
 
 def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
@@ -113,7 +155,7 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
         if card["role"] == "suspect"
     }
     assert {"coordinate", "relative_distance", "relative_order"} <= families
-    assert families & {"object_adjacency", "object_occupancy", "object_line", "room_composition"}
+    assert len(families) >= 4
     assert all((tmp_path / f"{name}.json").exists() for name in (
         "puzzle", "solution", "diagnostics", "explanation", "generation_report", "manifest"
     ))

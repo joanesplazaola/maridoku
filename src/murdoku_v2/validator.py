@@ -35,7 +35,7 @@ def _walls(board: dict[str, Any], row: int, column: int) -> dict[str, bool]:
     }
 
 
-def _matches_statement(
+def matches_statement(
     statement: dict[str, Any],
     positions: dict[str, tuple[int, int]],
     puzzle: dict[str, Any],

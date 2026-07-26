@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Iterable
 
 from ..models import validate_puzzle
-from ..validator import _matches_statement
+from ..validator import matches_statement
 
 
 BINARY_TYPES = {
@@ -128,7 +128,7 @@ def exact_solution_matches(ctx: SolverContext, assigned: dict[str, int]) -> bool
     if len(assigned) != len(ctx.character_ids):
         return False
     positions = ctx.to_positions(assigned)
-    return all(_matches_statement(statement, positions, ctx.puzzle) for statement in ctx.statements)
+    return all(matches_statement(statement, positions, ctx.puzzle) for statement in ctx.statements)
 
 
 def room_of(ctx: SolverContext, cell: int) -> str:
