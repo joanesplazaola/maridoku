@@ -153,6 +153,7 @@ def test_render_writes_an_interactive_printable_html(tmp_path: Path) -> None:
     assert 'class="game-toolbar"' in html
     assert 'id="puzzle-data"' in html
     assert "localStorage.setItem" in html
+    assert "durationSeconds" in html
     assert "data:image/webp;base64," in html
     assert 'class="furniture-layer"' in html
     assert "--object-width:2" in html

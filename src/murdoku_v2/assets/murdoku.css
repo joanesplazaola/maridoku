@@ -159,7 +159,7 @@ h1 {
 
 .game-toolbar {
   display: grid;
-  grid-template-columns: 38px 38px auto auto minmax(0, 1fr);
+  grid-template-columns: 38px 38px auto auto 38px minmax(0, 1fr);
   gap: 7px;
   align-items: center;
   margin-bottom: 9px;
@@ -608,7 +608,7 @@ li.hinted {
   }
 
   .game-toolbar {
-    grid-template-columns: 38px 38px auto auto;
+    grid-template-columns: 38px 38px auto auto 38px;
   }
 
   .game-status {

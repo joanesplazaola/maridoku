@@ -187,6 +187,24 @@
       ? "Caso resuelto"
       : result.complete ? "Hay pistas que no se cumplen" : "Faltan personajes por colocar";
   });
+  document.querySelector('[data-action="export"]').addEventListener("click", () => {
+    const report = {
+      schemaVersion: 1,
+      puzzleId: puzzle.id,
+      size: puzzle.board.rows,
+      durationSeconds: Math.round(((metrics.completedAt || Date.now()) - metrics.startedAt) / 1000),
+      checks: metrics.checks,
+      errors: metrics.errors,
+      hints: metrics.hints,
+      completed: Boolean(metrics.completedAt),
+    };
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: "application/json" }));
+    link.download = `${puzzle.id}-session.json`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+    status.value = "Sesión exportada sin datos personales";
+  });
 
   restore();
   render();

@@ -188,6 +188,7 @@ def render_html(puzzle: dict[str, Any]) -> str:
           <button type="button" data-action="reset" title="Reiniciar" aria-label="Reiniciar">↺</button>
           <button type="button" data-action="hint">Pista</button>
           <button type="button" class="check-button" data-action="check">Comprobar</button>
+          <button type="button" data-action="export" title="Exportar sesión" aria-label="Exportar sesión">⇩</button>
           <output class="game-status" aria-live="polite">Coloca a los personajes</output>
         </div>
         <div class="board-frame">
