@@ -13,6 +13,7 @@ from .validator import matches_statement
 
 
 DIRECTION_FAMILIES = {"coordinate", "relative_distance", "relative_order"}
+RELATION_FAMILIES = {"room_relation", "relative_distance", "relative_order"}
 FAMILY_PENALTY = {
     "object_occupancy": 0,
     "object_adjacency": 1,
@@ -81,6 +82,27 @@ def _choose(
         for statement in pool
         if statement["family"] in DIRECTION_FAMILIES
     ) <= 1)
+    model.add(sum(
+        variables[statement["id"]]
+        for statement in ordered
+        if statement["family"].startswith("room_")
+    ) >= 1)
+    model.add(sum(
+        variables[statement["id"]]
+        for statement in ordered
+        if statement["family"] in RELATION_FAMILIES
+    ) >= 1)
+    model.add(sum(
+        variables[statement["id"]]
+        for statement in ordered
+        if statement["family"].startswith("object_")
+    ) <= (len(pools) + 1) // 2)
+    for type_ in {statement["type"] for statement in ordered}:
+        model.add(sum(
+            variables[statement["id"]]
+            for statement in ordered
+            if statement["type"] == type_
+        ) <= 2)
     object_patterns: dict[tuple[str, str], list[Any]] = {}
     for statement in ordered:
         object_type = statement["args"].get("object_type")

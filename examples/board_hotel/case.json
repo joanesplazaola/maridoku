@@ -1,0 +1,83 @@
+{
+  "schema_version": 8,
+  "id": "hotel-de-medianoche",
+  "title": "Hotel de medianoche",
+  "story": "Tras el cierre del bar, encontraron a Lucas en el hotel. Reconstruye dónde estaba cada persona y descubre quién se quedó a solas con él.",
+  "seed": 2,
+  "selection_profile": "any",
+  "scene": "../../boards/board_hotel.json",
+  "characters": [
+    {"id": "ines", "name": "Inés", "gender": "woman", "role": "suspect"},
+    {"id": "lucas", "name": "Lucas", "gender": "man", "role": "victim"},
+    {"id": "marta", "name": "Marta", "gender": "woman", "role": "suspect"},
+    {"id": "nicolas", "name": "Nicolás", "gender": "man", "role": "suspect"},
+    {"id": "olivia", "name": "Olivia", "gender": "woman", "role": "suspect"},
+    {"id": "pablo", "name": "Pablo", "gender": "man", "role": "suspect"},
+    {"id": "raquel", "name": "Raquel", "gender": "woman", "role": "suspect"},
+    {"id": "sergio", "name": "Sergio", "gender": "man", "role": "suspect"}
+  ],
+  "victim": "lucas",
+  "rules": {
+    "one_character_per_row": true,
+    "one_character_per_column": true,
+    "one_card_per_character": true
+  },
+  "cards": [
+    {
+      "id": "card-ines",
+      "character": "ines",
+      "character_name": "Inés",
+      "role": "suspect",
+      "statements": [{"id": "card-ines-statement-1", "type": "room", "family": "room_exact", "args": {"character": "ines", "room": "lobby"}, "text": "Inés estaba en el vestíbulo."}]
+    },
+    {
+      "id": "card-lucas",
+      "character": "lucas",
+      "character_name": "Lucas",
+      "role": "victim",
+      "statements": [{"id": "card-lucas-statement-1", "type": "victim_rule", "family": "murder_rule", "args": {"character": "lucas"}, "text": "Lucas estaba a solas con otra persona. Esa persona es el asesino."}]
+    },
+    {
+      "id": "card-marta",
+      "character": "marta",
+      "character_name": "Marta",
+      "role": "suspect",
+      "statements": [{"id": "card-marta-statement-1", "type": "object_same_column_in_room", "family": "object_line", "args": {"character": "marta", "object_type": "bookshelf"}, "text": "Marta estaba en la misma columna y habitación que una estantería."}]
+    },
+    {
+      "id": "card-nicolas",
+      "character": "nicolas",
+      "character_name": "Nicolás",
+      "role": "suspect",
+      "statements": [{"id": "card-nicolas-statement-1", "type": "relative_column_distance", "family": "relative_distance", "args": {"character": "nicolas", "reference": "ines", "delta": -3}, "text": "Nicolás estaba 3 columnas al oeste de Inés."}]
+    },
+    {
+      "id": "card-olivia",
+      "character": "olivia",
+      "character_name": "Olivia",
+      "role": "suspect",
+      "statements": [{"id": "card-olivia-statement-1", "type": "adjacent_object", "family": "object_adjacency", "args": {"character": "olivia", "object_type": "counter"}, "text": "Olivia estaba al lado de un mostrador."}]
+    },
+    {
+      "id": "card-pablo",
+      "character": "pablo",
+      "character_name": "Pablo",
+      "role": "suspect",
+      "statements": [{"id": "card-pablo-statement-1", "type": "unique_on_object", "family": "object_occupancy", "args": {"character": "pablo", "object_type": "sofa"}, "text": "Pablo era la única persona sobre un sofá."}]
+    },
+    {
+      "id": "card-raquel",
+      "character": "raquel",
+      "character_name": "Raquel",
+      "role": "suspect",
+      "statements": [{"id": "card-raquel-statement-1", "type": "room", "family": "room_exact", "args": {"character": "raquel", "room": "bar"}, "text": "Raquel estaba en el bar."}]
+    },
+    {
+      "id": "card-sergio",
+      "character": "sergio",
+      "character_name": "Sergio",
+      "role": "suspect",
+      "statements": [{"id": "card-sergio-statement-1", "type": "adjacent_object", "family": "object_adjacency", "args": {"character": "sergio", "object_type": "bed"}, "text": "Sergio estaba al lado de una cama individual."}]
+    }
+  ]
+}

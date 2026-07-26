@@ -32,7 +32,7 @@ def test_ortools_matches_all_reference_cases() -> None:
 
     paths = [
         *sorted((PROJECT / "examples").glob("*/puzzle.json")),
-        PROJECT / "examples/board_restaurant/case.json",
+        *sorted((PROJECT / "examples").glob("*/case.json")),
     ]
     for puzzle_path in paths:
         puzzle = load_puzzle(puzzle_path)
@@ -158,7 +158,13 @@ def test_reference_case_selects_an_editorial_clue_set() -> None:
     assert not selection["human_complexity"]["calibrated"]
     assert len(selection["families"]) >= 4
     assert selection["directional"] <= 1
+    assert any(family.startswith("room_") for family in selection["families"])
+    assert any(family in {"room_relation", "relative_distance", "relative_order"} for family in selection["families"])
     assert sum(statement["family"].startswith(("object_", "room_")) for statement in statements) >= 4
+    assert max(
+        sum(candidate["type"] == statement["type"] for candidate in statements)
+        for statement in statements
+    ) <= 2
     assert all(statement["family"] != "coordinate" for statement in statements)
     assert all("otra altura" not in statement["text"] and "otro lado" not in statement["text"] for statement in statements)
     published = {
@@ -257,7 +263,9 @@ def test_reference_scene_generates_a_complete_variant_without_a_solution_input()
         character: (position["row"], position["column"])
         for character, position in published_solution["positions"].items()
     }
-    assert result["solution"]["murderer"] == "diego"
+    assert result["solution"]["murderer"] in {
+        character["id"] for character in base["characters"] if character["role"] == "suspect"
+    }
     assert result["diagnostics"]["target_attempt"] <= 20
     assert result["diagnostics"]["selector_iterations"] <= 40
     assert result["diagnostics"]["directional"] <= 1
@@ -302,6 +310,36 @@ def test_reference_scene_generation_smoke() -> None:
         variant["diagnostics"]["human_complexity"]["propagation_rounds"] >= 1
         for variant in variants
     )
+
+
+def test_second_scene_generation_is_varied_and_scene_independent() -> None:
+    from murdoku_v2.generation import generate_variant
+    from murdoku_v2.models import load_puzzle
+
+    base = load_puzzle(PROJECT / "examples/board_hotel/case.json")
+    result = generate_variant(base, 1)
+    statements = [
+        card["statements"][0]
+        for card in result["puzzle"]["cards"]
+        if card["role"] == "suspect"
+    ]
+    families = {statement["family"] for statement in statements}
+
+    assert result["puzzle"]["board"] == base["board"]
+    assert result["diagnostics"]["exact_unique"]
+    assert result["diagnostics"]["human_complexity"]["branching_points"] == 0
+    assert sum(statement["family"].startswith("object_") for statement in statements) <= 4
+    assert any(family.startswith("room_") for family in families)
+    assert any(family in {"room_relation", "relative_distance", "relative_order"} for family in families)
+    assert all(
+        "única persona" in statement["text"]
+        for statement in statements
+        if statement["type"] == "unique_on_object"
+    )
+    assert max(
+        sum(candidate["type"] == statement["type"] for candidate in statements)
+        for statement in statements
+    ) <= 2
 
 
 def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:

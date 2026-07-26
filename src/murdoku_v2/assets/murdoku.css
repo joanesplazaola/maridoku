@@ -295,7 +295,7 @@ td.crossed::after {
 
 .room-name {
   position: absolute;
-  z-index: 1;
+  z-index: 4;
   left: 6px;
   top: 20px;
   max-width: none;

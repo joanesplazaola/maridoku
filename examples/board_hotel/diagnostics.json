@@ -1,0 +1,40 @@
+{
+  "seed": 2,
+  "target_attempt": 2,
+  "selector_iterations": 8,
+  "selector_witnesses": 12,
+  "families": {
+    "room_exact": 2,
+    "object_line": 1,
+    "relative_distance": 1,
+    "object_adjacency": 2,
+    "object_occupancy": 1
+  },
+  "directional": 1,
+  "human_steps": 30,
+  "human_techniques": [
+    "binary_relation",
+    "clue_anchor",
+    "column_matching",
+    "row_matching",
+    "unique_object",
+    "victim_companion"
+  ],
+  "human_complexity": {
+    "deduction_steps": 30,
+    "propagation_rounds": 2,
+    "branching_points": 0,
+    "hardest_technique": "row_matching",
+    "hardest_level": 3,
+    "technique_counts": {
+      "clue_anchor": 6,
+      "unique_object": 6,
+      "binary_relation": 2,
+      "victim_companion": 2,
+      "row_matching": 9,
+      "column_matching": 5
+    },
+    "calibrated": false
+  },
+  "exact_unique": true
+}

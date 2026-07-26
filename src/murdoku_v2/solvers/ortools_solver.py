@@ -187,7 +187,8 @@ class ORToolsSolver:
         solver = cp_model.CpSolver()
         solver.parameters.num_search_workers = 1
         solver.parameters.random_seed = int(puzzle.get("seed", 0)) & 0x7FFFFFFF
-        solver.parameters.randomize_search = False
+        solver.parameters.randomize_search = True
+        solver.parameters.search_branching = cp_model.RANDOMIZED_SEARCH
         solver.parameters.enumerate_all_solutions = True
         if self.max_time_seconds is not None:
             solver.parameters.max_time_in_seconds = self.max_time_seconds

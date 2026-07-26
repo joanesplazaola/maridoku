@@ -146,7 +146,7 @@ def candidate_pools(
                 candidates.append((
                     "unique_on_object",
                     {"object_type": obj["type"]},
-                    f"{name} estaba sobre {phrase}.",
+                    f"{name} era la única persona sobre {phrase}.",
                 ))
             if any(
                 abs(row - obj_row) + abs(column - obj_column) == 1

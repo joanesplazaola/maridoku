@@ -29,9 +29,13 @@ editorial automatizado.
 - [x] Generar pools reproducibles de pistas verdaderas sobre una escena fija.
 - [x] Seleccionar una pista necesaria por sospechoso mediante contraejemplos CP-SAT.
 - [x] Generar soluciones y asesinos reproducibles sin una solución de entrada.
+- [x] Exigir variedad entre objetos, habitaciones y relaciones, no solo entre subfamilias técnicas.
 - [ ] Corregir toda semántica espacial contra el glosario, incluida “al lado”.
+- [ ] Completar de extremo a extremo los tipos exactos ya modelados antes de añadir otros.
+- [ ] Añadir pistas globales, negativas, diagonales y de unicidad como cortes verticales completos.
 - [ ] Ampliar objetos solo cuando una escena aprobada los necesite.
-- [ ] Añadir pistas generales y mecánicas especiales al contrato CP-SAT.
+- [ ] Modelar zonas superpuestas y secuencias temáticas para mecánicas especiales.
+- [ ] Admitir tableros rectangulares y tamaños de 5×5 a 16×16.
 - [ ] Sustituir `scaling.py` por un generador que elija solución sobre una escena fija.
 - [ ] Crear tres casos de referencia: fácil, medio y difícil.
 

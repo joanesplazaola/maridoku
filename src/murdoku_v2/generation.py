@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import random
 from typing import Any
 
 from .candidates import candidate_pools
@@ -22,7 +21,6 @@ def generate_variant(
     validate_puzzle(puzzle)
 
     board = puzzle["board"]
-    size = board["rows"]
     characters = [character["id"] for character in puzzle["characters"]]
     character_data = {character["id"]: character for character in puzzle["characters"]}
     victim = puzzle["victim"]
@@ -31,26 +29,20 @@ def generate_variant(
         for room in board["rooms"]
         for cell in room["cells"]
     }
-    blocked = {
-        tuple(cell)
-        for obj in board.get("objects", [])
-        if obj.get("blocks_character", False)
-        for cell in obj["cells"]
-    }
-    rng = random.Random(seed)
+    victim_statements = tuple(
+        statement
+        for card in puzzle["cards"]
+        if card["role"] == "victim"
+        for statement in card["statements"]
+    )
+    exact = get_solver("ortools")
+    targets = exact.enumerate_solutions(
+        {**puzzle, "seed": seed},
+        limit=max_target_attempts,
+        base_statements=victim_statements,
+    ).solutions
 
-    for attempt in range(1, max_target_attempts + 1):
-        rows = list(range(size))
-        columns = list(range(size))
-        rng.shuffle(rows)
-        rng.shuffle(columns)
-        target = {
-            character: (rows[index], columns[index])
-            for index, character in enumerate(characters)
-        }
-        if any(position in blocked for position in target.values()):
-            continue
-
+    for attempt, target in enumerate(targets, start=1):
         victim_room = room_at[target[victim]]
         companions = [
             character
@@ -80,8 +72,8 @@ def generate_variant(
         editorial = audit_puzzle(generated)
         if not editorial["accepted"] or editorial["warnings"]:
             continue
-        exact = get_solver("ortools").solve(generated, limit=2)
-        if not exact.unique or exact.solutions != [target]:
+        exact_result = exact.solve(generated, limit=2)
+        if not exact_result.unique or exact_result.solutions != [target]:
             continue
 
         murderer = companions[0]
