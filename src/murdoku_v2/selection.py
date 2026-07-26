@@ -30,8 +30,6 @@ FAMILY_PENALTY = {
     "relative_order": 24,
     "coordinate": 30,
 }
-
-
 def apply_clues(
     puzzle: dict[str, Any],
     statements: list[dict[str, Any]],
@@ -212,7 +210,7 @@ def select_clues(
     for iteration in range(1, max_iterations + 1):
         selected = _choose(pools, witnesses, forbidden, puzzle, global_pool)
         active = (*victim_statements, *selected)
-        result = exact.solve(puzzle, limit=2, base_statements=active)
+        result = exact.solve(puzzle, limit=8, base_statements=active)
         alternatives = [solution for solution in result.solutions if solution != target]
         if alternatives:
             witnesses.extend(alternatives)
