@@ -560,6 +560,7 @@ class ORToolsSolver:
 
     def _adjacent_object_cells(self, puzzle: dict[str, Any], object_type: str) -> set[int]:
         n = int(puzzle["board"]["rows"])
+        room_at = self._room_at(puzzle)
         object_cells = [
             cell
             for obj in puzzle["board"].get("objects", [])
@@ -570,5 +571,9 @@ class ORToolsSolver:
             row * n + column
             for row in range(n)
             for column in range(n)
-            if any(abs(row - object_row) + abs(column - object_column) == 1 for object_row, object_column in object_cells)
+            if any(
+                abs(row - object_row) + abs(column - object_column) == 1
+                and room_at[(row, column)] == room_at[(object_row, object_column)]
+                for object_row, object_column in object_cells
+            )
         }

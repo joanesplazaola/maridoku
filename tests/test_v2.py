@@ -164,17 +164,52 @@ def test_render_writes_an_interactive_printable_html(tmp_path: Path) -> None:
     assert "Estaba 1 columna al este de Elena." in html
 
 
-def test_site_builder_creates_a_level_catalog_without_solutions(tmp_path: Path) -> None:
+def test_site_builder_publishes_only_reference_cases_without_solutions(tmp_path: Path) -> None:
     from murdoku_v2.site_builder import build_site
 
-    result = build_site(tmp_path, level_count=2)
+    result = build_site(tmp_path)
     index = (tmp_path / "index.html").read_text(encoding="utf-8")
-    assert result["levels"] == 2
+    level = (tmp_path / "levels/001.html").read_text(encoding="utf-8")
+    assert result["levels"] == 1
     assert "Dificultad" in index
     assert "Fácil" in index
+    assert "Último servicio" in index
+    assert "V · VÍCTIMA" in level
+    assert 'data-tool="cross"' in level
+    assert 'data-tool="erase"' in level
     assert (tmp_path / "levels/001.html").exists()
-    assert (tmp_path / "levels/002.html").exists()
     assert not list(tmp_path.rglob("solution.json"))
+
+
+def test_reference_case_meets_editorial_acceptance() -> None:
+    from murdoku_v2.solvers.ortools_solver import ORToolsSolver
+
+    puzzle = json.loads((PROJECT / "examples/board_restaurant/puzzle.json").read_text(encoding="utf-8"))
+    solution = json.loads((PROJECT / "examples/board_restaurant/solution.json").read_text(encoding="utf-8"))
+    expected = {
+        character: (position["row"], position["column"])
+        for character, position in solution["positions"].items()
+    }
+    suspect_statements = [
+        statement
+        for card in puzzle["cards"]
+        if card["role"] == "suspect"
+        for statement in card["statements"]
+    ]
+    direction_families = {"relative_order", "relative_distance", "coordinate"}
+    families = {statement["family"] for statement in suspect_statements}
+    solver = ORToolsSolver()
+
+    result = solver.solve(puzzle, limit=2)
+    assert result.unique and result.solutions == [expected]
+    assert all(room["id"] != "crime_room" for room in puzzle["board"]["rooms"])
+    assert all(len(card["statements"]) == 1 for card in puzzle["cards"])
+    assert sum(statement["family"] in direction_families for statement in suspect_statements) <= 1
+    assert len(families) >= 4
+    assert all(
+        len(solver.solve(puzzle, limit=2, exclude_statement_id=statement["id"]).solutions) > 1
+        for statement in suspect_statements
+    )
 
 
 def test_pydantic_contract_rejects_invalid_content() -> None:

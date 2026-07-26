@@ -114,6 +114,7 @@ def _matches_statement(
         return any(
             obj["type"] == args["object_type"]
             and abs(row - cell_row) + abs(column - cell_column) == 1
+            and room_at[(cell_row, cell_column)] == own_room
             for obj in board.get("objects", [])
             for cell_row, cell_column in _object_cells(obj)
         )

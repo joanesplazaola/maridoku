@@ -2,36 +2,19 @@ from __future__ import annotations
 
 import html
 import json
-import tempfile
 from pathlib import Path
 
 from .render import _stylesheet, render_html
-from .scaling import generate_scaling_case
 
 
-DIFFICULTIES = (
-    ("easy", "Fácil", 6, 20, 1000),
-    ("medium", "Medio", 8, 20, 2000),
-    ("hard", "Difícil", 10, 10, 3000),
+REFERENCE_CASES = (
+    {
+        "number": 1,
+        "difficulty": "easy",
+        "difficulty_label": "Fácil",
+        "path": Path("examples/board_restaurant/puzzle.json"),
+    },
 )
-
-
-def _level_specs(limit: int) -> list[dict[str, object]]:
-    specs = []
-    number = 1
-    for difficulty, label, size, count, seed_base in DIFFICULTIES:
-        for offset in range(count):
-            if len(specs) >= limit:
-                return specs
-            specs.append({
-                "number": number,
-                "difficulty": difficulty,
-                "difficulty_label": label,
-                "size": size,
-                "seed": seed_base + offset,
-            })
-            number += 1
-    return specs
 
 
 def _catalog_html(levels: list[dict[str, object]]) -> str:
@@ -41,6 +24,7 @@ def _catalog_html(levels: list[dict[str, object]]) -> str:
         f'data-puzzle="{html.escape(str(level["puzzle_id"]))}" '
         f'href="levels/{int(level["number"]):03d}.html">'
         f'<strong>{int(level["number"]):02d}</strong>'
+        f'<b>{html.escape(str(level["title"]))}</b>'
         f'<span>{html.escape(str(level["difficulty_label"]))} · {level["size"]}×{level["size"]}</span></a>'
         for level in levels
     )
@@ -62,6 +46,7 @@ def _catalog_html(levels: list[dict[str, object]]) -> str:
   .level {{ min-height:92px; padding:14px; border:1px solid rgb(41 44 39 / 24%); background:rgb(255 254 249 / 90%); color:var(--ink); text-decoration:none; box-shadow:0 3px 8px rgb(35 37 32 / 7%); }}
   .level:hover,.level:focus-visible {{ outline:3px solid var(--green); outline-offset:1px; }}
   .level strong {{ display:block; font:700 30px Georgia,serif; }}
+  .level b {{ display:block; margin-top:5px; font:700 15px Georgia,serif; }}
   .level span {{ display:block; margin-top:7px; color:var(--muted); font-size:11px; font-weight:800; }}
   .level.completed {{ border-color:var(--green); background:#e4eee8; }}
   .level.completed strong::after {{ content:" ✓"; color:var(--green); font-size:16px; }}
@@ -106,30 +91,29 @@ def _catalog_html(levels: list[dict[str, object]]) -> str:
 </html>"""
 
 
-def build_site(output: Path, *, level_count: int = 50) -> dict[str, object]:
-    if not 1 <= level_count <= 50:
-        raise ValueError("level_count debe estar entre 1 y 50")
+def build_site(output: Path) -> dict[str, object]:
     output.mkdir(parents=True, exist_ok=True)
     levels_dir = output / "levels"
     levels_dir.mkdir(exist_ok=True)
     catalog = []
-    specs = _level_specs(level_count)
-    with tempfile.TemporaryDirectory(prefix="murdoku-site-") as temp_root:
-        root = Path(temp_root)
-        for index, spec in enumerate(specs):
-            result = generate_scaling_case(
-                int(spec["size"]), int(spec["seed"]), root / f"{int(spec['number']):03d}"
-            )
-            level = {**spec, "puzzle_id": result["puzzle"]["id"]}
-            catalog.append(level)
-            navigation = {
-                "number": spec["number"],
-                "previous": f"{int(spec['number']) - 1:03d}.html" if index else None,
-                "next": f"{int(spec['number']) + 1:03d}.html" if index + 1 < len(specs) else None,
-            }
-            (levels_dir / f"{int(spec['number']):03d}.html").write_text(
-                render_html(result["puzzle"], navigation=navigation), encoding="utf-8"
-            )
+    project = Path(__file__).resolve().parents[2]
+    for index, spec in enumerate(REFERENCE_CASES):
+        puzzle = json.loads((project / spec["path"]).read_text(encoding="utf-8"))
+        level = {
+            **{key: value for key, value in spec.items() if key != "path"},
+            "puzzle_id": puzzle["id"],
+            "title": puzzle.get("title", puzzle["board"]["name"]),
+            "size": puzzle["board"]["rows"],
+        }
+        catalog.append(level)
+        navigation = {
+            "number": spec["number"],
+            "previous": f"{int(spec['number']) - 1:03d}.html" if index else None,
+            "next": f"{int(spec['number']) + 1:03d}.html" if index + 1 < len(REFERENCE_CASES) else None,
+        }
+        (levels_dir / f"{int(spec['number']):03d}.html").write_text(
+            render_html(puzzle, navigation=navigation), encoding="utf-8"
+        )
     (output / "index.html").write_text(_catalog_html(catalog), encoding="utf-8")
     (output / "catalog.json").write_text(
         json.dumps(catalog, ensure_ascii=False, indent=2), encoding="utf-8"

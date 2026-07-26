@@ -1,11 +1,13 @@
 {
   "schema_version": 8,
-  "id": "case-board_restaurant-5003",
+  "id": "ultimo-servicio",
+  "title": "Último servicio",
+  "story": "El restaurante había cerrado cuando encontraron a Bruno. Reconstruye dónde estaba cada persona y descubre quién se quedó a solas con él.",
   "seed": 5003,
   "selection_profile": "any",
   "board": {
     "id": "board_restaurant",
-    "name": "Restaurante y terraza",
+    "name": "Último servicio",
     "rows": 6,
     "columns": 6,
     "room_groups": [
@@ -574,14 +576,13 @@
       "statements": [
         {
           "id": "card-carla-statement-1",
-          "type": "relative_column_order",
-          "family": "relative_order",
+          "type": "object_same_row_in_room",
+          "family": "object_line",
           "args": {
             "character": "carla",
-            "reference": "alicia",
-            "relation": "east"
+            "object_type": "plant"
           },
-          "text": "Carla estaba al este de Alicia."
+          "text": "Carla estaba en la misma fila y habitación que una planta."
         }
       ]
     },
@@ -593,14 +594,13 @@
       "statements": [
         {
           "id": "card-diego-statement-1",
-          "type": "relative_column_distance",
-          "family": "relative_distance",
+          "type": "room",
+          "family": "room_exact",
           "args": {
             "character": "diego",
-            "reference": "fabio",
-            "delta": -1
+            "room": "dining"
           },
-          "text": "Diego estaba 1 columna al oeste de Fabio."
+          "text": "Diego estaba en el comedor."
         }
       ]
     },

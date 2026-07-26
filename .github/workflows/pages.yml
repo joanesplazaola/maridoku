@@ -35,7 +35,7 @@ jobs:
             --budget-seconds 30
       - name: Build static preview
         run: |
-          uv run murdoku-v2 build-site --levels 50 --output _site
+          uv run murdoku-v2 build-site --output _site
           test ! -e _site/solution.json
         env:
           MURDOKU_COMMIT: ${{ github.sha }}

@@ -60,7 +60,8 @@ def _object_placement(obj: dict[str, Any]) -> str:
         f"--object-height:{height};--object-width:{width}"
     )
     return (
-        f'<div class="object-placement{layer}{shape}" style="{style}">'
+        f'<div class="object-placement{layer}{shape}" '
+        f'data-object-type="{html.escape(obj["type"])}" style="{style}">'
         f"{_object_marker(obj)}</div>"
     )
 
@@ -140,15 +141,23 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
     gender_by_character = {character["id"]: character.get("gender", "woman") for character in puzzle["characters"]}
     for card in puzzle["cards"]:
         gender = gender_by_character.get(card["character"], "woman")
-        statements = "".join(
-            f"<li data-statement=\"{html.escape(statement['id'])}\">"
-            f"{html.escape(_display_statement(statement['text'], card['character_name'], gender))}</li>"
-            for statement in card["statements"]
-        )
+        statement_items = []
+        for statement in card["statements"]:
+            object_type = statement["args"].get("object_type")
+            object_attribute = (
+                f' data-object-type="{html.escape(object_type)}" tabindex="0"'
+                if object_type else ""
+            )
+            statement_items.append(
+                f'<li data-statement="{html.escape(statement["id"])}"{object_attribute}>'
+                f"{html.escape(_display_statement(statement['text'], card['character_name'], gender))}</li>"
+            )
+        statements = "".join(statement_items)
         portrait_column = min(gender_slots.get(gender, 0), 3)
         gender_slots[gender] = portrait_column + 1
         portrait_x = (0, 33.333, 66.667, 100)[portrait_column]
         portrait_y = 100 if gender == "man" else 0
+        victim_badge = '<small class="victim-badge">V · VÍCTIMA</small>' if card["role"] == "victim" else ""
         cards.append(
             f"<article class=\"card {html.escape(card['role'])}\" data-card=\"{html.escape(card['character'])}\">"
             f"<button class=\"person-select\" type=\"button\" data-character=\"{html.escape(card['character'])}\" "
@@ -156,7 +165,9 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
             f"aria-label=\"Seleccionar a {html.escape(card['character_name'])}\">"
             f"<span class=\"portrait\" style=\"--portrait-x:{portrait_x}%;--portrait-y:{portrait_y}%\" "
             f"role=\"img\" aria-label=\"Retrato de {html.escape(card['character_name'])}\"></span>"
-            f"<span><h2>{html.escape(card['character_name'])}</h2></span></button>"
+            f"<span><h2>{html.escape(card['character_name'])}</h2>"
+            f"{victim_badge}"
+            f"</span></button>"
             f"<ol>{statements}</ol></article>"
         )
     puzzle_data = base64.b64encode(
@@ -191,7 +202,7 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
       <div class="masthead">
         <span class="eyebrow">Archivo de investigación</span>
         <h1>{html.escape(board.get('name') or puzzle['id'])}</h1>
-        <p class="subtitle">Una víctima. Una habitación. Un asesino entre los presentes.</p>
+        <p class="subtitle">{html.escape(puzzle.get('story') or 'Una víctima. Una habitación. Un asesino entre los presentes.')}</p>
       </div>
       <div class="case-id"><span>Caso</span>{html.escape(puzzle['id'])}</div>
     </header>
@@ -201,7 +212,8 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
         <div class="game-toolbar" aria-label="Controles del puzle">
           <button type="button" data-action="undo" title="Deshacer" aria-label="Deshacer">↶</button>
           <button type="button" data-action="reset" title="Reiniciar" aria-label="Reiniciar">↺</button>
-          <button type="button" data-action="hint">Pista</button>
+          <button type="button" data-tool="cross" title="Marcar como imposible" aria-label="Marcar como imposible">×</button>
+          <button type="button" data-tool="erase" title="Borrar casilla" aria-label="Borrar casilla">⌫</button>
           <button type="button" class="check-button" data-action="check">Comprobar</button>
           <button type="button" data-action="export" title="Exportar sesión" aria-label="Exportar sesión">⇩</button>
           <output class="game-status" aria-live="polite">Coloca a los personajes</output>

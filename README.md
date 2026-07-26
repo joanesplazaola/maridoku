@@ -3,8 +3,9 @@
 Repositorio local del motor de generación y validación de puzles Murdoku.
 Esta rama usa **Google OR-Tools CP-SAT** como motor exacto principal.
 
-La web publica un catálogo de 50 niveles: 20 fáciles de 6x6, 20 medios de
-8x8 y 10 difíciles de 10x10, con progreso local y sin soluciones privadas.
+La web publica únicamente casos de referencia revisados. El primero,
+**Último servicio**, separa la escena de la solución, identifica a la víctima
+y usa objetos y habitaciones como evidencia.
 
 ## Contenido
 
@@ -86,10 +87,10 @@ uv run murdoku-v2 validate \
   --solver ortools
 ```
 
-## Generar un caso
+## Generar un caso sintético
 
-El generador principal construye y valida el caso con CP-SAT sin enumerar
-previamente el universo de soluciones.
+Esta ruta mide escalabilidad de CP-SAT. Su salida no se publica como contenido
+editorial.
 
 ```bash
 uv run murdoku-v2 generate \
@@ -110,10 +111,16 @@ Para generar una hoja HTML imprimible:
 uv run murdoku-v2 render --puzzle generated/puzzle.json --output generated/puzzle.html
 ```
 
+## Construir la web
+
+```bash
+uv run murdoku-v2 build-site --output _site
+```
+
 ## Objetivo inmediato
 
-La siguiente fase es calibrar dificultad y claridad con sesiones reales sobre
-el jugador publicado.
+Crear tres casos de referencia sobre escenas fijas y añadir las técnicas
+humanas que permitan medir dificultad antes de ampliar el catálogo.
 
 Consulta `LOCAL_SETUP.md` para una secuencia detallada de ejecución y resolución
 de problemas.

@@ -1,95 +1,60 @@
 # Roadmap de producto
 
-## Estado actual
+## Principios
 
-- [x] CP-SAT es el único motor exacto y valida solución y unicidad.
-- [x] Hay generación editorial escalable validada en 6x6, 8x8 y 10x10.
-- [x] El catálogo formal cubre 22 familias de pistas.
-- [x] El catálogo visual cubre 11 objetos con huellas `1x1`, `1x2`, `2x2` y `L3`.
-- [x] Los tableros, objetos y puzles se validan con Pydantic.
-- [x] Existe una hoja HTML autocontenida para revisión editorial.
-- [x] El generador editorial escala más allá de 6 personajes.
-- [x] Existe un jugador interactivo usable.
-- [ ] La dificultad está calibrada con personas.
-- [ ] Existe un flujo reproducible de publicación y regresión de contenido.
+- La escena se diseña antes que la solución y nunca revela dónde ocurrió el crimen.
+- La víctima está identificada con `V`; el asesino es quien quedó a solas con ella.
+- CP-SAT demuestra solución, unicidad y necesidad. No decide si un caso es interesante.
+- La dificultad depende de las técnicas deductivas, no del tamaño del tablero.
+- Solo se publica contenido autorado que pase el contrato editorial.
 
-## Dirección técnica
+## P0: caso de referencia
 
-`scaling.py` es el generador editorial. CP-SAT es el único motor exacto; la
-ruta enumerativa, sus máscaras y su selector ya no forman parte del proyecto.
+- [x] Retirar la “Sala del crimen” del contenido publicado.
+- [x] Publicar una escena temática independiente de la solución.
+- [x] Marcar explícitamente a la víctima.
+- [x] Limitar a una pista necesaria por tarjeta.
+- [x] Usar al menos cuatro familias y como máximo un 30 % de pistas direccionales.
+- [x] Validar solución, asesino, unicidad y necesidad con CP-SAT.
+- [x] Evitar que el jugador revele en vivo la verdad de cada pista.
+- [x] Añadir marcas X, borrador y resaltado pista-objeto.
 
-No volveremos a hacer default un selector CP-SAT que dependa del universo
-enumerado o que termine silenciosamente en máscaras. Una nueva etapa solo
-sustituirá a la anterior cuando pase sus criterios de salida sin fallback.
+Criterio de salida: “Último servicio” puede jugarse completo y pasa el contrato
+editorial automatizado.
 
-Enfoques descartados:
+## P1: lenguaje de casos
 
-- beam basado únicamente en conteos CP-SAT capados;
-- ejecutar primero CP-SAT y repetir después toda la selección por máscaras;
-- CEGIS construido sobre los pools y objetivos del generador enumerativo.
+- [ ] Separar formalmente plantilla de escena, solución y pistas.
+- [ ] Corregir toda semántica espacial contra el glosario, incluida “al lado”.
+- [ ] Ampliar objetos solo cuando una escena aprobada los necesite.
+- [ ] Añadir pistas generales y mecánicas especiales al contrato CP-SAT.
+- [ ] Sustituir `scaling.py` por un generador que elija solución sobre una escena fija.
+- [ ] Crear tres casos de referencia: fácil, medio y difícil.
 
-## P0: generador escalable
+Criterio de salida: tres casos distintos, cada uno con mapa, objetos y técnica
+central propios; ninguno deriva su geometría de la solución.
 
-Objetivo: producir 8x8 y 10x10 variados sin enumerar `(n!)²`.
+## P2: dificultad humana
 
-1. [x] Extraer personajes y objetivo parametrizados desde `scaling.py`.
-2. [x] Extraer la construcción parametrizada del tablero escalable.
-3. [x] Generar pools editoriales verdaderos sin `enumerate_base_solutions()`.
-4. [x] Construir pistas y demostrar unicidad exclusivamente mediante CP-SAT.
-5. [x] Comprobar necesidad de cada tarjeta y afirmación de sospechoso con CP-SAT.
-6. [x] Sustituir las cadenas sintéticas por familias variadas del catálogo formal.
-7. [x] Añadir un gate reproducible de unicidad, necesidad y presupuesto para 6x6, 8x8 y 10x10.
-8. [x] Superar 100 seeds consecutivas por tamaño y conservar fixtures de regresión.
-9. [x] Mover `generate` a la ruta escalable y retirar selector, máscaras y universo antiguos.
+- [ ] Implementar un propagador de candidatos por técnicas humanas.
+- [ ] Exigir una ruta deductiva sin ensayo y error además de unicidad exacta.
+- [ ] Medir pasos, profundidad, bifurcaciones y técnica más difícil.
+- [ ] Calibrar fácil, medio, difícil y experto con pruebas ciegas.
 
-Criterio de salida: 100 casos consecutivos por tamaño, todos únicos, sin pistas
-redundantes y dentro del presupuesto publicado. Ningún caso aceptado puede
-registrar fallback al generador enumerativo.
+Criterio de salida: la etiqueta de dificultad está respaldada por una ruta
+deductiva y por datos de personas.
 
-## P1: jugador web
+## P3: catálogo comercial
 
-Objetivo: probar puzles completos sin herramientas de desarrollo.
-
-- [x] Seleccionar sospechoso y colocarlo, moverlo o retirarlo del tablero.
-- [x] Mostrar restricciones de fila, columna y ocupación mientras se juega.
-- [x] Añadir deshacer, reiniciar, comprobación y persistencia local.
-- [x] Adaptar tablero y tarjetas a escritorio, tableta y móvil.
-- [x] Cubrir navegación por teclado, foco visible, contraste y lectores de pantalla.
-- [x] Registrar finalización, errores, ayudas y tiempo de resolución sin datos personales.
-- [x] Publicar una preview estática en GitHub Pages mediante GitHub Actions.
-
-Criterio de salida: una sesión completa funciona con ratón, táctil y teclado en
-Chrome, Firefox y Safari actuales, y la misma build está accesible en GitHub Pages.
-
-## P2: calidad editorial
-
-Objetivo: que dificultad y claridad sean propiedades medidas, no etiquetas heurísticas.
-
-- [x] Crear un propagador no enumerativo para explicaciones y pistas.
-- [x] Versionar la redacción y traducciones fuera de la lógica.
-- [ ] Ejecutar pruebas ciegas y calibrar fácil, medio, difícil y experto.
-- [x] Detectar ambigüedad lingüística, pistas dominantes y soluciones por descarte técnico.
+- [ ] Generar candidatos sobre plantillas aprobadas y enviarlos a revisión.
+- [ ] Publicar 15 casos autorados antes de volver a plantear un catálogo de 50.
 - [ ] Revisar licencia y procedencia de todos los recursos visuales.
+- [ ] Completar QA en Chrome, Firefox y Safari, escritorio y móvil.
+- [x] Desplegar builds verificadas en GitHub Pages.
+- [x] Mantener solución privada y retirada reproducible de casos.
 
-Criterio de salida: cada nivel cumple su rango de tiempo, abandono y ayudas en
-una muestra de prueba definida.
+## Fuera de alcance
 
-## P3: publicación
-
-Objetivo: convertir generación, revisión y entrega en un flujo repetible.
-
-- [x] Crear un manifiesto por puzle con versión, seed, solución y métricas editoriales.
-- [x] Separar datos privados de solución de los datos enviados al jugador.
-- [x] Añadir revisión editorial, aprobación y retirada de puzles.
-- [x] Exigir tests y build correctos antes de desplegar GitHub Pages.
-- [x] Promover a producción únicamente artefactos generados por un commit identificado.
-- [x] Definir analítica, privacidad, backups y respuesta ante errores de contenido.
-
-Criterio de salida: un puzle aprobado pasa de seed a producción y puede retirarse
-sin editar archivos manualmente.
-
-## Fuera de alcance por ahora
-
-- Cuentas, pagos y multijugador antes de validar el jugador.
-- Más motores exactos mientras CP-SAT cumpla los presupuestos.
-- Un sistema de diseño independiente antes de estabilizar la interacción.
+- Cuentas, pagos y multijugador antes de validar 15 casos.
+- Más motores exactos mientras CP-SAT cumpla el presupuesto.
+- Generar volumen para ocultar falta de variedad editorial.

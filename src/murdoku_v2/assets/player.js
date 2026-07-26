@@ -29,12 +29,13 @@
   }
   let selected = puzzle.characters[0].id;
   let positions = {};
+  let crosses = new Set();
+  let tool = "person";
   let history = [];
   const emptyMetrics = () => ({
     startedAt: Date.now(),
     checks: 0,
     errors: 0,
-    hints: 0,
     completedAt: null,
   });
   let metrics;
@@ -45,18 +46,26 @@
   }
 
   const key = (row, column) => `${row},${column}`;
-  const save = () => localStorage.setItem(storageKey, JSON.stringify(positions));
+  const save = () => localStorage.setItem(storageKey, JSON.stringify({
+    positions,
+    crosses: [...crosses],
+  }));
   const saveMetrics = () => localStorage.setItem(metricsKey, JSON.stringify(metrics));
-  const snapshot = () => history.push(structuredClone(positions));
+  const snapshot = () => history.push({
+    positions: structuredClone(positions),
+    crosses: new Set(crosses),
+  });
 
   function restore() {
     try {
       const stored = JSON.parse(localStorage.getItem(storageKey) || "{}");
+      const savedPositions = stored.positions || stored;
       positions = Object.fromEntries(
-        Object.entries(stored).filter(([, position]) =>
+        Object.entries(savedPositions).filter(([, position]) =>
           Array.isArray(position) && position.length === 2 && !blocked.has(key(...position)),
         ),
       );
+      crosses = new Set((stored.crosses || []).filter((cell) => !blocked.has(cell)));
     } catch {
       positions = {};
     }
@@ -123,7 +132,8 @@
     }
     if (statement.type === "adjacent_object") {
       return objectCells(args.object_type).some(([row, column]) =>
-        Math.abs(own[0] - row) + Math.abs(own[1] - column) === 1,
+        Math.abs(own[0] - row) + Math.abs(own[1] - column) === 1
+        && roomAt.get(key(row, column)) === ownRoom,
       );
     }
     if (statement.type === "object_same_row_in_room") {
@@ -155,9 +165,6 @@
     for (const card of puzzle.cards) {
       for (const statement of card.statements) {
         const state = statementState(statement);
-        const element = document.querySelector(`[data-statement="${statement.id}"]`);
-        element.classList.toggle("satisfied", state === true);
-        element.classList.toggle("violated", state === false);
         valid &&= state !== false;
         complete &&= state !== null;
       }
@@ -168,6 +175,7 @@
   function render() {
     cells.forEach((cell) => {
       cell.querySelector(".character-token")?.remove();
+      cell.classList.toggle("crossed", crosses.has(key(Number(cell.dataset.row), Number(cell.dataset.column))));
       cell.classList.remove("duplicate-row", "duplicate-column");
     });
     for (const [character, [row, column]] of Object.entries(positions)) {
@@ -188,17 +196,39 @@
       cell.classList.toggle("duplicate-column", values.filter((position) => position[1] === column).length > 1);
     }
     selectors.forEach((button) => button.closest(".card").classList.toggle("selected", button.dataset.character === selected));
-    evaluate();
+    document.querySelectorAll("[data-tool]").forEach((button) => {
+      button.classList.toggle("active", button.dataset.tool === tool);
+    });
     save();
   }
 
   function place(cell) {
     const row = Number(cell.dataset.row);
     const column = Number(cell.dataset.column);
-    if (blocked.has(key(row, column))) {
+    const cellKey = key(row, column);
+    if (blocked.has(cellKey)) {
       status.value = "Ese mueble bloquea la casilla";
       return;
     }
+    if (tool === "cross") {
+      if (Object.values(positions).some((position) => key(...position) === cellKey)) {
+        status.value = "Borra primero el personaje";
+        return;
+      }
+      snapshot();
+      crosses.has(cellKey) ? crosses.delete(cellKey) : crosses.add(cellKey);
+      render();
+      return;
+    }
+    if (tool === "erase") {
+      snapshot();
+      crosses.delete(cellKey);
+      const occupant = Object.entries(positions).find(([, position]) => position[0] === row && position[1] === column);
+      if (occupant) delete positions[occupant[0]];
+      render();
+      return;
+    }
+    crosses.delete(cellKey);
     snapshot();
     if (positions[selected]?.[0] === row && positions[selected]?.[1] === column) {
       delete positions[selected];
@@ -215,6 +245,7 @@
 
   selectors.forEach((button) => button.addEventListener("click", () => {
     selected = button.dataset.character;
+    tool = "person";
     render();
     status.value = `${names[selected]} seleccionado`;
   }));
@@ -226,6 +257,14 @@
   }));
   cells.forEach((cell) => {
     cell.addEventListener("click", () => place(cell));
+    cell.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      const previousTool = tool;
+      tool = "cross";
+      place(cell);
+      tool = previousTool;
+      render();
+    });
     cell.addEventListener("dragover", (event) => {
       event.preventDefault();
       event.dataTransfer.dropEffect = "move";
@@ -243,31 +282,20 @@
     });
   });
   document.querySelector('[data-action="undo"]').addEventListener("click", () => {
-    if (history.length) positions = history.pop();
+    if (history.length) ({ positions, crosses } = history.pop());
     render();
   });
   document.querySelector('[data-action="reset"]').addEventListener("click", () => {
     snapshot();
     positions = {};
+    crosses.clear();
     render();
     status.value = "Tablero reiniciado";
   });
-  document.querySelector('[data-action="hint"]').addEventListener("click", () => {
-    const pending = puzzle.cards
-      .flatMap((card) => card.statements)
-      .find((statement) => statementState(statement) !== true);
-    if (!pending) {
-      status.value = "Todas las declaraciones se cumplen";
-      return;
-    }
-    metrics.hints += 1;
-    saveMetrics();
-    const clue = document.querySelector(`[data-statement="${pending.id}"]`);
-    clue.closest(".card").scrollIntoView({ behavior: "smooth", block: "center" });
-    clue.classList.add("hinted");
-    setTimeout(() => clue.classList.remove("hinted"), 1800);
-    status.value = "Revisa la declaración destacada";
-  });
+  document.querySelectorAll("[data-tool]").forEach((button) => button.addEventListener("click", () => {
+    tool = tool === button.dataset.tool ? "person" : button.dataset.tool;
+    render();
+  }));
   document.querySelector('[data-action="check"]').addEventListener("click", () => {
     const result = evaluate();
     metrics.checks += 1;
@@ -276,7 +304,7 @@
     saveMetrics();
     status.value = result.complete && result.valid
       ? "Caso resuelto"
-      : result.complete ? "Hay pistas que no se cumplen" : "Faltan personajes por colocar";
+      : result.complete ? "La solución todavía no es correcta" : "Faltan personajes por colocar";
   });
   document.querySelector('[data-action="export"]').addEventListener("click", () => {
     const report = {
@@ -286,7 +314,6 @@
       durationSeconds: Math.round(((metrics.completedAt || Date.now()) - metrics.startedAt) / 1000),
       checks: metrics.checks,
       errors: metrics.errors,
-      hints: metrics.hints,
       completed: Boolean(metrics.completedAt),
     };
     const link = document.createElement("a");
@@ -295,6 +322,16 @@
     link.click();
     URL.revokeObjectURL(link.href);
     status.value = "Sesión exportada sin datos personales";
+  });
+
+  document.querySelectorAll("[data-object-type]").forEach((element) => {
+    const highlight = (active) => document
+      .querySelectorAll(`[data-object-type="${element.dataset.objectType}"]`)
+      .forEach((match) => match.classList.toggle("object-highlight", active));
+    element.addEventListener("mouseenter", () => highlight(true));
+    element.addEventListener("mouseleave", () => highlight(false));
+    element.addEventListener("focusin", () => highlight(true));
+    element.addEventListener("focusout", () => highlight(false));
   });
 
   restore();

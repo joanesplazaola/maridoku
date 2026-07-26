@@ -109,7 +109,6 @@ def main() -> None:
 
     site_parser = subparsers.add_parser("build-site", help="Construye el catálogo web")
     site_parser.add_argument("--output", type=Path, default=Path("_site"))
-    site_parser.add_argument("--levels", type=int, default=50)
 
     subparsers.add_parser("solvers", help="Muestra motores y librerías disponibles")
     subparsers.add_parser("catalog", help="Muestra el catálogo formal de pistas")
@@ -150,7 +149,7 @@ def main() -> None:
     elif args.command == "editorial-status":
         _json(set_editorial_status(args.manifest, args.status))
     elif args.command == "build-site":
-        _json(build_site(args.output, level_count=args.levels))
+        _json(build_site(args.output))
     elif args.command == "solvers":
         _json(availability())
     elif args.command == "object-catalog":
