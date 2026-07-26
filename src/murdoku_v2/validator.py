@@ -138,6 +138,9 @@ def matches_statement(
     if statement_type == "relative_column_distance":
         _, reference_column = positions[args["reference"]]
         return column - reference_column == args["delta"]
+    if statement_type == "same_diagonal":
+        reference_row, reference_column = positions[args["reference"]]
+        return abs(row - reference_row) == abs(column - reference_column)
     if statement_type in {"same_room", "different_room"}:
         same = own_room == room_at[positions[args["reference"]]]
         return same if statement_type == "same_room" else not same

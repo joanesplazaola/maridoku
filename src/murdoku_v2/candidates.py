@@ -151,6 +151,12 @@ def candidate_pools(
                     f"a {reference['name']}.",
                 ),
             ))
+            if abs(row_delta) == abs(column_delta):
+                candidates.append((
+                    "same_diagonal",
+                    {"reference": reference["id"]},
+                    f"{name} estaba en la misma diagonal que {reference['name']}.",
+                ))
             if row != reference_row:
                 relation = "north" if row < reference_row else "south"
                 candidates.append((

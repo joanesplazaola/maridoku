@@ -449,6 +449,14 @@ class ORToolsSolver:
         if typ == "relative_column_distance":
             model.add(ctx.column[subject] - ctx.column[args["reference"]] == int(args["delta"]))
             return
+        if typ == "same_diagonal":
+            reference = args["reference"]
+            row_gap = model.new_int_var(0, ctx.n - 1, f"diagonal_row_{statement['id']}")
+            column_gap = model.new_int_var(0, ctx.n - 1, f"diagonal_column_{statement['id']}")
+            model.add_abs_equality(row_gap, ctx.row[subject] - ctx.row[reference])
+            model.add_abs_equality(column_gap, ctx.column[subject] - ctx.column[reference])
+            model.add(row_gap == column_gap)
+            return
         if typ == "same_room":
             model.add(ctx.room[subject] == ctx.room[args["reference"]])
             return

@@ -12,8 +12,8 @@ from .solvers.registry import get_solver
 from .validator import matches_statement
 
 
-DIRECTION_FAMILIES = {"coordinate", "relative_distance", "relative_order"}
-RELATION_FAMILIES = {"room_relation", "relative_distance", "relative_order"}
+DIRECTION_FAMILIES = {"coordinate", "relative_diagonal", "relative_distance", "relative_order"}
+RELATION_FAMILIES = {"room_relation", "relative_diagonal", "relative_distance", "relative_order"}
 FAMILY_PENALTY = {
     "object_occupancy": 0,
     "object_adjacency": 1,
@@ -24,6 +24,7 @@ FAMILY_PENALTY = {
     "room_composition": 6,
     "room_companion": 7,
     "room_relation": 8,
+    "relative_diagonal": 22,
     "relative_distance": 20,
     "relative_order": 24,
     "coordinate": 30,

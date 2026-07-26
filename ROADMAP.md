@@ -32,6 +32,7 @@ editorial automatizado.
 - [x] Exigir variedad entre objetos, habitaciones y relaciones, no solo entre subfamilias técnicas.
 - [x] Completar pistas de ocupación y género en generación, CP-SAT y deducción humana.
 - [x] Añadir unicidad junto a objetos y agrupar candidatos por tipo de mobiliario.
+- [x] Añadir relaciones diagonales en generación, CP-SAT, jugador y deducción humana.
 - [ ] Corregir toda semántica espacial contra el glosario, incluida “al lado”.
 - [ ] Completar de extremo a extremo los tipos exactos ya modelados antes de añadir otros.
 - [ ] Añadir pistas globales, negativas, diagonales y de unicidad como cortes verticales completos.

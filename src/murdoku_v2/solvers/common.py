@@ -12,6 +12,7 @@ BINARY_TYPES = {
     "relative_column_order",
     "relative_row_distance",
     "relative_column_distance",
+    "same_diagonal",
     "same_room",
     "different_room",
 }

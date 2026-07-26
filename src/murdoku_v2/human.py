@@ -33,6 +33,7 @@ BINARY_TYPES = {
     "relative_column_order",
     "relative_row_distance",
     "relative_column_distance",
+    "same_diagonal",
     "same_room",
     "different_room",
 }
@@ -186,6 +187,8 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
             return subject_row - reference_row == args["delta"]
         if typ == "relative_column_distance":
             return subject_column - reference_column == args["delta"]
+        if typ == "same_diagonal":
+            return abs(subject_row - reference_row) == abs(subject_column - reference_column)
         same_room = ctx.room_at[(subject_row, subject_column)] == ctx.room_at[(reference_row, reference_column)]
         return same_room if typ == "same_room" else not same_room
 

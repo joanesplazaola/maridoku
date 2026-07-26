@@ -16,7 +16,7 @@ PROJECT = Path(__file__).resolve().parents[1]
 def test_catalogs_define_the_public_contract() -> None:
     from murdoku_v2.text_catalog import text_catalog
 
-    assert len(CLUE_SPECS) == len(catalog_json()) == 23
+    assert len(CLUE_SPECS) == len(catalog_json()) == 24
     assert len(OBJECT_CATALOG) == len(object_catalog_json()) == 11
     assert OBJECT_CATALOG["table"].footprints == ("1x1", "1x2")
     assert OBJECT_CATALOG["dining_table"].footprints == ("1x2",)
@@ -167,7 +167,7 @@ def test_reference_case_selects_an_editorial_clue_set() -> None:
     assert len(selection["families"]) >= 4
     assert selection["directional"] <= 1
     assert any(family.startswith("room_") for family in selection["families"])
-    assert any(family in {"room_relation", "relative_distance", "relative_order"} for family in selection["families"])
+    assert any(family in {"room_relation", "relative_diagonal", "relative_distance", "relative_order"} for family in selection["families"])
     assert sum(statement["family"].startswith(("object_", "room_")) for statement in statements) >= 4
     assert max(
         sum(candidate["type"] == statement["type"] for candidate in statements)
@@ -324,6 +324,39 @@ def test_unique_adjacent_object_is_generated_and_solved_end_to_end() -> None:
     assert "unique_object" in human["techniques"]
 
 
+def test_same_diagonal_is_generated_and_solved_end_to_end() -> None:
+    import copy
+
+    from murdoku_v2.candidates import candidate_pools
+    from murdoku_v2.human import solve_human
+    from murdoku_v2.models import load_puzzle
+    from murdoku_v2.solvers.ortools_solver import ORToolsSolver
+
+    case_path = PROJECT / "examples/board_restaurant/case.json"
+    puzzle = load_puzzle(case_path)
+    solution = json.loads((case_path.parent / "solution.json").read_text(encoding="utf-8"))
+    expected = {
+        character: (position["row"], position["column"])
+        for character, position in solution["positions"].items()
+    }
+    statement = next(
+        statement
+        for statement in candidate_pools(puzzle, expected)["alicia"]
+        if statement["type"] == "same_diagonal"
+        and statement["args"]["reference"] == "carla"
+    )
+    candidate = copy.deepcopy(puzzle)
+    card = next(card for card in candidate["cards"] if card["character"] == "alicia")
+    statement["id"] = card["statements"][0]["id"]
+    card["statements"] = [statement]
+
+    exact = ORToolsSolver().solve(candidate, limit=2)
+    human = solve_human(candidate)
+    assert exact.unique and exact.solutions == [expected]
+    assert human["solved"] and human["positions"] == expected
+    assert "binary_relation" in human["techniques"]
+
+
 def test_reference_scene_generates_a_complete_variant_without_a_solution_input() -> None:
     from murdoku_v2.generation import generate_variant
     from murdoku_v2.models import load_puzzle
@@ -414,7 +447,7 @@ def test_second_scene_generation_is_varied_and_scene_independent() -> None:
     assert result["diagnostics"]["human_complexity"]["branching_points"] == 0
     assert sum(statement["family"].startswith("object_") for statement in statements) <= 4
     assert any(family.startswith("room_") for family in families)
-    assert any(family in {"room_relation", "relative_distance", "relative_order"} for family in families)
+    assert any(family in {"room_relation", "relative_diagonal", "relative_distance", "relative_order"} for family in families)
     assert all(
         "única persona" in statement["text"]
         for statement in statements

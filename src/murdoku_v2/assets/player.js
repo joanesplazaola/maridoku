@@ -173,6 +173,9 @@
     }
     if (statement.type === "relative_row_distance") return own[0] - reference[0] === args.delta;
     if (statement.type === "relative_column_distance") return own[1] - reference[1] === args.delta;
+    if (statement.type === "same_diagonal") {
+      return Math.abs(own[0] - reference[0]) === Math.abs(own[1] - reference[1]);
+    }
     if (statement.type === "same_room") return ownRoom === roomAt.get(key(...reference));
     if (statement.type === "different_room") return ownRoom !== roomAt.get(key(...reference));
     return null;

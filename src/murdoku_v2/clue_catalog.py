@@ -34,6 +34,7 @@ SPECS: tuple[ClueSpec, ...] = (
     ClueSpec("relative_column_order", "relative_order", "Está al este o al oeste de otra persona."),
     ClueSpec("relative_row_distance", "relative_distance", "Distancia vertical exacta respecto a otra persona."),
     ClueSpec("relative_column_distance", "relative_distance", "Distancia horizontal exacta respecto a otra persona."),
+    ClueSpec("same_diagonal", "relative_diagonal", "Está en la misma diagonal que otra persona."),
     ClueSpec("same_room", "room_relation", "Está en la misma habitación que otra persona."),
     ClueSpec("different_room", "room_relation", "Está en una habitación distinta de otra persona."),
 )
