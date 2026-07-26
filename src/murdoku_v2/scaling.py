@@ -686,7 +686,11 @@ def generate_scaling_case(
     rejected_targets: list[int] = []
     for target_attempt in range(max_target_attempts):
         effective_seed = seed + target_attempt
-        puzzle = make_scaling_puzzle(size, effective_seed)
+        try:
+            puzzle = make_scaling_puzzle(size, effective_seed)
+        except RuntimeError:
+            rejected_targets.append(effective_seed)
+            continue
         expected = expected_scaling_solution(size, effective_seed)
         puzzle["cards"] = _make_order_cards(puzzle, expected)
         removed_order_clues = _prune_implied_order_clues(puzzle, expected)

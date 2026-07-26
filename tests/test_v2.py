@@ -491,6 +491,14 @@ def test_scaling_generator_retries_redundant_targets(tmp_path: Path) -> None:
     assert result["diagnostics"]["rejected_target_seeds"] == [0]
 
 
+def test_scaling_generator_retries_unplaceable_furniture(tmp_path: Path) -> None:
+    from murdoku_v2.scaling import generate_scaling_case
+
+    result = generate_scaling_case(6, 7, tmp_path)
+    assert result["diagnostics"]["effective_seed"] > 7
+    assert 7 in result["diagnostics"]["rejected_target_seeds"]
+
+
 def test_scaling_generation_regression_reports_acceptance(tmp_path: Path) -> None:
     from murdoku_v2.scaling import run_scaling_generation_regression
 
