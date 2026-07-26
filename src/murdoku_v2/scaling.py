@@ -14,6 +14,7 @@ from .editorial import audit_puzzle
 from .explainer import explain_puzzle
 from .object_catalog import OBJECT_CATALOG
 from .solvers.registry import get_solver
+from .text_catalog import clue_text, text_catalog
 
 
 NAMES = [
@@ -349,7 +350,7 @@ def make_scaling_puzzle(size: int, seed: int = 0) -> dict[str, Any]:
             "type": "victim_rule",
             "family": "murder_rule",
             "args": {"character": victim["id"]},
-            "text": f"{victim['name']} estaba a solas con otra persona.",
+            "text": clue_text("victim_rule", name=victim["name"]),
         }],
     }]
 
@@ -605,9 +606,10 @@ def _make_editorial_cards(
                 statement_type = coordinate_type
                 family = "coordinate"
                 args = {"character": character_id, coordinate_type.removeprefix("exact_"): value}
-                text = (
-                    f"{characters[character_id]['name']} estaba en la "
-                    f"{'fila' if dimension == 0 else 'columna'} {value + 1}."
+                text = clue_text(
+                    coordinate_type,
+                    name=characters[character_id]["name"],
+                    value=value + 1,
                 )
             elif index % 2:
                 statement_type = order_type.replace("_order", "_distance")
@@ -617,9 +619,11 @@ def _make_editorial_cards(
                     "reference": reference,
                     "delta": value - reference_value,
                 }
-                text = (
-                    f"{characters[character_id]['name']} estaba justo {direction_text} "
-                    f"de {characters[reference]['name']}."
+                text = clue_text(
+                    "relative_distance",
+                    name=characters[character_id]["name"],
+                    direction=direction_text,
+                    reference=characters[reference]["name"],
                 )
             else:
                 statement_type = order_type
@@ -629,9 +633,11 @@ def _make_editorial_cards(
                     "reference": reference,
                     "relation": relation,
                 }
-                text = (
-                    f"{characters[character_id]['name']} estaba {direction_text} "
-                    f"de {characters[reference]['name']}."
+                text = clue_text(
+                    "relative_order",
+                    name=characters[character_id]["name"],
+                    direction=direction_text,
+                    reference=characters[reference]["name"],
                 )
             statements[character_id].append({
                 "id": "",
@@ -809,6 +815,8 @@ def generate_scaling_case(
         "puzzle_schema_version": puzzle["schema_version"],
         "generator": "scaling_editorial",
         "generator_commit": os.environ.get("MURDOKU_COMMIT", "local"),
+        "text_locale": "es",
+        "text_version": text_catalog()["version"],
         "requested_seed": seed,
         "effective_seed": effective_seed,
         "editorial_status": "draft",

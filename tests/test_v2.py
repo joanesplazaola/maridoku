@@ -14,6 +14,8 @@ PROJECT = Path(__file__).resolve().parents[1]
 
 
 def test_catalogs_define_the_public_contract() -> None:
+    from murdoku_v2.text_catalog import text_catalog
+
     assert len(CLUE_SPECS) == len(catalog_json()) == 22
     assert len(OBJECT_CATALOG) == len(object_catalog_json()) == 11
     assert OBJECT_CATALOG["table"].footprints == ("1x1", "1x2")
@@ -21,6 +23,7 @@ def test_catalogs_define_the_public_contract() -> None:
     assert OBJECT_CATALOG["counter"].footprints == ("1x2", "L3")
     assert footprint_kind([(0, 0), (0, 1), (1, 0)]) == "L3"
     assert footprint_kind([(0, 0), (0, 2)]) == "custom"
+    assert set(text_catalog("es")) == set(text_catalog("en"))
 
 
 def test_ortools_matches_all_reference_cases() -> None:
@@ -96,6 +99,8 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     assert result["explanation"]["method"] == "incremental_cp_sat"
     assert result["explanation"]["unique"]
     assert result["manifest"]["editorial_status"] == "draft"
+    assert result["manifest"]["text_locale"] == "es"
+    assert result["manifest"]["text_version"] == 1
     assert {
         statement["family"]
         for card in result["puzzle"]["cards"]

@@ -66,7 +66,7 @@ Chrome, Firefox y Safari actuales, y la misma build está accesible en GitHub Pa
 Objetivo: que dificultad y claridad sean propiedades medidas, no etiquetas heurísticas.
 
 - [x] Crear un propagador no enumerativo para explicaciones y pistas.
-- [ ] Versionar la redacción y traducciones fuera de la lógica.
+- [x] Versionar la redacción y traducciones fuera de la lógica.
 - [ ] Ejecutar pruebas ciegas y calibrar fácil, medio, difícil y experto.
 - [x] Detectar ambigüedad lingüística, pistas dominantes y soluciones por descarte técnico.
 - [ ] Revisar licencia y procedencia de todos los recursos visuales.

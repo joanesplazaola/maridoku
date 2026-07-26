@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "victim_rule": "{name} was alone with one other person.",
+  "exact_row": "{name} was in row {value}.",
+  "exact_column": "{name} was in column {value}.",
+  "relative_order": "{name} was {direction} of {reference}.",
+  "relative_distance": "{name} was immediately {direction} of {reference}."
+}
