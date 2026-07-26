@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import copy
 from collections import Counter
 from typing import Any
 
 from ortools.sat.python import cp_model
 
 from .candidates import candidate_pools
+from .human import solve_human
 from .solvers.registry import get_solver
 from .validator import matches_statement
 
@@ -26,6 +28,24 @@ FAMILY_PENALTY = {
 }
 
 
+def apply_clues(
+    puzzle: dict[str, Any],
+    statements: list[dict[str, Any]],
+) -> dict[str, Any]:
+    selected = copy.deepcopy(puzzle)
+    by_character = {
+        statement["args"]["character"]: statement
+        for statement in statements
+    }
+    for card in selected["cards"]:
+        if card["role"] == "victim":
+            continue
+        statement = copy.deepcopy(by_character[card["character"]])
+        statement["id"] = f"{card['id']}-statement-1"
+        card["statements"] = [statement]
+    return selected
+
+
 def _choose(
     pools: dict[str, list[dict[str, Any]]],
     witnesses: list[dict[str, tuple[int, int]]],
@@ -38,6 +58,7 @@ def _choose(
         for pool in pools.values()
         for statement in pool
     }
+    ordered = [statement for pool in pools.values() for statement in pool]
     for pool in pools.values():
         model.add_exactly_one(variables[statement["id"]] for statement in pool)
 
@@ -60,6 +81,15 @@ def _choose(
         for statement in pool
         if statement["family"] in DIRECTION_FAMILIES
     ) <= 1)
+    object_patterns: dict[tuple[str, str], list[Any]] = {}
+    for statement in ordered:
+        object_type = statement["args"].get("object_type")
+        if object_type:
+            object_patterns.setdefault(
+                (statement["type"], object_type), []
+            ).append(variables[statement["id"]])
+    for pattern_variables in object_patterns.values():
+        model.add(sum(pattern_variables) <= 1)
 
     for witness in witnesses:
         eliminated_by = [
@@ -72,7 +102,6 @@ def _choose(
     for selection in forbidden:
         model.add(sum(variables[statement_id] for statement_id in selection) <= len(selection) - 1)
 
-    ordered = [statement for pool in pools.values() for statement in pool]
     model.minimize(sum(
         (FAMILY_PENALTY.get(statement["family"], 40) * 1000 + index)
         * variables[statement["id"]]
@@ -137,6 +166,10 @@ def select_clues(
             for candidate in selected
         )
         if necessary:
+            human = solve_human(apply_clues(puzzle, selected))
+            if not human["solved"]:
+                forbidden.append({statement["id"] for statement in selected})
+                continue
             families = Counter(statement["family"] for statement in selected)
             return {
                 "statements": selected,
@@ -147,6 +180,8 @@ def select_clues(
                     statement["family"] in DIRECTION_FAMILIES
                     for statement in selected
                 ),
+                "human_steps": human["step_count"],
+                "human_techniques": human["techniques"],
             }
         forbidden.append({statement["id"] for statement in selected})
 

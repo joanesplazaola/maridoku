@@ -39,8 +39,8 @@ central propios; ninguno deriva su geometría de la solución.
 
 ## P2: dificultad humana
 
-- [ ] Implementar un propagador de candidatos por técnicas humanas.
-- [ ] Exigir una ruta deductiva sin ensayo y error además de unicidad exacta.
+- [x] Implementar un propagador de candidatos por técnicas humanas.
+- [x] Exigir una ruta deductiva sin ensayo y error además de unicidad exacta.
 - [ ] Medir pasos, profundidad, bifurcaciones y técnica más difícil.
 - [ ] Calibrar fácil, medio, difícil y experto con pruebas ciegas.
 

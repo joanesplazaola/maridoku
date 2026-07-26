@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-import copy
 import random
 from typing import Any
 
 from .candidates import candidate_pools
 from .editorial import audit_puzzle
 from .models import validate_puzzle
-from .selection import select_clues
+from .selection import apply_clues, select_clues
 from .solvers.registry import get_solver
 
 
@@ -74,19 +73,9 @@ def generate_variant(
         except RuntimeError:
             continue
 
-        generated = copy.deepcopy(puzzle)
+        generated = apply_clues(puzzle, selection["statements"])
         generated["id"] = f"{puzzle['id']}-{seed}"
         generated["seed"] = seed
-        selected_by_character = {
-            statement["args"]["character"]: statement
-            for statement in selection["statements"]
-        }
-        for card in generated["cards"]:
-            if card["role"] == "victim":
-                continue
-            statement = copy.deepcopy(selected_by_character[card["character"]])
-            statement["id"] = f"{card['id']}-statement-1"
-            card["statements"] = [statement]
 
         editorial = audit_puzzle(generated)
         if not editorial["accepted"] or editorial["warnings"]:
@@ -121,6 +110,8 @@ def generate_variant(
                 "selector_witnesses": selection["witnesses"],
                 "families": selection["families"],
                 "directional": selection["directional"],
+                "human_steps": selection["human_steps"],
+                "human_techniques": selection["human_techniques"],
                 "editorial_audit": editorial,
                 "exact_unique": True,
             },

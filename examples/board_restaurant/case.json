@@ -28,10 +28,10 @@
       "role": "suspect",
       "statements": [{
         "id": "card-alicia-statement-1",
-        "type": "object_same_column_in_room",
-        "family": "object_line",
-        "args": {"character": "alicia", "object_type": "chair"},
-        "text": "Alicia estaba en la misma columna y habitación que una silla."
+        "type": "room",
+        "family": "room_exact",
+        "args": {"character": "alicia", "room": "dining"},
+        "text": "Alicia estaba en el comedor."
       }]
     },
     {
@@ -54,10 +54,10 @@
       "role": "suspect",
       "statements": [{
         "id": "card-carla-statement-1",
-        "type": "relative_row_distance",
-        "family": "relative_distance",
-        "args": {"character": "carla", "reference": "bruno", "delta": 2},
-        "text": "Carla estaba 2 filas al sur de Bruno."
+        "type": "object_same_row_in_room",
+        "family": "object_line",
+        "args": {"character": "carla", "object_type": "plant"},
+        "text": "Carla estaba en la misma fila y habitación que una planta."
       }]
     },
     {
@@ -67,10 +67,10 @@
       "role": "suspect",
       "statements": [{
         "id": "card-diego-statement-1",
-        "type": "adjacent_object",
-        "family": "object_adjacency",
-        "args": {"character": "diego", "object_type": "table"},
-        "text": "Diego estaba al lado de una mesa."
+        "type": "relative_row_distance",
+        "family": "relative_distance",
+        "args": {"character": "diego", "reference": "fabio", "delta": -4},
+        "text": "Diego estaba 4 filas al norte de Fabio."
       }]
     },
     {
@@ -80,10 +80,10 @@
       "role": "suspect",
       "statements": [{
         "id": "card-elena-statement-1",
-        "type": "room",
-        "family": "room_exact",
-        "args": {"character": "elena", "room": "kitchen"},
-        "text": "Elena estaba en la cocina."
+        "type": "adjacent_object",
+        "family": "object_adjacency",
+        "args": {"character": "elena", "object_type": "table"},
+        "text": "Elena estaba al lado de una mesa."
       }]
     },
     {

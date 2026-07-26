@@ -152,6 +152,8 @@ def test_reference_case_selects_an_editorial_clue_set() -> None:
     assert len(statements) == len(puzzle["characters"]) - 1
     assert selection["iterations"] <= 40
     assert selection["witnesses"] <= 50
+    assert selection["human_steps"] > 0
+    assert {"clue_anchor", "row_matching", "column_matching"} <= set(selection["human_techniques"])
     assert len(selection["families"]) >= 4
     assert selection["directional"] <= 1
     assert sum(statement["family"].startswith(("object_", "room_")) for statement in statements) >= 4
@@ -197,6 +199,31 @@ def test_reference_case_selects_an_editorial_clue_set() -> None:
     assert audit_puzzle(selected_puzzle)["warnings"] == []
 
 
+def test_reference_case_has_a_human_deduction_route() -> None:
+    import copy
+
+    from murdoku_v2.human import solve_human
+    from murdoku_v2.models import load_puzzle
+
+    case_path = PROJECT / "examples/board_restaurant/case.json"
+    puzzle = load_puzzle(case_path)
+    solution = json.loads((case_path.parent / "solution.json").read_text(encoding="utf-8"))
+    expected = {
+        character: (position["row"], position["column"])
+        for character, position in solution["positions"].items()
+    }
+    result = solve_human(puzzle)
+
+    assert result["solved"]
+    assert result["positions"] == expected
+    assert result["difficulty"] == "unrated"
+    assert {"clue_anchor", "binary_relation", "victim_companion"} <= set(result["techniques"])
+
+    unsupported = copy.deepcopy(puzzle)
+    unsupported["cards"][0]["statements"][0]["type"] = "room_population"
+    assert solve_human(unsupported)["reason"] == "unsupported_clues"
+
+
 def test_reference_scene_generates_a_complete_variant_without_a_solution_input() -> None:
     from murdoku_v2.generation import generate_variant
     from murdoku_v2.models import load_puzzle
@@ -225,6 +252,7 @@ def test_reference_scene_generates_a_complete_variant_without_a_solution_input()
     assert result["diagnostics"]["selector_iterations"] <= 40
     assert result["diagnostics"]["directional"] <= 1
     assert len(result["diagnostics"]["families"]) >= 4
+    assert result["diagnostics"]["human_steps"] > 0
 
     solver = ORToolsSolver()
     exact = solver.solve(generated, limit=2)
@@ -338,8 +366,8 @@ def test_render_writes_an_interactive_printable_html(tmp_path: Path) -> None:
     assert 'class="furniture-layer"' in html
     assert "--object-width:2" in html
     assert ">1.1<" not in html
-    assert "Alicia estaba en la misma columna" not in html
-    assert "Estaba en la misma columna y habitación que una silla." in html
+    assert "Alicia estaba en el comedor" not in html
+    assert "Estaba en el comedor." in html
 
 
 def test_site_builder_publishes_only_reference_cases_without_solutions(tmp_path: Path) -> None:
