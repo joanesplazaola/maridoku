@@ -98,7 +98,7 @@ def _player_script() -> str:
     return files("murdoku_v2").joinpath("assets/player.js").read_text(encoding="utf-8")
 
 
-def render_html(puzzle: dict[str, Any]) -> str:
+def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = None) -> str:
     board = puzzle["board"]
     rooms = _room_lookup(board)
     room_classes = {room["id"]: f"room-{index % 6}" for index, room in enumerate(board["rooms"])}
@@ -145,7 +145,6 @@ def render_html(puzzle: dict[str, Any]) -> str:
             f"{html.escape(_display_statement(statement['text'], card['character_name'], gender))}</li>"
             for statement in card["statements"]
         )
-        role = "Victima" if card["role"] == "victim" else "Sospechoso"
         portrait_column = min(gender_slots.get(gender, 0), 3)
         gender_slots[gender] = portrait_column + 1
         portrait_x = (0, 33.333, 66.667, 100)[portrait_column]
@@ -153,15 +152,30 @@ def render_html(puzzle: dict[str, Any]) -> str:
         cards.append(
             f"<article class=\"card {html.escape(card['role'])}\" data-card=\"{html.escape(card['character'])}\">"
             f"<button class=\"person-select\" type=\"button\" data-character=\"{html.escape(card['character'])}\" "
+            f"data-portrait-x=\"{portrait_x}%\" data-portrait-y=\"{portrait_y}%\" draggable=\"true\" "
             f"aria-label=\"Seleccionar a {html.escape(card['character_name'])}\">"
             f"<span class=\"portrait\" style=\"--portrait-x:{portrait_x}%;--portrait-y:{portrait_y}%\" "
             f"role=\"img\" aria-label=\"Retrato de {html.escape(card['character_name'])}\"></span>"
-            f"<span><h2>{html.escape(card['character_name'])}</h2><p>{role}</p></span></button>"
+            f"<span><h2>{html.escape(card['character_name'])}</h2></span></button>"
             f"<ol>{statements}</ol></article>"
         )
     puzzle_data = base64.b64encode(
         json.dumps(puzzle, ensure_ascii=False).encode("utf-8")
     ).decode("ascii")
+    level_navigation = ""
+    if navigation:
+        previous = (
+            f'<a href="{html.escape(navigation["previous"])}" aria-label="Nivel anterior">←</a>'
+            if navigation.get("previous") else "<span></span>"
+        )
+        following = (
+            f'<a href="{html.escape(navigation["next"])}" aria-label="Nivel siguiente">→</a>'
+            if navigation.get("next") else "<span></span>"
+        )
+        level_navigation = (
+            f'<nav class="level-navigation">{previous}<a href="../index.html">'
+            f'Nivel {int(navigation["number"]):02d}</a>{following}</nav>'
+        )
     return f"""<!doctype html>
 <html lang="es">
 <head>
@@ -172,6 +186,7 @@ def render_html(puzzle: dict[str, Any]) -> str:
 </head>
 <body>
   <div class="sheet">
+    {level_navigation}
     <header class="titlebar">
       <div class="masthead">
         <span class="eyebrow">Archivo de investigación</span>

@@ -3,16 +3,10 @@ from __future__ import annotations
 from collections import Counter
 from typing import Any
 
+from .clue_catalog import CLUE_SPECS
 
-PLAYER_TYPES = {
-    "victim_rule",
-    "exact_row",
-    "exact_column",
-    "relative_row_order",
-    "relative_column_order",
-    "relative_row_distance",
-    "relative_column_distance",
-}
+
+PLAYER_TYPES = {"victim_rule", *CLUE_SPECS}
 
 
 def audit_puzzle(puzzle: dict[str, Any]) -> dict[str, Any]:

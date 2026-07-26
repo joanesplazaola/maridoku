@@ -101,12 +101,14 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     assert result["manifest"]["editorial_status"] == "draft"
     assert result["manifest"]["text_locale"] == "es"
     assert result["manifest"]["text_version"] == 1
-    assert {
+    families = {
         statement["family"]
         for card in result["puzzle"]["cards"]
         for statement in card["statements"]
         if card["role"] == "suspect"
-    } == {"coordinate", "relative_distance", "relative_order"}
+    }
+    assert {"coordinate", "relative_distance", "relative_order"} <= families
+    assert families & {"object_adjacency", "object_occupancy", "object_line", "room_composition"}
     assert all((tmp_path / f"{name}.json").exists() for name in (
         "puzzle", "solution", "diagnostics", "explanation", "generation_report", "manifest"
     ))
@@ -160,6 +162,19 @@ def test_render_writes_an_interactive_printable_html(tmp_path: Path) -> None:
     assert ">1.1<" not in html
     assert "Alicia estaba 1 columna" not in html
     assert "Estaba 1 columna al este de Elena." in html
+
+
+def test_site_builder_creates_a_level_catalog_without_solutions(tmp_path: Path) -> None:
+    from murdoku_v2.site_builder import build_site
+
+    result = build_site(tmp_path, level_count=2)
+    index = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert result["levels"] == 2
+    assert "Dificultad" in index
+    assert "Fácil" in index
+    assert (tmp_path / "levels/001.html").exists()
+    assert (tmp_path / "levels/002.html").exists()
+    assert not list(tmp_path.rglob("solution.json"))
 
 
 def test_pydantic_contract_rejects_invalid_content() -> None:

@@ -14,6 +14,7 @@ from .scaling import (
     run_scaling_benchmark,
     run_scaling_generation_regression,
 )
+from .site_builder import build_site
 from .solvers.registry import availability, get_solver
 
 
@@ -106,6 +107,10 @@ def main() -> None:
     editorial_parser.add_argument("--manifest", type=Path, required=True)
     editorial_parser.add_argument("--status", choices=["approved", "retired"], required=True)
 
+    site_parser = subparsers.add_parser("build-site", help="Construye el catálogo web")
+    site_parser.add_argument("--output", type=Path, default=Path("_site"))
+    site_parser.add_argument("--levels", type=int, default=50)
+
     subparsers.add_parser("solvers", help="Muestra motores y librerías disponibles")
     subparsers.add_parser("catalog", help="Muestra el catálogo formal de pistas")
     subparsers.add_parser("object-catalog", help="Muestra el catálogo de objetos y huellas")
@@ -144,6 +149,8 @@ def main() -> None:
         _json(report["summary"])
     elif args.command == "editorial-status":
         _json(set_editorial_status(args.manifest, args.status))
+    elif args.command == "build-site":
+        _json(build_site(args.output, level_count=args.levels))
     elif args.command == "solvers":
         _json(availability())
     elif args.command == "object-catalog":

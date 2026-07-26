@@ -36,6 +36,11 @@ ROOM_NAMES = [
 ]
 
 
+def _object_phrase(name: str) -> str:
+    article = "el" if name.casefold() in {"sofá", "armario", "mostrador", "televisor"} else "la"
+    return f"{article} {name.casefold()}"
+
+
 def _object(
     type_: str, cells: set[tuple[int, int]], suffix: str, *, occupiable: bool | None = None,
 ) -> dict[str, Any]:
@@ -516,7 +521,8 @@ def make_scaling_candidate_pools(
                 "companion_gender_count",
                 "room_composition",
                 {"gender": gender, "count": count},
-                f"{name} compartía habitación con {count} {'mujeres' if gender == 'woman' else 'hombres'}.",
+                f"{name} compartía habitación con {count} "
+                f"{'mujer' if count == 1 and gender == 'woman' else 'hombre' if count == 1 else 'mujeres' if gender == 'woman' else 'hombres'}.",
             ))
         for group_id, group_rooms in groups.items():
             if room_id in group_rooms:
@@ -533,28 +539,28 @@ def make_scaling_candidate_pools(
                     "unique_on_object",
                     "object_occupancy",
                     {"object_type": obj["type"]},
-                    f"{name} estaba junto a {obj['name'].lower()}.",
+                    f"{name} estaba sobre {_object_phrase(obj['name'])}.",
                 ))
             if any(abs(row - obj_row) + abs(column - obj_column) == 1 for obj_row, obj_column in cells):
                 candidates.append((
                     "adjacent_object",
                     "object_adjacency",
                     {"object_type": obj["type"]},
-                    f"{name} estaba al lado de {obj['name'].lower()}.",
+                    f"{name} estaba al lado de {_object_phrase(obj['name'])}.",
                 ))
             if any(obj_row == row and room_at[(obj_row, obj_column)] == room_id for obj_row, obj_column in cells):
                 candidates.append((
                     "object_same_row_in_room",
                     "object_line",
                     {"object_type": obj["type"]},
-                    f"{name} estaba en la misma fila y habitación que {obj['name'].lower()}.",
+                    f"{name} estaba en la misma fila y habitación que {_object_phrase(obj['name'])}.",
                 ))
             if any(obj_column == column and room_at[(obj_row, obj_column)] == room_id for obj_row, obj_column in cells):
                 candidates.append((
                     "object_same_column_in_room",
                     "object_line",
                     {"object_type": obj["type"]},
-                    f"{name} estaba en la misma columna y habitación que {obj['name'].lower()}.",
+                    f"{name} estaba en la misma columna y habitación que {_object_phrase(obj['name'])}.",
                 ))
 
         pool = []
@@ -583,11 +589,18 @@ def _make_editorial_cards(
         for character_id in characters
         if character_id != victim_id
     }
+    coordinate_anchors: set[str] = set()
     for dimension, coordinate_type, order_type, directions in (
         (0, "exact_row", "relative_row_order", ("north", "south")),
         (1, "exact_column", "relative_column_order", ("west", "east")),
     ):
         order = sorted(target, key=lambda character_id: target[character_id][dimension])
+        endpoints = [character_id for character_id in (order[0], order[-1]) if character_id != victim_id]
+        anchor = next(
+            (character_id for character_id in endpoints if character_id not in coordinate_anchors),
+            endpoints[0],
+        )
+        coordinate_anchors.add(anchor)
         victim_index = order.index(victim_id)
         for index, character_id in enumerate(order):
             if character_id == victim_id:
@@ -602,14 +615,19 @@ def _make_editorial_cards(
                 "west": "al oeste",
                 "east": "al este",
             }[relation]
-            if value in {0, len(order) - 1}:
+            if character_id == anchor:
                 statement_type = coordinate_type
                 family = "coordinate"
                 args = {"character": character_id, coordinate_type.removeprefix("exact_"): value}
                 text = clue_text(
-                    coordinate_type,
+                    "exact_edge",
                     name=characters[character_id]["name"],
-                    value=value + 1,
+                    edge={
+                        (0, 0): "borde norte",
+                        (0, len(order) - 1): "borde sur",
+                        (1, 0): "borde oeste",
+                        (1, len(order) - 1): "borde este",
+                    }[(dimension, value)],
                 )
             elif index % 2:
                 statement_type = order_type.replace("_order", "_distance")
@@ -708,6 +726,73 @@ def _prune_implied_clues(
     return removed
 
 
+def _substitute_editorial_clues(
+    puzzle: dict[str, Any],
+    expected: dict[str, tuple[int, int]],
+    *,
+    max_substitutions: int = 3,
+    max_probes: int = 40,
+) -> list[str]:
+    pools = make_scaling_candidate_pools(puzzle, expected)
+    solver = get_solver("ortools")
+    priorities = {
+        family: index
+        for index, family in enumerate((
+            "object_adjacency",
+            "object_occupancy",
+            "object_line",
+            "room_composition",
+            "room_population",
+            "room_relation",
+            "room_group",
+            "room_exact",
+        ))
+    }
+    changed: set[str] = set()
+    selected: list[str] = []
+    probes = 0
+    for _ in range(max_substitutions):
+        accepted = False
+        for card in puzzle["cards"]:
+            if card["role"] == "victim":
+                continue
+            candidates = sorted(
+                (
+                    candidate
+                    for candidate in pools[card["character"]]
+                    if candidate["family"] in priorities
+                ),
+                key=lambda candidate: priorities[candidate["family"]],
+            )
+            for index, original in enumerate(card["statements"]):
+                if original["id"] in changed:
+                    continue
+                for candidate in candidates:
+                    probes += 1
+                    replacement = {**candidate, "id": original["id"]}
+                    card["statements"][index] = replacement
+                    result = solver.solve(puzzle, limit=2)
+                    if (
+                        result.unique
+                        and result.solutions[0] == expected
+                        and _suspect_clues_are_necessary(puzzle, expected)
+                    ):
+                        changed.add(original["id"])
+                        selected.append(f"{original['id']}:{candidate['family']}")
+                        accepted = True
+                        break
+                    card["statements"][index] = original
+                    if probes >= max_probes:
+                        return selected
+                if accepted:
+                    break
+            if accepted:
+                break
+        if not accepted:
+            break
+    return selected
+
+
 def generate_scaling_case(
     size: int,
     seed: int,
@@ -731,6 +816,7 @@ def generate_scaling_case(
         expected = expected_scaling_solution(size, effective_seed)
         puzzle["cards"] = _make_editorial_cards(puzzle, expected)
         removed_clues = _prune_implied_clues(puzzle, expected)
+        editorial_clues = _substitute_editorial_clues(puzzle, expected)
         result = solver.solve(puzzle, limit=2)
         if (
             result.available

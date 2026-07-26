@@ -3,6 +3,7 @@
   "victim_rule": "{name} estaba a solas con otra persona.",
   "exact_row": "{name} estaba en la fila {value}.",
   "exact_column": "{name} estaba en la columna {value}.",
+  "exact_edge": "{name} estaba junto al {edge} del plano.",
   "relative_order": "{name} estaba {direction} de {reference}.",
   "relative_distance": "{name} estaba justo {direction} de {reference}."
 }

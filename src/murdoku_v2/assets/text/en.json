@@ -3,6 +3,7 @@
   "victim_rule": "{name} was alone with one other person.",
   "exact_row": "{name} was in row {value}.",
   "exact_column": "{name} was in column {value}.",
+  "exact_edge": "{name} was by the {edge} of the floor plan.",
   "relative_order": "{name} was {direction} of {reference}.",
   "relative_distance": "{name} was immediately {direction} of {reference}."
 }

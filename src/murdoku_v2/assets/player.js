@@ -5,7 +5,11 @@
   const cells = [...document.querySelectorAll("td[data-row]")];
   const selectors = [...document.querySelectorAll("[data-character]")];
   const status = document.querySelector(".game-status");
-  const storageKey = `murdoku:${puzzle.id}`;
+  const clueVersion = puzzle.cards
+    .flatMap((card) => card.statements)
+    .map((statement) => `${statement.id}:${statement.type}`)
+    .join("|");
+  const storageKey = `murdoku:${puzzle.id}:${clueVersion}`;
   const metricsKey = `${storageKey}:metrics`;
   const names = Object.fromEntries(puzzle.characters.map((character) => [character.id, character.name]));
   const blocked = new Set(
@@ -16,6 +20,13 @@
   const roomAt = new Map(
     puzzle.board.rooms.flatMap((room) => room.cells.map(([row, column]) => [`${row},${column}`, room.id])),
   );
+  const roomGroups = Object.fromEntries(
+    (puzzle.board.room_groups || []).map((group) => [group.id, new Set(group.rooms)]),
+  );
+  const objectsByType = {};
+  for (const object of puzzle.board.objects) {
+    (objectsByType[object.type] ||= []).push(object);
+  }
   let selected = puzzle.characters[0].id;
   let positions = {};
   let history = [];
@@ -57,13 +68,74 @@
     if (!own) return null;
     const reference = args.reference && positions[args.reference];
     if (args.reference && !reference) return null;
+    const allPlaced = Object.keys(positions).length === puzzle.characters.length;
+    const ownRoom = roomAt.get(key(...own));
+    const roomOccupants = () => Object.entries(positions)
+      .filter(([, position]) => roomAt.get(key(...position)) === ownRoom);
+    const objectCells = (type, occupiable = false) => (objectsByType[type] || [])
+      .filter((object) => !occupiable || object.occupiable)
+      .flatMap((object) => object.cells);
     if (statement.type === "victim_rule") {
-      if (Object.keys(positions).length !== puzzle.characters.length) return null;
-      const room = roomAt.get(key(...own));
-      return Object.values(positions).filter((position) => roomAt.get(key(...position)) === room).length === 2;
+      if (!allPlaced) return null;
+      return roomOccupants().length === 2;
     }
+    if (statement.type === "room") return ownRoom === args.room;
     if (statement.type === "exact_row") return own[0] === args.row;
     if (statement.type === "exact_column") return own[1] === args.column;
+    if (statement.type === "room_population") return allPlaced ? roomOccupants().length === args.count : null;
+    if (statement.type === "alone_in_room") {
+      return allPlaced ? ownRoom === args.room && roomOccupants().length === 1 : null;
+    }
+    if (statement.type === "room_gender_count" || statement.type === "companion_gender_count") {
+      if (!allPlaced) return null;
+      const companions = roomOccupants().filter(([character]) =>
+        statement.type === "room_gender_count" || character !== args.character,
+      );
+      return companions.filter(([character]) =>
+        puzzle.characters.find((item) => item.id === character).gender === args.gender,
+      ).length === args.count;
+    }
+    if (statement.type === "alone_with_gender") {
+      if (!allPlaced) return null;
+      const companions = roomOccupants().filter(([character]) => character !== args.character);
+      return companions.length === 1
+        && puzzle.characters.find((item) => item.id === companions[0][0]).gender === args.gender;
+    }
+    if (statement.type === "not_adjacent_to_wall" || statement.type === "in_room_corner") {
+      const [row, column] = own;
+      const walls = [
+        row === 0 || roomAt.get(key(row - 1, column)) !== ownRoom,
+        row === puzzle.board.rows - 1 || roomAt.get(key(row + 1, column)) !== ownRoom,
+        column === 0 || roomAt.get(key(row, column - 1)) !== ownRoom,
+        column === puzzle.board.columns - 1 || roomAt.get(key(row, column + 1)) !== ownRoom,
+      ];
+      return statement.type === "not_adjacent_to_wall"
+        ? !walls.some(Boolean)
+        : (walls[0] || walls[1]) && (walls[2] || walls[3]);
+    }
+    if (statement.type === "in_room_group") return roomGroups[args.group]?.has(ownRoom) || false;
+    if (statement.type === "room_disjunction") return args.rooms.includes(ownRoom);
+    if (statement.type === "unique_on_object") {
+      if (!allPlaced) return null;
+      const cells = new Set(objectCells(args.object_type, true).map((cell) => key(...cell)));
+      return cells.has(key(...own))
+        && Object.values(positions).filter((position) => cells.has(key(...position))).length === 1;
+    }
+    if (statement.type === "adjacent_object") {
+      return objectCells(args.object_type).some(([row, column]) =>
+        Math.abs(own[0] - row) + Math.abs(own[1] - column) === 1,
+      );
+    }
+    if (statement.type === "object_same_row_in_room") {
+      return objectCells(args.object_type).some(([row, column]) =>
+        row === own[0] && roomAt.get(key(row, column)) === ownRoom,
+      );
+    }
+    if (statement.type === "object_same_column_in_room") {
+      return objectCells(args.object_type).some(([row, column]) =>
+        column === own[1] && roomAt.get(key(row, column)) === ownRoom,
+      );
+    }
     if (statement.type === "relative_row_order") {
       return args.relation === "north" ? own[0] < reference[0] : own[0] > reference[0];
     }
@@ -72,6 +144,8 @@
     }
     if (statement.type === "relative_row_distance") return own[0] - reference[0] === args.delta;
     if (statement.type === "relative_column_distance") return own[1] - reference[1] === args.delta;
+    if (statement.type === "same_room") return ownRoom === roomAt.get(key(...reference));
+    if (statement.type === "different_room") return ownRoom !== roomAt.get(key(...reference));
     return null;
   }
 
@@ -99,8 +173,10 @@
     for (const [character, [row, column]] of Object.entries(positions)) {
       const cell = document.querySelector(`td[data-row="${row}"][data-column="${column}"]`);
       const token = document.createElement("span");
-      token.className = "character-token";
-      token.textContent = names[character].slice(0, 1);
+      const selector = document.querySelector(`[data-character="${character}"]`);
+      token.className = "character-token portrait-token";
+      token.style.setProperty("--portrait-x", selector.dataset.portraitX);
+      token.style.setProperty("--portrait-y", selector.dataset.portraitY);
       token.title = names[character];
       token.setAttribute("aria-label", names[character]);
       cell.append(token);
@@ -142,8 +218,23 @@
     render();
     status.value = `${names[selected]} seleccionado`;
   }));
+  selectors.forEach((button) => button.addEventListener("dragstart", (event) => {
+    selected = button.dataset.character;
+    event.dataTransfer.setData("text/plain", selected);
+    event.dataTransfer.effectAllowed = "move";
+    render();
+  }));
   cells.forEach((cell) => {
     cell.addEventListener("click", () => place(cell));
+    cell.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "move";
+    });
+    cell.addEventListener("drop", (event) => {
+      event.preventDefault();
+      selected = event.dataTransfer.getData("text/plain") || selected;
+      place(cell);
+    });
     cell.addEventListener("keydown", (event) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
