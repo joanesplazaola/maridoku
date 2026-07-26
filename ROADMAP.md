@@ -18,6 +18,7 @@
 - [x] Validar solución, asesino, unicidad y necesidad con CP-SAT.
 - [x] Evitar que el jugador revele en vivo la verdad de cada pista.
 - [x] Añadir marcas X, borrador y resaltado pista-objeto.
+- [x] Añadir potenciales de personajes por casilla.
 
 Criterio de salida: “Último servicio” puede jugarse completo y pasa el contrato
 editorial automatizado.

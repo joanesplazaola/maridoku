@@ -214,6 +214,7 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
           <button type="button" data-action="undo" title="Deshacer" aria-label="Deshacer">↶</button>
           <button type="button" data-action="reset" title="Reiniciar" aria-label="Reiniciar">↺</button>
           <button type="button" data-tool="cross" title="Marcar como imposible" aria-label="Marcar como imposible">×</button>
+          <button type="button" data-tool="candidate" title="Marcar posición posible" aria-label="Marcar posición posible">✎</button>
           <button type="button" data-tool="erase" title="Borrar casilla" aria-label="Borrar casilla">⌫</button>
           <button type="button" class="check-button" data-action="check">Comprobar</button>
           <button type="button" data-action="export" title="Exportar sesión" aria-label="Exportar sesión">⇩</button>

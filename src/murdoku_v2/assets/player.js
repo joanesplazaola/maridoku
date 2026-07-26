@@ -12,6 +12,7 @@
   const storageKey = `murdoku:${puzzle.id}:${clueVersion}`;
   const metricsKey = `${storageKey}:metrics`;
   const names = Object.fromEntries(puzzle.characters.map((character) => [character.id, character.name]));
+  const characterOrder = Object.fromEntries(puzzle.characters.map((character, index) => [character.id, index]));
   const blocked = new Set(
     puzzle.board.objects
       .filter((object) => object.blocks_character)
@@ -30,6 +31,7 @@
   let selected = puzzle.characters[0].id;
   let positions = {};
   let crosses = new Set();
+  let notes = {};
   let tool = "person";
   let history = [];
   const emptyMetrics = () => ({
@@ -49,11 +51,13 @@
   const save = () => localStorage.setItem(storageKey, JSON.stringify({
     positions,
     crosses: [...crosses],
+    notes,
   }));
   const saveMetrics = () => localStorage.setItem(metricsKey, JSON.stringify(metrics));
   const snapshot = () => history.push({
     positions: structuredClone(positions),
     crosses: new Set(crosses),
+    notes: structuredClone(notes),
   });
 
   function restore() {
@@ -66,8 +70,18 @@
         ),
       );
       crosses = new Set((stored.crosses || []).filter((cell) => !blocked.has(cell)));
+      notes = Object.fromEntries(
+        Object.entries(stored.notes || {})
+          .filter(([cell]) => !blocked.has(cell))
+          .map(([cell, characters]) => [
+            cell,
+            [...new Set(characters)].filter((character) => names[character]),
+          ])
+          .filter(([, characters]) => characters.length),
+      );
     } catch {
       positions = {};
+      notes = {};
     }
   }
 
@@ -175,9 +189,28 @@
   function render() {
     cells.forEach((cell) => {
       cell.querySelector(".character-token")?.remove();
+      cell.querySelector(".candidate-notes")?.remove();
       cell.classList.toggle("crossed", crosses.has(key(Number(cell.dataset.row), Number(cell.dataset.column))));
       cell.classList.remove("duplicate-row", "duplicate-column");
     });
+    for (const [cellKey, characters] of Object.entries(notes)) {
+      const [row, column] = cellKey.split(",").map(Number);
+      const cell = document.querySelector(`td[data-row="${row}"][data-column="${column}"]`);
+      if (!cell) continue;
+      const container = document.createElement("span");
+      container.className = "candidate-notes";
+      for (const character of [...characters].sort((a, b) => characterOrder[a] - characterOrder[b])) {
+        const selector = document.querySelector(`[data-character="${character}"]`);
+        const token = document.createElement("span");
+        token.className = "candidate-token";
+        token.style.setProperty("--portrait-x", selector.dataset.portraitX);
+        token.style.setProperty("--portrait-y", selector.dataset.portraitY);
+        token.title = `${names[character]} podría estar aquí`;
+        token.setAttribute("aria-label", token.title);
+        container.append(token);
+      }
+      cell.append(container);
+    }
     for (const [character, [row, column]] of Object.entries(positions)) {
       const cell = document.querySelector(`td[data-row="${row}"][data-column="${column}"]`);
       const token = document.createElement("span");
@@ -216,20 +249,46 @@
         return;
       }
       snapshot();
-      crosses.has(cellKey) ? crosses.delete(cellKey) : crosses.add(cellKey);
+      if (crosses.has(cellKey)) {
+        crosses.delete(cellKey);
+      } else {
+        crosses.add(cellKey);
+        delete notes[cellKey];
+      }
       render();
+      return;
+    }
+    if (tool === "candidate") {
+      if (positions[selected]) {
+        status.value = `${names[selected]} ya está colocado`;
+        return;
+      }
+      if (Object.values(positions).some((position) => key(...position) === cellKey)) {
+        status.value = "Esa casilla ya está ocupada";
+        return;
+      }
+      snapshot();
+      crosses.delete(cellKey);
+      const candidates = notes[cellKey] || [];
+      notes[cellKey] = candidates.includes(selected)
+        ? candidates.filter((character) => character !== selected)
+        : [...candidates, selected];
+      if (!notes[cellKey].length) delete notes[cellKey];
+      render();
+      status.value = `${names[selected]}: posición posible`;
       return;
     }
     if (tool === "erase") {
       snapshot();
       crosses.delete(cellKey);
+      delete notes[cellKey];
       const occupant = Object.entries(positions).find(([, position]) => position[0] === row && position[1] === column);
       if (occupant) delete positions[occupant[0]];
       render();
       return;
     }
-    crosses.delete(cellKey);
     snapshot();
+    crosses.delete(cellKey);
     if (positions[selected]?.[0] === row && positions[selected]?.[1] === column) {
       delete positions[selected];
       render();
@@ -238,6 +297,10 @@
     }
     const occupant = Object.entries(positions).find(([, position]) => position[0] === row && position[1] === column);
     if (occupant && occupant[0] !== selected) delete positions[occupant[0]];
+    for (const [noteCell, candidates] of Object.entries(notes)) {
+      notes[noteCell] = candidates.filter((character) => character !== selected);
+      if (!notes[noteCell].length || noteCell === cellKey) delete notes[noteCell];
+    }
     positions[selected] = [row, column];
     render();
     status.value = `${names[selected]}: fila ${row + 1}, columna ${column + 1}`;
@@ -245,12 +308,13 @@
 
   selectors.forEach((button) => button.addEventListener("click", () => {
     selected = button.dataset.character;
-    tool = "person";
+    if (tool !== "candidate") tool = "person";
     render();
     status.value = `${names[selected]} seleccionado`;
   }));
   selectors.forEach((button) => button.addEventListener("dragstart", (event) => {
     selected = button.dataset.character;
+    tool = "person";
     event.dataTransfer.setData("text/plain", selected);
     event.dataTransfer.effectAllowed = "move";
     render();
@@ -282,13 +346,14 @@
     });
   });
   document.querySelector('[data-action="undo"]').addEventListener("click", () => {
-    if (history.length) ({ positions, crosses } = history.pop());
+    if (history.length) ({ positions, crosses, notes } = history.pop());
     render();
   });
   document.querySelector('[data-action="reset"]').addEventListener("click", () => {
     snapshot();
     positions = {};
     crosses.clear();
+    notes = {};
     render();
     status.value = "Tablero reiniciado";
   });

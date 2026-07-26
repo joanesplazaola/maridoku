@@ -359,6 +359,8 @@ def test_render_writes_an_interactive_printable_html(tmp_path: Path) -> None:
     assert 'class="sheet"' in html
     assert '<table aria-label="Tablero" style="--cols:' in html
     assert 'class="game-toolbar"' in html
+    assert 'data-tool="candidate"' in html
+    assert "candidate-notes" in html
     assert 'id="puzzle-data"' in html
     assert "localStorage.setItem" in html
     assert "durationSeconds" in html
@@ -382,6 +384,7 @@ def test_site_builder_publishes_only_reference_cases_without_solutions(tmp_path:
     assert "Último servicio" in index
     assert "V · VÍCTIMA" in level
     assert 'data-tool="cross"' in level
+    assert 'data-tool="candidate"' in level
     assert 'data-tool="erase"' in level
     assert (tmp_path / "levels/001.html").exists()
     assert not list(tmp_path.rglob("solution.json"))
