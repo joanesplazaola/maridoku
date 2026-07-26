@@ -37,12 +37,14 @@ BINARY_TYPES = {
     "same_room",
     "different_room",
 }
-SUPPORTED_TYPES = {"victim_rule", *UNARY_TYPES, *BINARY_TYPES, *COUNT_TYPES}
+GLOBAL_TYPES = {"room_population_at_least"}
+SUPPORTED_TYPES = {"victim_rule", *UNARY_TYPES, *BINARY_TYPES, *COUNT_TYPES, *GLOBAL_TYPES}
 TECHNIQUE_LEVEL = {
     "clue_anchor": 1,
     "unique_object": 1,
     "binary_relation": 1,
     "room_count": 2,
+    "global_room_count": 2,
     "victim_companion": 2,
     "row_matching": 3,
     "column_matching": 3,
@@ -307,6 +309,26 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
                             if any(feasible(subject_cell, (other, cell)) for subject_cell in domains[subject])
                         },
                         "victim_companion" if statement["type"] == "victim_rule" else "room_count",
+                        statement["id"],
+                    )
+
+            for statement in (
+                statement for statement in ctx.statements
+                if statement["type"] == "room_population_at_least"
+            ):
+                room_cells = ctx.room_cells[statement["args"]["room"]]
+                required = int(statement["args"]["count"])
+                for character in ctx.character_ids:
+                    changed |= restrict(
+                        character,
+                        {
+                            cell for cell in domains[character]
+                            if sum(
+                                bool((({cell} if other == character else domains[other]) & room_cells))
+                                for other in ctx.character_ids
+                            ) >= required
+                        },
+                        "global_room_count",
                         statement["id"],
                     )
 

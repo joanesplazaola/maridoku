@@ -53,6 +53,11 @@ def active_statements(
             for statement in card["statements"]
             if statement["id"] != exclude_statement_id
         ]
+        statements.extend(
+            statement
+            for statement in puzzle.get("general_clues", [])
+            if statement["id"] != exclude_statement_id
+        )
     else:
         statements = list(base_statements)
     statements.extend(extra_statements)

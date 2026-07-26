@@ -87,11 +87,16 @@
 
   function statementState(statement) {
     const args = statement.args;
+    const allPlaced = Object.keys(positions).length === puzzle.characters.length;
+    if (statement.type === "room_population_at_least") {
+      if (!allPlaced) return null;
+      return Object.values(positions).filter((position) =>
+        roomAt.get(key(...position)) === args.room).length >= args.count;
+    }
     const own = positions[args.character];
     if (!own) return null;
     const reference = args.reference && positions[args.reference];
     if (args.reference && !reference) return null;
-    const allPlaced = Object.keys(positions).length === puzzle.characters.length;
     const ownRoom = roomAt.get(key(...own));
     const roomOccupants = () => Object.entries(positions)
       .filter(([, position]) => roomAt.get(key(...position)) === ownRoom);
@@ -190,6 +195,11 @@
         valid &&= state !== false;
         complete &&= state !== null;
       }
+    }
+    for (const statement of puzzle.general_clues || []) {
+      const state = statementState(statement);
+      valid &&= state !== false;
+      complete &&= state !== null;
     }
     return { complete, valid };
   }

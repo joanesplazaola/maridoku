@@ -16,7 +16,7 @@ PROJECT = Path(__file__).resolve().parents[1]
 def test_catalogs_define_the_public_contract() -> None:
     from murdoku_v2.text_catalog import text_catalog
 
-    assert len(CLUE_SPECS) == len(catalog_json()) == 24
+    assert len(CLUE_SPECS) == len(catalog_json()) == 25
     assert len(OBJECT_CATALOG) == len(object_catalog_json()) == 11
     assert OBJECT_CATALOG["table"].footprints == ("1x1", "1x2")
     assert OBJECT_CATALOG["dining_table"].footprints == ("1x2",)
@@ -355,6 +355,45 @@ def test_same_diagonal_is_generated_and_solved_end_to_end() -> None:
     assert exact.unique and exact.solutions == [expected]
     assert human["solved"] and human["positions"] == expected
     assert "binary_relation" in human["techniques"]
+
+
+def test_global_room_count_is_solved_and_rendered_end_to_end() -> None:
+    import copy
+
+    from murdoku_v2.human import solve_human
+    from murdoku_v2.models import load_puzzle, validate_puzzle
+    from murdoku_v2.render import render_html
+    from murdoku_v2.solvers.ortools_solver import ORToolsSolver
+
+    case_path = PROJECT / "examples/board_restaurant/case.json"
+    puzzle = load_puzzle(case_path)
+    solution = json.loads((case_path.parent / "solution.json").read_text(encoding="utf-8"))
+    expected = {
+        character: (position["row"], position["column"])
+        for character, position in solution["positions"].items()
+    }
+    puzzle["general_clues"] = [{
+        "id": "general-dining",
+        "type": "room_population_at_least",
+        "family": "global_room",
+        "args": {"room": "dining", "count": 2},
+        "text": "Había al menos 2 personas en el comedor.",
+    }]
+
+    validate_puzzle(puzzle)
+    exact = ORToolsSolver().solve(puzzle, limit=2)
+    human = solve_human(puzzle)
+    html = render_html(puzzle)
+    assert exact.unique and exact.solutions == [expected]
+    assert human["solved"] and human["positions"] == expected
+    assert human["complexity"]["technique_counts"]["global_room_count"] >= 1
+    assert 'class="general-clues"' in html
+    assert "Había al menos 2 personas en el comedor." in html
+
+    invalid = copy.deepcopy(puzzle)
+    invalid["general_clues"][0]["args"]["character"] = "alicia"
+    with pytest.raises(ValidationError):
+        validate_puzzle(invalid)
 
 
 def test_reference_scene_generates_a_complete_variant_without_a_solution_input() -> None:

@@ -133,6 +133,7 @@ class PuzzleModel(BaseModel):
     characters: list[CharacterModel]
     victim: str
     cards: list[CardModel]
+    general_clues: list[StatementModel] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def validate_contract(self) -> "PuzzleModel":
@@ -157,6 +158,8 @@ class PuzzleModel(BaseModel):
                     raise ValueError(
                         f"La afirmación {statement.id} no está centrada en el personaje de su tarjeta."
                     )
+        if any("character" in statement.args for statement in self.general_clues):
+            raise ValueError("Las pistas generales no pueden pertenecer a un personaje.")
         return self
 
 

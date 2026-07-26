@@ -10,7 +10,10 @@ PLAYER_TYPES = {"victim_rule", *CLUE_SPECS}
 
 
 def audit_puzzle(puzzle: dict[str, Any]) -> dict[str, Any]:
-    statements = [statement for card in puzzle["cards"] for statement in card["statements"]]
+    statements = [
+        *puzzle.get("general_clues", []),
+        *(statement for card in puzzle["cards"] for statement in card["statements"]),
+    ]
     families = Counter(statement["family"] for statement in statements)
     types = Counter(statement["type"] for statement in statements)
     normalized = [statement["text"].strip().casefold() for statement in statements]

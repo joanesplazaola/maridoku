@@ -46,6 +46,11 @@ def matches_statement(
     room_at = _room_lookup(board)
     groups = _room_groups(board)
     characters = {character["id"]: character for character in puzzle["characters"]}
+    if statement_type == "room_population_at_least":
+        return sum(
+            room_at[position] == args["room"]
+            for position in positions.values()
+        ) >= args["count"]
     character_id = args["character"]
     row, column = positions[character_id]
     own_room = room_at[(row, column)]

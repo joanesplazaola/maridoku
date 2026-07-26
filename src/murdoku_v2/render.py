@@ -183,6 +183,13 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
     puzzle_data = base64.b64encode(
         json.dumps(puzzle, ensure_ascii=False).encode("utf-8")
     ).decode("ascii")
+    general_clues = ""
+    if puzzle.get("general_clues"):
+        items = "".join(
+            f"<li>{html.escape(statement['text'])}</li>"
+            for statement in puzzle["general_clues"]
+        )
+        general_clues = f'<section class="general-clues" aria-label="Pistas generales"><ul>{items}</ul></section>'
     level_navigation = ""
     if navigation:
         previous = (
@@ -236,7 +243,7 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
           </div>
         </div>
       </aside>
-      <main><div class="section-heading"><span>Declaraciones</span><small>{len(cards)} expedientes</small></div>{''.join(cards)}</main>
+      <main><div class="section-heading"><span>Declaraciones</span><small>{len(cards)} expedientes</small></div>{general_clues}{''.join(cards)}</main>
     </div>
   </div>
   <script type="application/json" id="puzzle-data">{puzzle_data}</script>

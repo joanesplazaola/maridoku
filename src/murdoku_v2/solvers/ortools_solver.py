@@ -331,6 +331,16 @@ class ORToolsSolver:
         model = ctx.model
         typ = statement["type"]
         args = statement["args"]
+        if typ == "room_population_at_least":
+            room_index = ctx.room_index[args["room"]]
+            occupants = []
+            for character in ctx.character_ids:
+                present = model.new_bool_var(f"global_room_{statement['id']}_{character}")
+                model.add(ctx.room[character] == room_index).only_enforce_if(present)
+                model.add(ctx.room[character] != room_index).only_enforce_if(present.Not())
+                occupants.append(present)
+            model.add(sum(occupants) >= int(args["count"]))
+            return
         subject = args["character"]
 
         if typ == "victim_rule":

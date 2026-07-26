@@ -37,6 +37,12 @@ SPECS: tuple[ClueSpec, ...] = (
     ClueSpec("same_diagonal", "relative_diagonal", "Está en la misma diagonal que otra persona."),
     ClueSpec("same_room", "room_relation", "Está en la misma habitación que otra persona."),
     ClueSpec("different_room", "room_relation", "Está en una habitación distinta de otra persona."),
+    ClueSpec(
+        "room_population_at_least",
+        "global_room",
+        "Hay al menos una cantidad de personas en una habitación concreta.",
+        subject_centred=False,
+    ),
 )
 
 CLUE_SPECS = {spec.type: spec for spec in SPECS}
