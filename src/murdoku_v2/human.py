@@ -54,6 +54,22 @@ TECHNIQUE_LEVEL = {
 }
 
 
+def _difficulty(solved: bool, complexity: dict[str, Any]) -> dict[str, Any]:
+    if not solved:
+        return {"label": "unrated", "score": None, "calibration": "technical_estimate"}
+    score = (
+        complexity["deduction_steps"]
+        + complexity["hardest_level"] * 5
+        + complexity["propagation_rounds"] * 3
+    )
+    label = "easy" if score <= 40 else "medium" if score <= 60 else "hard" if score <= 80 else "expert"
+    return {
+        "label": label,
+        "score": score,
+        "calibration": "technical_estimate_not_human_calibrated",
+    }
+
+
 class _Contradiction(Exception):
     pass
 
@@ -433,5 +449,5 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
             for character, domain in domains.items()
         },
         "complexity": complexity,
-        "difficulty": "unrated",
+        "difficulty": _difficulty(solved, complexity),
     }

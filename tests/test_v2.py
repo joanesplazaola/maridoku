@@ -240,7 +240,8 @@ def test_reference_case_has_a_human_deduction_route() -> None:
 
     assert result["solved"]
     assert result["positions"] == expected
-    assert result["difficulty"] == "unrated"
+    assert result["difficulty"]["label"] == "easy"
+    assert result["difficulty"]["calibration"] == "technical_estimate_not_human_calibrated"
     assert {"clue_anchor", "binary_relation", "victim_companion"} <= set(result["techniques"])
     complexity = result["complexity"]
     assert complexity["deduction_steps"] == result["step_count"]
@@ -574,6 +575,18 @@ def test_second_scene_generation_is_varied_and_scene_independent() -> None:
         sum(candidate["type"] == statement["type"] for candidate in statements)
         for statement in statements
     ) <= 2
+
+
+def test_difficulty_uses_the_human_deduction_route() -> None:
+    from murdoku_v2.explainer import explain_puzzle
+    from murdoku_v2.models import load_puzzle
+
+    restaurant = explain_puzzle(load_puzzle(PROJECT / "examples/board_restaurant/case.json"))
+    hotel = explain_puzzle(load_puzzle(PROJECT / "examples/board_hotel/case.json"))
+    assert restaurant["method"] == hotel["method"] == "human_propagation"
+    assert restaurant["difficulty"]["label"] == "easy"
+    assert hotel["difficulty"]["label"] == "medium"
+    assert restaurant["step_count"] < hotel["step_count"]
 
 
 def test_generate_writes_a_fixed_scene_draft(tmp_path: Path) -> None:
