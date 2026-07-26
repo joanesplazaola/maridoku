@@ -143,6 +143,13 @@
     }
     if (statement.type === "in_room_group") return roomGroups[args.group]?.has(ownRoom) || false;
     if (statement.type === "room_disjunction") return args.rooms.includes(ownRoom);
+    if (statement.type === "beside_not_in_zone") {
+      const zone = (puzzle.board.zones || []).find((item) => item.id === args.zone);
+      if (!zone) return false;
+      return !zone.cells.some(([row, column]) => row === own[0] && column === own[1])
+        && zone.cells.some(([row, column]) =>
+          Math.abs(own[0] - row) + Math.abs(own[1] - column) === 1);
+    }
     if (statement.type === "unique_on_object") {
       if (!allPlaced) return null;
       const cells = new Set(objectCells(args.object_type, true).map((cell) => key(...cell)));

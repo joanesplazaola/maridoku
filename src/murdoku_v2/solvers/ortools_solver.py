@@ -418,6 +418,14 @@ class ORToolsSolver:
             allowed_rooms = [ctx.room_index[room_id] for room_id in args["rooms"]]
             self._restrict_int_values(ctx, ctx.room[subject], allowed_rooms, statement["id"])
             return
+        if typ == "beside_not_in_zone":
+            self._restrict_subject_cells(
+                ctx,
+                subject,
+                self._beside_not_in_zone_cells(ctx.puzzle, args["zone"]),
+                statement["id"],
+            )
+            return
         if typ in {"unique_on_object", "unique_adjacent_object"}:
             valid = (
                 self._object_cells_of_type(ctx.puzzle, args["object_type"], occupiable_only=True)
@@ -614,5 +622,22 @@ class ORToolsSolver:
                 abs(row - object_row) + abs(column - object_column) == 1
                 and room_at[(row, column)] == room_at[(object_row, object_column)]
                 for object_row, object_column in object_cells
+            )
+        }
+
+    @staticmethod
+    def _beside_not_in_zone_cells(puzzle: dict[str, Any], zone_id: str) -> set[int]:
+        board = puzzle["board"]
+        columns = int(board["columns"])
+        zone = next(zone for zone in board.get("zones", []) if zone["id"] == zone_id)
+        zone_cells = {tuple(cell) for cell in zone["cells"]}
+        return {
+            row * columns + column
+            for row in range(int(board["rows"]))
+            for column in range(columns)
+            if (row, column) not in zone_cells
+            and any(
+                abs(row - zone_row) + abs(column - zone_column) == 1
+                for zone_row, zone_column in zone_cells
             )
         }

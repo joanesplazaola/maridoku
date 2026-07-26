@@ -22,6 +22,7 @@ UNARY_TYPES = {
     "not_adjacent_object",
     "not_adjacent_to_wall",
     "in_room_corner",
+    "beside_not_in_zone",
 }
 COUNT_TYPES = {
     "room_population",
@@ -141,6 +142,16 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
             return set().union(*(ctx.room_cells[room] for room in args["rooms"]))
         if typ == "alone_in_room":
             return set(ctx.room_cells[args["room"]])
+        if typ == "beside_not_in_zone":
+            zone = ctx.zones[args["zone"]]
+            return {
+                cell for cell in ctx.all_cells - zone
+                if any(
+                    abs(cell // ctx.n - zone_cell // ctx.n)
+                    + abs(cell % ctx.n - zone_cell % ctx.n) == 1
+                    for zone_cell in zone
+                )
+            }
         if typ == "unique_on_object":
             return set(ctx.occupiable_cells_by_type.get(args["object_type"], set()))
         if typ == "not_adjacent_to_wall":

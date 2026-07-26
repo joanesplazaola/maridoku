@@ -33,6 +33,14 @@ class RoomGroupModel(BaseModel):
     rooms: list[str]
 
 
+class ZoneModel(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    id: str
+    name: str
+    clue_label: str | None = None
+    cells: list[tuple[int, int]]
+
+
 class ObjectModel(BaseModel):
     model_config = ConfigDict(extra="allow")
     id: str
@@ -62,6 +70,7 @@ class BoardModel(BaseModel):
     columns: int = Field(gt=0)
     rooms: list[RoomModel]
     room_groups: list[RoomGroupModel] = Field(default_factory=list)
+    zones: list[ZoneModel] = Field(default_factory=list)
     objects: list[ObjectModel] = Field(default_factory=list)
 
     @model_validator(mode="after")
@@ -77,6 +86,14 @@ class BoardModel(BaseModel):
             unknown = set(group.rooms) - room_ids
             if unknown:
                 raise ValueError(f"El grupo {group.id} referencia habitaciones inexistentes: {sorted(unknown)}")
+        zone_ids = {zone.id for zone in self.zones}
+        if len(zone_ids) != len(self.zones):
+            raise ValueError("Hay identificadores de zona repetidos.")
+        for zone in self.zones:
+            if not zone.cells or len(set(zone.cells)) != len(zone.cells):
+                raise ValueError(f"La zona {zone.id} está vacía o repite casillas.")
+            if any(cell not in expected for cell in zone.cells):
+                raise ValueError(f"La zona {zone.id} sale del tablero.")
         room_at = {cell: room.id for room in self.rooms for cell in room.cells}
         for obj in self.objects:
             if any(cell not in expected for cell in obj.cells):

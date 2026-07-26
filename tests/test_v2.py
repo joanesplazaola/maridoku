@@ -16,7 +16,7 @@ PROJECT = Path(__file__).resolve().parents[1]
 def test_catalogs_define_the_public_contract() -> None:
     from murdoku_v2.text_catalog import text_catalog
 
-    assert len(CLUE_SPECS) == len(catalog_json()) == 26
+    assert len(CLUE_SPECS) == len(catalog_json()) == 27
     assert len(OBJECT_CATALOG) == len(object_catalog_json()) == 11
     assert OBJECT_CATALOG["table"].footprints == ("1x1", "1x2")
     assert OBJECT_CATALOG["dining_table"].footprints == ("1x2",)
@@ -762,6 +762,12 @@ def test_rectangular_board_is_solved_and_rendered() -> None:
                 "name": "Hall",
                 "cells": [[row, column] for row in range(2) for column in range(3)],
             }],
+            "zones": [{
+                "id": "water",
+                "name": "Agua",
+                "clue_label": "el agua",
+                "cells": [[0, 1], [0, 2]],
+            }],
             "objects": [],
         },
         "characters": [
@@ -775,7 +781,12 @@ def test_rectangular_board_is_solved_and_rendered() -> None:
                 "character": "ana",
                 "role": "suspect",
                 "statements": [
-                    {"id": "ana-row", "type": "exact_row", "family": "coordinate", "args": {"character": "ana", "row": 0}},
+                    {
+                        "id": "ana-water",
+                        "type": "beside_not_in_zone",
+                        "family": "zone_relation",
+                        "args": {"character": "ana", "zone": "water"},
+                    },
                     {"id": "ana-column", "type": "exact_column", "family": "coordinate", "args": {"character": "ana", "column": 0}},
                 ],
             },
@@ -799,6 +810,7 @@ def test_rectangular_board_is_solved_and_rendered() -> None:
     assert exact.unique and exact.solutions == [expected]
     assert human["solved"] and human["positions"] == expected
     assert "--cols:3;--rows:2" in html
+    assert "zone-cell zone-0" in html
 
 
 def test_solver_registry_uses_cpsat() -> None:

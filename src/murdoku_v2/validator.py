@@ -94,6 +94,13 @@ def matches_statement(
         return own_room in groups[args["group"]]
     if statement_type == "room_disjunction":
         return own_room in args["rooms"]
+    if statement_type == "beside_not_in_zone":
+        zone = next(zone for zone in board.get("zones", []) if zone["id"] == args["zone"])
+        zone_cells = {tuple(cell) for cell in zone["cells"]}
+        return (row, column) not in zone_cells and any(
+            abs(row - zone_row) + abs(column - zone_column) == 1
+            for zone_row, zone_column in zone_cells
+        )
     if statement_type == "unique_on_object":
         object_cells = {
             cell

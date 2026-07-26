@@ -117,11 +117,19 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
         room["id"]: tuple(room.get("label_anchor", room["cells"][0]))
         for room in board["rooms"]
     }
+    zones_at: dict[tuple[int, int], list[int]] = {}
+    for index, zone in enumerate(board.get("zones", [])):
+        for cell in zone["cells"]:
+            zones_at.setdefault(tuple(cell), []).append(index)
     rows = []
     for row in range(board["rows"]):
         cells = []
         for column in range(board["columns"]):
             room = rooms[(row, column)]
+            zone_classes = " ".join(
+                f"zone-cell zone-{index % 3}"
+                for index in zones_at.get((row, column), [])
+            )
             wall_classes = [
                 name
                 for name, neighbor in {
@@ -135,7 +143,7 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
             label = html.escape(room["name"]) if room_labels[room["id"]] == (row, column) else ""
             label_html = f'<span class="room-name">{label}</span>' if label else ""
             cells.append(
-                f"<td class=\"{room_classes[room['id']]} {' '.join(wall_classes)}\" "
+                f"<td class=\"{room_classes[room['id']]} {' '.join(wall_classes)} {zone_classes}\" "
                 f"data-row=\"{row}\" data-column=\"{column}\" tabindex=\"0\" "
                 f"aria-label=\"Fila {row + 1}, columna {column + 1}\">"
                 f"{label_html}</td>"

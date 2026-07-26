@@ -259,6 +259,18 @@ def candidate_pools(
                     {"object_type": object_type},
                     f"{name} estaba en la misma columna y habitación que {phrase}.",
                 ))
+        for zone in board.get("zones", []):
+            zone_cells = {tuple(cell) for cell in zone["cells"]}
+            if (row, column) not in zone_cells and any(
+                abs(row - zone_row) + abs(column - zone_column) == 1
+                for zone_row, zone_column in zone_cells
+            ):
+                label = zone.get("clue_label") or zone["name"]
+                candidates.append((
+                    "beside_not_in_zone",
+                    {"zone": zone["id"]},
+                    f"{name} no estaba en {label}, pero sí a su lado.",
+                ))
 
         pool = []
         for index, (type_, args, text) in enumerate(candidates, start=1):

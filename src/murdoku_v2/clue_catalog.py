@@ -44,6 +44,7 @@ SPECS: tuple[ClueSpec, ...] = (
         "Hay al menos una cantidad de personas en una habitación concreta.",
         subject_centred=False,
     ),
+    ClueSpec("beside_not_in_zone", "zone_relation", "Está fuera de una zona pero ortogonalmente junto a ella."),
 )
 
 CLUE_SPECS = {spec.type: spec for spec in SPECS}
