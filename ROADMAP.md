@@ -83,7 +83,7 @@ Objetivo: convertir generación, revisión y entrega en un flujo repetible.
 - [x] Añadir revisión editorial, aprobación y retirada de puzles.
 - [x] Exigir tests y build correctos antes de desplegar GitHub Pages.
 - [x] Promover a producción únicamente artefactos generados por un commit identificado.
-- [ ] Definir analítica, privacidad, backups y respuesta ante errores de contenido.
+- [x] Definir analítica, privacidad, backups y respuesta ante errores de contenido.
 
 Criterio de salida: un puzle aprobado pasa de seed a producción y puede retirarse
 sin editar archivos manualmente.
