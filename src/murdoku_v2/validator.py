@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import json
-from itertools import permutations
-from pathlib import Path
 from typing import Any
 
 
@@ -13,14 +10,6 @@ def _object_cells(obj: dict[str, Any]) -> list[tuple[int, int]]:
         return [(int(row), int(column)) for row, column in obj["cells"]]
     return [(int(obj["row"]), int(obj["column"]))]
 
-
-def _blocked_character_cells(board: dict[str, Any]) -> set[tuple[int, int]]:
-    return {
-        cell
-        for obj in board.get("objects", [])
-        if obj.get("blocks_character", False)
-        for cell in _object_cells(obj)
-    }
 
 def _room_lookup(board: dict[str, Any]) -> dict[tuple[int, int], str]:
     return {
@@ -144,66 +133,3 @@ def _matches_statement(
         same = own_room == room_at[positions[args["reference"]]]
         return same if statement_type == "same_room" else not same
     raise ValueError(f"Tipo desconocido: {statement_type}")
-
-
-def solve_puzzle(
-    puzzle: dict[str, Any],
-    limit: int = 2,
-    exclude_card_id: str | None = None,
-    exclude_statement_id: str | None = None,
-) -> list[dict[str, tuple[int, int]]]:
-    """Second solver: standard-library enumeration independent from the NumPy generator."""
-    n = puzzle["board"]["rows"]
-    character_ids = [character["id"] for character in puzzle["characters"]]
-    active_statements = [
-        statement
-        for card in puzzle["cards"]
-        if card["id"] != exclude_card_id
-        for statement in card["statements"]
-        if statement["id"] != exclude_statement_id
-    ]
-    found: list[dict[str, tuple[int, int]]] = []
-    blocked = _blocked_character_cells(puzzle["board"])
-
-    for row_perm in permutations(range(n)):
-        for column_perm in permutations(range(n)):
-            positions = {
-                character_id: (row_perm[index], column_perm[index])
-                for index, character_id in enumerate(character_ids)
-            }
-            if any(position in blocked for position in positions.values()):
-                continue
-            if all(_matches_statement(statement, positions, puzzle) for statement in active_statements):
-                found.append(positions)
-                if len(found) >= limit:
-                    return found
-    return found
-
-
-def validate_files(puzzle_path: Path, solution_path: Path) -> dict[str, Any]:
-    puzzle = json.loads(puzzle_path.read_text(encoding="utf-8"))
-    expected = json.loads(solution_path.read_text(encoding="utf-8"))
-    found = solve_puzzle(puzzle, limit=2)
-    unique = len(found) == 1
-    matches_expected = False
-    murderer_matches = False
-    if unique:
-        expected_positions = {
-            character_id: (position["row"], position["column"])
-            for character_id, position in expected["positions"].items()
-        }
-        matches_expected = found[0] == expected_positions
-        room_at = _room_lookup(puzzle["board"])
-        victim = puzzle["victim"]
-        victim_room = room_at[found[0][victim]]
-        companions = [
-            character_id for character_id, position in found[0].items()
-            if character_id != victim and room_at[position] == victim_room
-        ]
-        murderer_matches = companions == [expected["murderer"]]
-    return {
-        "solution_count_up_to_two": len(found),
-        "unique": unique,
-        "matches_generated_solution": matches_expected,
-        "murderer_matches": murderer_matches,
-    }

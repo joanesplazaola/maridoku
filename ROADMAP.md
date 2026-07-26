@@ -15,9 +15,8 @@
 
 ## Dirección técnica
 
-`scaling.py` es la base del futuro generador editorial. La ruta 6x6 de
-`engine.py` queda como referencia temporal para comparar calidad y fixtures,
-pero no recibirá nuevas funciones.
+`scaling.py` es el generador editorial. CP-SAT es el único motor exacto; la
+ruta enumerativa, sus máscaras y su selector ya no forman parte del proyecto.
 
 No volveremos a hacer default un selector CP-SAT que dependa del universo
 enumerado o que termine silenciosamente en máscaras. Una nueva etapa solo
@@ -41,7 +40,7 @@ Objetivo: producir 8x8 y 10x10 variados sin enumerar `(n!)²`.
 6. [x] Sustituir las cadenas sintéticas por familias variadas del catálogo formal.
 7. [x] Añadir un gate reproducible de unicidad, necesidad y presupuesto para 6x6, 8x8 y 10x10.
 8. [x] Superar 100 seeds consecutivas por tamaño y conservar fixtures de regresión.
-9. [ ] Mover `generate` a la ruta escalable y retirar selector, máscaras y universo antiguos.
+9. [x] Mover `generate` a la ruta escalable y retirar selector, máscaras y universo antiguos.
 
 Criterio de salida: 100 casos consecutivos por tamaño, todos únicos, sin pistas
 redundantes y dentro del presupuesto publicado. Ningún caso aceptado puede

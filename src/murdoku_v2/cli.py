@@ -4,7 +4,6 @@ import argparse
 import json
 from pathlib import Path
 
-from .benchmark import run_benchmark, run_benchmark_suite
 from .clue_catalog import catalog_json
 from .explainer import explain_puzzle
 from .object_catalog import catalog_json as object_catalog_json
@@ -16,7 +15,6 @@ from .scaling import (
     run_scaling_generation_regression,
 )
 from .solvers.registry import availability, get_solver
-from .targeted import generate_targeted
 
 
 def _json(data) -> None:
@@ -91,24 +89,6 @@ def main() -> None:
     render_parser.add_argument("--puzzle", type=Path, default=Path("generated/puzzle.json"))
     render_parser.add_argument("--output", type=Path, default=Path("generated/puzzle.html"))
 
-    benchmark_parser = subparsers.add_parser("benchmark", help="Genera muchos casos")
-    benchmark_parser.add_argument("--board", type=Path, default=Path("boards/board_two_houses.json"))
-    benchmark_parser.add_argument("--start-seed", type=int, default=100)
-    benchmark_parser.add_argument("--count", type=int, default=10)
-    benchmark_parser.add_argument("--output", type=Path, default=Path("benchmark"))
-    benchmark_parser.add_argument("--difficulty", choices=["any", "easy", "medium", "hard", "expert"], default="any")
-    benchmark_parser.add_argument("--max-attempts", type=int, default=12)
-    benchmark_parser.add_argument("--target-attempts", type=int, default=16)
-
-    suite_parser = subparsers.add_parser("benchmark-suite", help="Benchmark en todos los tableros")
-    suite_parser.add_argument("--boards", type=Path, default=Path("boards"))
-    suite_parser.add_argument("--start-seed", type=int, default=1000)
-    suite_parser.add_argument("--count-per-board", type=int, default=5)
-    suite_parser.add_argument("--output", type=Path, default=Path("benchmark_suite"))
-    suite_parser.add_argument("--difficulty", choices=["any", "easy", "medium", "hard", "expert"], default="any")
-    suite_parser.add_argument("--max-attempts", type=int, default=12)
-    suite_parser.add_argument("--target-attempts", type=int, default=16)
-
     scale_parser = subparsers.add_parser("scale-benchmark", help="Prueba 6×6, 8×8, 10×10 y 12×12")
     scale_parser.add_argument("--sizes", nargs="+", type=int, default=[6, 8, 10, 12])
     scale_parser.add_argument("--solver", choices=["ortools"], default="ortools")
@@ -148,20 +128,6 @@ def main() -> None:
     elif args.command == "render":
         render_file(args.puzzle, args.output)
         _json({"puzzle": str(args.puzzle), "html": str(args.output)})
-    elif args.command == "benchmark":
-        report = run_benchmark(
-            args.board, args.start_seed, args.count, args.output,
-            difficulty=args.difficulty, max_attempts=args.max_attempts,
-            target_attempts=args.target_attempts,
-        )
-        _json(report["summary"])
-    elif args.command == "benchmark-suite":
-        report = run_benchmark_suite(
-            args.boards, args.start_seed, args.count_per_board, args.output,
-            difficulty=args.difficulty, max_attempts=args.max_attempts,
-            target_attempts=args.target_attempts,
-        )
-        _json(report["summary"])
     elif args.command == "scale-benchmark":
         report = run_scaling_benchmark(
             args.sizes, solver_name=args.solver, repetitions=args.repetitions, output=args.output,
