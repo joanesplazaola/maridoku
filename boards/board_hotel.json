@@ -166,7 +166,8 @@
       "cells": [[2, 6]],
       "layer": "furniture",
       "occupiable": true,
-      "blocks_character": false
+      "blocks_character": false,
+      "rotation": 180
     },
     {
       "id": "rug-corridor",
@@ -184,7 +185,8 @@
       "cells": [[5, 0], [5, 1]],
       "layer": "furniture",
       "occupiable": true,
-      "blocks_character": false
+      "blocks_character": false,
+      "rotation": 180
     },
     {
       "id": "plant-lobby",
@@ -196,9 +198,9 @@
       "blocks_character": true
     },
     {
-      "id": "table-reception",
-      "type": "table",
-      "name": "Mesa redonda",
+      "id": "counter-reception",
+      "type": "counter",
+      "name": "Mostrador",
       "cells": [[4, 4], [4, 5]],
       "layer": "furniture",
       "occupiable": false,
@@ -211,7 +213,8 @@
       "cells": [[5, 5]],
       "layer": "furniture",
       "occupiable": true,
-      "blocks_character": false
+      "blocks_character": false,
+      "rotation": 180
     },
     {
       "id": "counter-bar",
@@ -229,7 +232,8 @@
       "cells": [[5, 6]],
       "layer": "furniture",
       "occupiable": true,
-      "blocks_character": false
+      "blocks_character": false,
+      "rotation": 180
     },
     {
       "id": "rug-lounge",
@@ -247,7 +251,8 @@
       "cells": [[7, 1], [7, 2]],
       "layer": "furniture",
       "occupiable": true,
-      "blocks_character": false
+      "blocks_character": false,
+      "rotation": 180
     },
     {
       "id": "plant-lounge",
@@ -262,7 +267,7 @@
       "id": "dining-table",
       "type": "dining_table",
       "name": "Mesa rectangular",
-      "cells": [[6, 3], [6, 4], [7, 3], [7, 4]],
+      "cells": [[6, 3], [6, 4]],
       "layer": "furniture",
       "occupiable": false,
       "blocks_character": true
@@ -271,10 +276,21 @@
       "id": "chair-dining-a",
       "type": "chair",
       "name": "Silla",
-      "cells": [[6, 5]],
+      "cells": [[7, 3]],
       "layer": "furniture",
       "occupiable": true,
-      "blocks_character": false
+      "blocks_character": false,
+      "rotation": 180
+    },
+    {
+      "id": "chair-dining-b",
+      "type": "chair",
+      "name": "Silla",
+      "cells": [[7, 4]],
+      "layer": "furniture",
+      "occupiable": true,
+      "blocks_character": false,
+      "rotation": 180
     },
     {
       "id": "counter-kitchen",

@@ -428,6 +428,7 @@ td.crossed::after {
   height: 82%;
   background: center / contain no-repeat;
   filter: drop-shadow(0 5px 3px rgb(0 0 0 / 26%));
+  transform: rotate(var(--object-rotation, 0deg));
 }
 
 .object-plant { background-image: url("__PLANT__"); }
@@ -456,16 +457,18 @@ td.crossed::after {
 .object-dining-table { background-image: url("__DINING_TABLE__"); }
 .object-bookshelf { background-image: url("__BOOKSHELF__"); }
 .object-wardrobe { background-image: url("__WARDROBE__"); }
-.object-counter { background-image: url("__COUNTER_L__"); }
+.object-counter { background-image: url("__COUNTER_STRAIGHT__"); }
 
 .object-placement.vertical .object {
-  transform: rotate(90deg);
+  transform: rotate(calc(90deg + var(--object-rotation, 0deg)));
 }
 
 .object-placement.vertical .object-bed,
 .object-placement.vertical .object-dining-table,
 .object-placement.vertical .object-bookshelf,
-.object-placement.vertical .object-wardrobe { transform: none; }
+.object-placement.vertical .object-wardrobe {
+  transform: rotate(var(--object-rotation, 0deg));
+}
 
 .object-placement:not(.vertical) .object-bed {
   background-image: url("__BED_HORIZONTAL__");
@@ -479,30 +482,38 @@ td.crossed::after {
 .object-placement:not(.vertical) .object-wardrobe {
   background-image: url("__WARDROBE_HORIZONTAL__");
 }
+.object-placement.footprint-1x2 .object-table {
+  background-image: url("__DINING_TABLE_HORIZONTAL__");
+}
+
+.object-placement.footprint-L3 .object-counter {
+  background-image: url("__COUNTER_L__");
+}
 
 .shape-l-missing-0-0 .object-rug {
   background-image: url("__RUG_L__");
-  transform: rotate(-90deg);
+  transform: rotate(calc(-90deg + var(--object-rotation, 0deg)));
 }
 
 .shape-l-missing-0-1 .object-rug {
   background-image: url("__RUG_L__");
+  transform: rotate(var(--object-rotation, 0deg));
 }
 
 .shape-l-missing-1-0 .object-rug {
   background-image: url("__RUG_L__");
-  transform: rotate(180deg);
+  transform: rotate(calc(180deg + var(--object-rotation, 0deg)));
 }
 
 .shape-l-missing-1-1 .object-rug {
   background-image: url("__RUG_L__");
-  transform: rotate(90deg);
+  transform: rotate(calc(90deg + var(--object-rotation, 0deg)));
 }
 
-.shape-l-missing-1-0 .object-counter { transform: none; }
-.shape-l-missing-0-0 .object-counter { transform: rotate(90deg); }
-.shape-l-missing-0-1 .object-counter { transform: rotate(180deg); }
-.shape-l-missing-1-1 .object-counter { transform: rotate(-90deg); }
+.shape-l-missing-1-0 .object-counter { transform: rotate(var(--object-rotation, 0deg)); }
+.shape-l-missing-0-0 .object-counter { transform: rotate(calc(90deg + var(--object-rotation, 0deg))); }
+.shape-l-missing-0-1 .object-counter { transform: rotate(calc(180deg + var(--object-rotation, 0deg))); }
+.shape-l-missing-1-1 .object-counter { transform: rotate(calc(-90deg + var(--object-rotation, 0deg))); }
 
 main {
   display: grid;

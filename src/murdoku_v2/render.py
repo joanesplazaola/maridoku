@@ -50,7 +50,14 @@ def _object_placement(obj: dict[str, Any]) -> str:
         for column in range(min_column, max_column + 1)
         if (row, column) not in cells
     }
-    shape = ""
+    footprint = "1x1"
+    if len(cells) == 2 and {height, width} == {1, 2}:
+        footprint = "1x2"
+    elif len(cells) == 4 and height == width == 2:
+        footprint = "2x2"
+    elif len(cells) == 3 and height == width == 2:
+        footprint = "L3"
+    shape = f" footprint-{footprint}"
     if height == width == 2 and len(cells) == 3:
         shape = f" shape-l-missing-{next(iter(missing))[0]}-{next(iter(missing))[1]}"
     if height > width:
@@ -58,7 +65,8 @@ def _object_placement(obj: dict[str, Any]) -> str:
     layer = " floor-object" if obj.get("layer") == "floor" else ""
     style = (
         f"--object-row:{min_row + 1};--object-column:{min_column + 1};"
-        f"--object-height:{height};--object-width:{width}"
+        f"--object-height:{height};--object-width:{width};"
+        f"--object-rotation:{int(obj.get('rotation', 0))}deg"
     )
     return (
         f'<div class="object-placement{layer}{shape}" '
@@ -89,6 +97,7 @@ def _stylesheet() -> str:
         "__WARDROBE__": assets.joinpath("furniture/wardrobe.webp"),
         "__WARDROBE_HORIZONTAL__": assets.joinpath("furniture/wardrobe-horizontal.webp"),
         "__COUNTER_L__": assets.joinpath("furniture/counter-l.webp"),
+        "__COUNTER_STRAIGHT__": assets.joinpath("furniture/counter-straight.webp"),
     }
     for marker, asset in replacements.items():
         data = base64.b64encode(asset.read_bytes()).decode("ascii")

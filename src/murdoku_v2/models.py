@@ -43,6 +43,7 @@ class ObjectModel(BaseModel):
     column: int | None = None
     occupiable: bool = False
     blocks_character: bool = False
+    rotation: Literal[0, 90, 180, 270] = 0
 
     @model_validator(mode="after")
     def normalise_cells(self) -> "ObjectModel":

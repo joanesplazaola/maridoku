@@ -19,7 +19,7 @@ SPECS = (
     ObjectSpec("chair", "Silla", ("1x1",), occupiable=True, blocks_character=False),
     ObjectSpec("tv", "Televisión", ("1x1",)),
     ObjectSpec("table", "Mesa redonda", ("1x1", "1x2")),
-    ObjectSpec("dining_table", "Mesa rectangular", ("1x2", "2x2")),
+    ObjectSpec("dining_table", "Mesa rectangular", ("1x2",)),
     ObjectSpec("sofa", "Sofá", ("1x1", "1x2"), occupiable=True, blocks_character=False),
     ObjectSpec("bed", "Cama individual", ("1x2",), occupiable=True, blocks_character=False),
     ObjectSpec("rug", "Alfombra", ("1x1", "1x2", "2x2", "L3"), "floor", True, False),

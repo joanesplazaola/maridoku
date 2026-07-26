@@ -19,6 +19,7 @@ def test_catalogs_define_the_public_contract() -> None:
     assert len(CLUE_SPECS) == len(catalog_json()) == 22
     assert len(OBJECT_CATALOG) == len(object_catalog_json()) == 11
     assert OBJECT_CATALOG["table"].footprints == ("1x1", "1x2")
+    assert OBJECT_CATALOG["dining_table"].footprints == ("1x2",)
     assert OBJECT_CATALOG["bed"].footprints == ("1x2",)
     assert OBJECT_CATALOG["counter"].footprints == ("1x2", "L3")
     assert footprint_kind([(0, 0), (0, 1), (1, 0)]) == "L3"
@@ -420,9 +421,13 @@ def test_render_writes_an_interactive_printable_html(tmp_path: Path) -> None:
     assert "data:image/webp;base64," in html
     assert 'class="furniture-layer"' in html
     assert "--object-width:2" in html
+    assert "footprint-1x2" in html
     assert ">1.1<" not in html
     assert "Alicia estaba en el comedor" not in html
     assert "Estaba en el comedor." in html
+
+    render_file(PROJECT / "examples/board_hotel/case.json", output)
+    assert "--object-rotation:180deg" in output.read_text(encoding="utf-8")
 
 
 def test_site_builder_publishes_only_reference_cases_without_solutions(tmp_path: Path) -> None:
@@ -504,6 +509,11 @@ def test_pydantic_contract_rejects_invalid_content() -> None:
     wrong_footprint["board"]["objects"][0]["cells"] = [[0, 0], [0, 2]]
     with pytest.raises(ValidationError):
         validate_puzzle(wrong_footprint)
+
+    wrong_rotation = copy.deepcopy(puzzle)
+    wrong_rotation["board"]["objects"][0]["rotation"] = 45
+    with pytest.raises(ValidationError):
+        validate_puzzle(wrong_rotation)
 
 
 def test_solver_registry_uses_cpsat() -> None:
