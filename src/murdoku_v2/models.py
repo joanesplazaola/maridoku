@@ -137,10 +137,8 @@ class PuzzleModel(BaseModel):
 
     @model_validator(mode="after")
     def validate_contract(self) -> "PuzzleModel":
-        if self.board.rows != self.board.columns:
-            raise ValueError("El tablero debe ser cuadrado para la regla de filas y columnas.")
-        if len(self.characters) != self.board.rows:
-            raise ValueError("Debe haber tantos personajes como filas y columnas.")
+        if len(self.characters) != min(self.board.rows, self.board.columns):
+            raise ValueError("Debe haber tantos personajes como líneas tenga el lado menor.")
         character_ids = [character.id for character in self.characters]
         if len(set(character_ids)) != len(character_ids):
             raise ValueError("Hay identificadores de personaje repetidos.")

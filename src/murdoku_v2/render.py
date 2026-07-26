@@ -149,8 +149,10 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
     cards = []
     gender_slots = {"woman": 0, "man": 0}
     gender_by_character = {character["id"]: character.get("gender", "woman") for character in puzzle["characters"]}
+    name_by_character = {character["id"]: character["name"] for character in puzzle["characters"]}
     for card in puzzle["cards"]:
         gender = gender_by_character.get(card["character"], "woman")
+        character_name = card.get("character_name") or name_by_character[card["character"]]
         statement_items = []
         for statement in card["statements"]:
             object_type = statement["args"].get("object_type")
@@ -160,7 +162,7 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
             )
             statement_items.append(
                 f'<li data-statement="{html.escape(statement["id"])}"{object_attribute}>'
-                f"{html.escape(_display_statement(statement['text'], card['character_name'], gender))}</li>"
+                f"{html.escape(_display_statement(statement.get('text', ''), character_name, gender))}</li>"
             )
         statements = "".join(statement_items)
         portrait_column = min(gender_slots.get(gender, 0), 3)
@@ -172,10 +174,10 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
             f"<article class=\"card {html.escape(card['role'])}\" data-card=\"{html.escape(card['character'])}\">"
             f"<button class=\"person-select\" type=\"button\" data-character=\"{html.escape(card['character'])}\" "
             f"data-portrait-x=\"{portrait_x}%\" data-portrait-y=\"{portrait_y}%\" draggable=\"true\" "
-            f"aria-label=\"Seleccionar a {html.escape(card['character_name'])}\">"
+            f"aria-label=\"Seleccionar a {html.escape(character_name)}\">"
             f"<span class=\"portrait\" style=\"--portrait-x:{portrait_x}%;--portrait-y:{portrait_y}%\" "
-            f"role=\"img\" aria-label=\"Retrato de {html.escape(card['character_name'])}\"></span>"
-            f"<span><h2>{html.escape(card['character_name'])}</h2>"
+            f"role=\"img\" aria-label=\"Retrato de {html.escape(character_name)}\"></span>"
+            f"<span><h2>{html.escape(character_name)}</h2>"
             f"{victim_badge}"
             f"</span></button>"
             f"<ol>{statements}</ol></article>"
@@ -186,7 +188,7 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
     general_clues = ""
     if puzzle.get("general_clues"):
         items = "".join(
-            f"<li>{html.escape(statement['text'])}</li>"
+            f"<li>{html.escape(statement.get('text', ''))}</li>"
             for statement in puzzle["general_clues"]
         )
         general_clues = f'<section class="general-clues" aria-label="Pistas generales"><ul>{items}</ul></section>'
@@ -237,8 +239,8 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
           <output class="game-status" aria-live="polite">Coloca a los personajes</output>
         </div>
         <div class="board-frame">
-          <div class="board-stage" style="--cols: {int(board['columns'])}">
-            <table aria-label="Tablero" style="--cols: {int(board['columns'])}">{''.join(rows)}</table>
+          <div class="board-stage" style="--cols:{int(board['columns'])};--rows:{int(board['rows'])}">
+            <table aria-label="Tablero" style="--cols:{int(board['columns'])};--rows:{int(board['rows'])}">{''.join(rows)}</table>
             <div class="furniture-layer" aria-label="Mobiliario">{furniture}</div>
           </div>
         </div>

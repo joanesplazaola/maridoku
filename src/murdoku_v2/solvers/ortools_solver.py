@@ -23,6 +23,7 @@ class _CpSatContext:
     room_index: dict[str, int]
     room_at_cell: list[int]
     allowed_cells: list[int]
+    rows: int
     n: int
     puzzle: dict[str, Any]
 
@@ -266,7 +267,8 @@ class ORToolsSolver:
     ) -> _CpSatContext:
         validate_puzzle(puzzle)
         board = puzzle["board"]
-        n = int(board["rows"])
+        rows = int(board["rows"])
+        n = int(board["columns"])
         character_ids = [character["id"] for character in puzzle["characters"]]
         room_ids = [room["id"] for room in board["rooms"]]
         room_index = {room_id: index for index, room_id in enumerate(room_ids)}
@@ -277,7 +279,7 @@ class ORToolsSolver:
         }
         room_at_cell = [
             room_index[room_at_tuple[divmod(cell_value, n)]]
-            for cell_value in range(n * n)
+            for cell_value in range(rows * n)
         ]
         blocked = {
             int(row) * n + int(column)
@@ -285,8 +287,8 @@ class ORToolsSolver:
             if obj.get("blocks_character", False)
             for row, column in self._object_cells(obj)
         }
-        allowed_cells = [cell_value for cell_value in range(n * n) if cell_value not in blocked]
-        if len(allowed_cells) < n:
+        allowed_cells = [cell_value for cell_value in range(rows * n) if cell_value not in blocked]
+        if len(allowed_cells) < len(character_ids):
             raise ValueError("No hay suficientes casillas transitables para todos los personajes.")
 
         model = cp_model.CpModel()
@@ -298,7 +300,7 @@ class ORToolsSolver:
 
         for character in character_ids:
             cell[character] = model.new_int_var_from_domain(cell_domain, f"cell_{character}")
-            row[character] = model.new_int_var(0, n - 1, f"row_{character}")
+            row[character] = model.new_int_var(0, rows - 1, f"row_{character}")
             column[character] = model.new_int_var(0, n - 1, f"column_{character}")
             room[character] = model.new_int_var(0, len(room_ids) - 1, f"room_{character}")
             model.add_division_equality(row[character], cell[character], n)
@@ -320,6 +322,7 @@ class ORToolsSolver:
             room_index=room_index,
             room_at_cell=room_at_cell,
             allowed_cells=allowed_cells,
+            rows=rows,
             n=n,
             puzzle=puzzle,
         )
@@ -470,7 +473,7 @@ class ORToolsSolver:
             return
         if typ == "same_diagonal":
             reference = args["reference"]
-            row_gap = model.new_int_var(0, ctx.n - 1, f"diagonal_row_{statement['id']}")
+            row_gap = model.new_int_var(0, ctx.rows - 1, f"diagonal_row_{statement['id']}")
             column_gap = model.new_int_var(0, ctx.n - 1, f"diagonal_column_{statement['id']}")
             model.add_abs_equality(row_gap, ctx.row[subject] - ctx.row[reference])
             model.add_abs_equality(column_gap, ctx.column[subject] - ctx.column[reference])
@@ -522,7 +525,7 @@ class ORToolsSolver:
         return [(int(obj["row"]), int(obj["column"]))]
 
     def _object_cells_of_type(self, puzzle: dict[str, Any], object_type: str, *, occupiable_only: bool = False) -> set[int]:
-        n = int(puzzle["board"]["rows"])
+        n = int(puzzle["board"]["columns"])
         return {
             row * n + column
             for obj in puzzle["board"].get("objects", [])
@@ -551,18 +554,20 @@ class ORToolsSolver:
         }
 
     def _cells_not_adjacent_to_wall(self, puzzle: dict[str, Any]) -> set[int]:
-        n = int(puzzle["board"]["rows"])
+        rows = int(puzzle["board"]["rows"])
+        n = int(puzzle["board"]["columns"])
         return {
             row * n + column
-            for row in range(n)
+            for row in range(rows)
             for column in range(n)
             if not any(self._walls(puzzle, row, column).values())
         }
 
     def _room_corner_cells(self, puzzle: dict[str, Any]) -> set[int]:
-        n = int(puzzle["board"]["rows"])
+        rows = int(puzzle["board"]["rows"])
+        n = int(puzzle["board"]["columns"])
         result: set[int] = set()
-        for row in range(n):
+        for row in range(rows):
             for column in range(n):
                 walls = self._walls(puzzle, row, column)
                 if (walls["north"] or walls["south"]) and (walls["west"] or walls["east"]):
@@ -570,7 +575,8 @@ class ORToolsSolver:
         return result
 
     def _object_line_cells(self, puzzle: dict[str, Any], object_type: str, *, same_row: bool) -> set[int]:
-        n = int(puzzle["board"]["rows"])
+        rows = int(puzzle["board"]["rows"])
+        n = int(puzzle["board"]["columns"])
         room_at = self._room_at(puzzle)
         object_cells = [
             cell
@@ -579,7 +585,7 @@ class ORToolsSolver:
             for cell in self._object_cells(obj)
         ]
         result: set[int] = set()
-        for row in range(n):
+        for row in range(rows):
             for column in range(n):
                 own_room = room_at[(row, column)]
                 if any(
@@ -591,7 +597,8 @@ class ORToolsSolver:
         return result
 
     def _adjacent_object_cells(self, puzzle: dict[str, Any], object_type: str) -> set[int]:
-        n = int(puzzle["board"]["rows"])
+        rows = int(puzzle["board"]["rows"])
+        n = int(puzzle["board"]["columns"])
         room_at = self._room_at(puzzle)
         object_cells = [
             cell
@@ -601,7 +608,7 @@ class ORToolsSolver:
         ]
         return {
             row * n + column
-            for row in range(n)
+            for row in range(rows)
             for column in range(n)
             if any(
                 abs(row - object_row) + abs(column - object_column) == 1

@@ -238,12 +238,12 @@ h1 {
 
 .board-stage {
   position: relative;
-  aspect-ratio: 1;
+  aspect-ratio: var(--cols) / var(--rows);
 }
 
 table {
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: var(--cols) / var(--rows);
   border-collapse: collapse;
   table-layout: fixed;
   background: #eeeae0;
@@ -254,7 +254,7 @@ tbody {
 }
 
 tr {
-  height: calc(100% / var(--cols));
+  height: calc(100% / var(--rows));
 }
 
 td {
@@ -319,7 +319,7 @@ td.crossed::after {
   inset: 0;
   display: grid;
   grid-template-columns: repeat(var(--cols), 1fr);
-  grid-template-rows: repeat(var(--cols), 1fr);
+  grid-template-rows: repeat(var(--rows), 1fr);
   pointer-events: none;
 }
 

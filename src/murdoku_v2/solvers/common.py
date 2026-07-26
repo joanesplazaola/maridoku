@@ -71,7 +71,8 @@ def build_context(
 ) -> SolverContext:
     validate_puzzle(puzzle)
     board = puzzle["board"]
-    n = int(board["rows"])
+    rows = int(board["rows"])
+    n = int(board["columns"])
     room_at_tuple = {
         tuple(cell): room["id"]
         for room in board["rooms"]
@@ -100,12 +101,12 @@ def build_context(
             occupiable_cells_by_type.setdefault(obj["type"], set()).update(cells)
 
     geometry: dict[int, dict[str, bool]] = {}
-    for row in range(n):
+    for row in range(rows):
         for column in range(n):
             own_room = room_at_tuple[(row, column)]
             geometry[row * n + column] = {
                 "north": row == 0 or room_at_tuple[(row - 1, column)] != own_room,
-                "south": row == n - 1 or room_at_tuple[(row + 1, column)] != own_room,
+                "south": row == rows - 1 or room_at_tuple[(row + 1, column)] != own_room,
                 "west": column == 0 or room_at_tuple[(row, column - 1)] != own_room,
                 "east": column == n - 1 or room_at_tuple[(row, column + 1)] != own_room,
             }
@@ -123,7 +124,7 @@ def build_context(
         room_cells=room_cells,
         groups=groups,
         blocked_cells=blocked,
-        all_cells=set(range(n * n)) - blocked,
+        all_cells=set(range(rows * n)) - blocked,
         object_cells_by_type=object_cells_by_type,
         occupiable_cells_by_type=occupiable_cells_by_type,
         geometry=geometry,

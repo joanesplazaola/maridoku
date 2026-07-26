@@ -742,6 +742,65 @@ def test_pydantic_contract_rejects_invalid_content() -> None:
         validate_puzzle(wrong_rotation)
 
 
+def test_rectangular_board_is_solved_and_rendered() -> None:
+    from murdoku_v2.human import solve_human
+    from murdoku_v2.models import validate_puzzle
+    from murdoku_v2.render import render_html
+    from murdoku_v2.solvers.ortools_solver import ORToolsSolver
+
+    puzzle = {
+        "schema_version": 8,
+        "id": "rectangular-contract",
+        "seed": 1,
+        "board": {
+            "id": "rectangular-board",
+            "name": "Rectangular",
+            "rows": 2,
+            "columns": 3,
+            "rooms": [{
+                "id": "hall",
+                "name": "Hall",
+                "cells": [[row, column] for row in range(2) for column in range(3)],
+            }],
+            "objects": [],
+        },
+        "characters": [
+            {"id": "ana", "name": "Ana", "gender": "woman", "role": "suspect"},
+            {"id": "victor", "name": "Víctor", "gender": "man", "role": "victim"},
+        ],
+        "victim": "victor",
+        "cards": [
+            {
+                "id": "card-ana",
+                "character": "ana",
+                "role": "suspect",
+                "statements": [
+                    {"id": "ana-row", "type": "exact_row", "family": "coordinate", "args": {"character": "ana", "row": 0}},
+                    {"id": "ana-column", "type": "exact_column", "family": "coordinate", "args": {"character": "ana", "column": 0}},
+                ],
+            },
+            {
+                "id": "card-victor",
+                "character": "victor",
+                "role": "victim",
+                "statements": [
+                    {"id": "victim-rule", "type": "victim_rule", "family": "murder_rule", "args": {"character": "victor"}},
+                    {"id": "victor-column", "type": "exact_column", "family": "coordinate", "args": {"character": "victor", "column": 2}},
+                ],
+            },
+        ],
+    }
+    expected = {"ana": (0, 0), "victor": (1, 2)}
+
+    validate_puzzle(puzzle)
+    exact = ORToolsSolver().solve(puzzle, limit=2)
+    human = solve_human(puzzle)
+    html = render_html(puzzle)
+    assert exact.unique and exact.solutions == [expected]
+    assert human["solved"] and human["positions"] == expected
+    assert "--cols:3;--rows:2" in html
+
+
 def test_solver_registry_uses_cpsat() -> None:
     from murdoku_v2.solvers.registry import get_solver
 

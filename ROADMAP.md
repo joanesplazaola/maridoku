@@ -41,7 +41,8 @@ editorial automatizado.
 - [ ] Añadir pistas globales, negativas, diagonales y de unicidad como cortes verticales completos.
 - [ ] Ampliar objetos solo cuando una escena aprobada los necesite.
 - [ ] Modelar zonas superpuestas y secuencias temáticas para mecánicas especiales.
-- [ ] Admitir tableros rectangulares y tamaños de 5×5 a 16×16.
+- [x] Admitir tableros rectangulares con personajes según el lado menor.
+- [ ] Verificar generación y render en tamaños de 5×5 a 16×16.
 - [ ] Sustituir `scaling.py` por un generador que elija solución sobre una escena fija.
 - [ ] Crear tres casos de referencia: fácil, medio y difícil.
 
