@@ -10,6 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
+from .explainer import explain_puzzle
 from .object_catalog import OBJECT_CATALOG
 from .solvers.registry import get_solver
 
@@ -771,15 +772,11 @@ def generate_scaling_case(
             "stats": result.stats.to_dict(),
         },
         "generation_ms": round(elapsed_ms, 3),
-        "human_solver_available": False,
+        "exact_explanation_available": True,
         "all_suspect_clues_necessary": True,
         "removed_implied_clues": removed_clues,
     }
-    explanation = {
-        "puzzle_id": puzzle["id"],
-        "available": False,
-        "reason": "La explicación deductiva actual usa enumeración 6x6; este caso se valida con CP-SAT.",
-    }
+    explanation = explain_puzzle(puzzle)
     generation_report = {
         "puzzle_id": puzzle["id"],
         "summary": {

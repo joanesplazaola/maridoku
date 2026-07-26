@@ -468,6 +468,8 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     assert len(objects["counter"]["cells"]) == 3
     assert result["diagnostics"]["exact_validation"]["unique"] is True
     assert result["diagnostics"]["all_suspect_clues_necessary"] is True
+    assert result["explanation"]["method"] == "incremental_cp_sat"
+    assert result["explanation"]["unique"] is True
     assert result["diagnostics"]["requested_seed"] == 9001
     assert result["diagnostics"]["target_attempts"] >= 1
     assert {

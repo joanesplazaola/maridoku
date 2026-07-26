@@ -6,7 +6,7 @@ from pathlib import Path
 
 from .benchmark import run_benchmark, run_benchmark_suite
 from .clue_catalog import catalog_json
-from .human_solver import analyze_puzzle
+from .explainer import explain_puzzle
 from .object_catalog import catalog_json as object_catalog_json
 from .render import render_file
 from .scaling import (
@@ -136,10 +136,10 @@ def main() -> None:
         _json(_validate_with_solver(args.puzzle, args.solution, args.solver))
     elif args.command == "explain":
         puzzle = json.loads(args.puzzle.read_text(encoding="utf-8"))
-        explanation = analyze_puzzle(puzzle)
+        explanation = explain_puzzle(puzzle)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(explanation, ensure_ascii=False, indent=2), encoding="utf-8")
-        _json({"puzzle": explanation["puzzle_id"], "difficulty": explanation["difficulty"], "steps": explanation["step_count"]})
+        _json({"puzzle": explanation["puzzle_id"], "difficulty": explanation["difficulty"]["label"], "steps": explanation["step_count"]})
     elif args.command == "render":
         render_file(args.puzzle, args.output)
         _json({"puzzle": str(args.puzzle), "html": str(args.output)})
