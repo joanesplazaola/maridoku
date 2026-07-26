@@ -1,12 +1,18 @@
 from __future__ import annotations
 
+import hashlib
+import json
+import os
+from pathlib import Path
 from typing import Any
 
 from .candidates import candidate_pools
 from .editorial import audit_puzzle
-from .models import validate_puzzle
+from .explainer import explain_puzzle
+from .models import load_puzzle, validate_puzzle
 from .selection import apply_clues, select_clues
 from .solvers.registry import get_solver
+from .text_catalog import text_catalog
 
 
 def generate_variant(
@@ -113,3 +119,60 @@ def generate_variant(
     raise RuntimeError(
         f"No se encontró una variante publicable en {max_target_attempts} objetivos."
     )
+
+
+def generate_case(case_path: Path, seed: int, output: Path) -> dict[str, Any]:
+    """Generate and persist a draft from an approved fixed scene."""
+    result = generate_variant(load_puzzle(case_path), seed)
+    puzzle = result["puzzle"]
+    artifacts = {
+        **result,
+        "explanation": explain_puzzle(puzzle),
+        "generation_report": {
+            "puzzle_id": puzzle["id"],
+            "summary": {
+                "accepted": True,
+                "method": "fixed_scene",
+                "seed": seed,
+            },
+        },
+    }
+    encoded = {
+        name: json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8")
+        for name, data in artifacts.items()
+        if name in {"puzzle", "solution", "diagnostics", "explanation", "generation_report"}
+    }
+    manifest = {
+        "schema_version": 1,
+        "puzzle_id": puzzle["id"],
+        "puzzle_schema_version": puzzle["schema_version"],
+        "generator": "fixed_scene",
+        "generator_commit": os.environ.get("MURDOKU_COMMIT", "local"),
+        "text_locale": "es",
+        "text_version": text_catalog()["version"],
+        "seed": seed,
+        "source_case": str(case_path),
+        "editorial_status": "draft",
+        "private_solution": {
+            "path": "solution.json",
+            "sha256": hashlib.sha256(encoded["solution"]).hexdigest(),
+        },
+        "public_puzzle": {
+            "path": "puzzle.json",
+            "sha256": hashlib.sha256(encoded["puzzle"]).hexdigest(),
+        },
+        "metrics": {
+            "rows": puzzle["board"]["rows"],
+            "columns": puzzle["board"]["columns"],
+            "unique": result["diagnostics"]["exact_unique"],
+            "families": result["diagnostics"]["families"],
+            "human_complexity": result["diagnostics"]["human_complexity"],
+        },
+    }
+    output.mkdir(parents=True, exist_ok=True)
+    for name, data in encoded.items():
+        (output / f"{name}.json").write_bytes(data)
+    (output / "manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    return {**artifacts, "manifest": manifest}

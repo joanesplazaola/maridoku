@@ -6,12 +6,12 @@ from pathlib import Path
 
 from .clue_catalog import catalog_json
 from .explainer import explain_puzzle
+from .generation import generate_case
 from .models import load_puzzle
 from .object_catalog import catalog_json as object_catalog_json
 from .publication import set_editorial_status
 from .render import render_file
 from .scaling import (
-    generate_scaling_case,
     run_scaling_benchmark,
     run_scaling_generation_regression,
 )
@@ -27,10 +27,13 @@ def _generation_summary(result: dict) -> dict:
     return {
         "puzzle": result["puzzle"]["id"],
         "seed": result["puzzle"]["seed"],
-        "size": result["puzzle"]["board"]["rows"],
+        "size": [
+            result["puzzle"]["board"]["rows"],
+            result["puzzle"]["board"]["columns"],
+        ],
         "victim": result["solution"]["victim_name"],
         "murderer": result["solution"]["murderer_name"],
-        "exact": result["diagnostics"]["exact_validation"],
+        "unique": result["diagnostics"]["exact_unique"],
     }
 
 
@@ -68,15 +71,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generador local de Murdoku")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    generate_parser = subparsers.add_parser("generate", help="Genera un caso JSON")
-    generate_parser.add_argument("--size", type=int, default=8)
+    generate_parser = subparsers.add_parser("generate", help="Genera una variante sobre una escena fija")
+    generate_parser.add_argument(
+        "--case",
+        type=Path,
+        default=Path("examples/board_restaurant/case.json"),
+    )
     generate_parser.add_argument("--seed", type=int, default=12345)
     generate_parser.add_argument("--output", type=Path, default=Path("generated"))
-
-    generate_scale_parser = subparsers.add_parser("generate-scale", help="Genera un caso escalable CP-SAT")
-    generate_scale_parser.add_argument("--size", type=int, default=10)
-    generate_scale_parser.add_argument("--seed", type=int, default=12345)
-    generate_scale_parser.add_argument("--output", type=Path, default=Path("generated_scale"))
 
     validate_parser = subparsers.add_parser("validate", help="Valida un caso con el motor elegido")
     validate_parser.add_argument("--puzzle", type=Path, default=Path("generated/puzzle.json"))
@@ -117,10 +119,7 @@ def main() -> None:
 
     args = parser.parse_args()
     if args.command == "generate":
-        result = generate_scaling_case(args.size, args.seed, args.output)
-        _json(_generation_summary(result))
-    elif args.command == "generate-scale":
-        result = generate_scaling_case(args.size, args.seed, args.output)
+        result = generate_case(args.case, args.seed, args.output)
         _json(_generation_summary(result))
     elif args.command == "validate":
         _json(_validate_with_solver(args.puzzle, args.solution, args.solver))

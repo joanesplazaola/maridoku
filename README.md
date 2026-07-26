@@ -87,23 +87,17 @@ uv run murdoku-v2 validate \
   --solver ortools
 ```
 
-## Generar un caso sintético
-
-Esta ruta mide escalabilidad de CP-SAT. Su salida no se publica como contenido
-editorial.
+## Generar una variante sobre una escena fija
 
 ```bash
 uv run murdoku-v2 generate \
-  --size 8 \
+  --case examples/board_restaurant/case.json \
   --seed 6201 \
   --output generated_local
 ```
 
-`generate-scale` se mantiene como alias compatible:
-
-```bash
-uv run murdoku-v2 generate-scale --size 10 --seed 6201 --output generated_scale
-```
+La geometría y el mobiliario proceden siempre del caso de entrada; el generador
+elige la solución y las pistas.
 
 Para generar una hoja HTML imprimible:
 

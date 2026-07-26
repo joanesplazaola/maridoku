@@ -568,32 +568,19 @@ def test_second_scene_generation_is_varied_and_scene_independent() -> None:
     ) <= 2
 
 
-def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
-    from murdoku_v2.scaling import generate_scaling_case
+def test_generate_writes_a_fixed_scene_draft(tmp_path: Path) -> None:
+    from murdoku_v2.generation import generate_case
+    from murdoku_v2.models import load_puzzle
 
-    result = generate_scaling_case(10, 9001, tmp_path)
-    objects = {obj["type"]: obj for obj in result["puzzle"]["board"]["objects"]}
-    assert len(objects) >= 9
-    assert len(objects["rug"]["cells"]) == 3
-    assert len(objects["bed"]["cells"]) == 2
-    assert len(objects["counter"]["cells"]) == 3
-    assert result["diagnostics"]["exact_validation"]["unique"]
-    assert result["diagnostics"]["all_suspect_clues_necessary"]
-    assert result["diagnostics"]["editorial_audit"]["accepted"]
-    assert result["diagnostics"]["editorial_audit"]["warnings"] == []
-    assert result["explanation"]["method"] == "incremental_cp_sat"
+    source = PROJECT / "examples/board_restaurant/case.json"
+    result = generate_case(source, 20260726, tmp_path)
+    assert result["puzzle"]["board"] == load_puzzle(source)["board"]
+    assert result["diagnostics"]["exact_unique"]
     assert result["explanation"]["unique"]
     assert result["manifest"]["editorial_status"] == "draft"
+    assert result["manifest"]["generator"] == "fixed_scene"
     assert result["manifest"]["text_locale"] == "es"
     assert result["manifest"]["text_version"] == 1
-    families = {
-        statement["family"]
-        for card in result["puzzle"]["cards"]
-        for statement in card["statements"]
-        if card["role"] == "suspect"
-    }
-    assert {"coordinate", "relative_distance", "relative_order"} <= families
-    assert len(families) >= 4
     assert all((tmp_path / f"{name}.json").exists() for name in (
         "puzzle", "solution", "diagnostics", "explanation", "generation_report", "manifest"
     ))
@@ -618,10 +605,10 @@ def test_scaling_regression_reports_acceptance(tmp_path: Path) -> None:
 
 
 def test_editorial_manifest_can_be_approved_then_retired(tmp_path: Path) -> None:
+    from murdoku_v2.generation import generate_case
     from murdoku_v2.publication import set_editorial_status
-    from murdoku_v2.scaling import generate_scaling_case
 
-    generate_scaling_case(6, 1, tmp_path)
+    generate_case(PROJECT / "examples/board_restaurant/case.json", 1, tmp_path)
     manifest_path = tmp_path / "manifest.json"
     assert set_editorial_status(manifest_path, "approved")["editorial_status"] == "approved"
     assert set_editorial_status(manifest_path, "retired")["editorial_status"] == "retired"

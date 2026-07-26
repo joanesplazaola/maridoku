@@ -44,7 +44,7 @@ editorial automatizado.
 - [ ] Modelar secuencias temáticas para mecánicas especiales.
 - [x] Admitir tableros rectangulares con personajes según el lado menor.
 - [ ] Verificar generación y render en tamaños de 5×5 a 16×16.
-- [ ] Sustituir `scaling.py` por un generador que elija solución sobre una escena fija.
+- [x] Sustituir la generación editorial de `scaling.py` por variantes sobre una escena fija.
 - [ ] Crear tres casos de referencia: fácil, medio y difícil.
 
 Criterio de salida: tres casos distintos, cada uno con mapa, objetos y técnica
