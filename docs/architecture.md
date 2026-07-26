@@ -3,13 +3,15 @@
 ## Flujo
 
 ```text
-board.json + case.json
-        ↓ load_puzzle()
- puzle público autocontenido
-        ↙ candidate_pools(puzle, solución privada)
+board.json + case.json + seed
+        ↓ permutación válida
+ solución candidata
+        ↓ candidate_pools(puzle, solución candidata)
  candidatos verdaderos
         ↓ select_clues()
  selección única, necesaria y editorial
+        ↓ generate_variant()
+ solución privada + puzle público
         ↓
 validación Pydantic + CP-SAT
         ↓
@@ -24,6 +26,7 @@ HTML sin solution.json
 - `models.py`: composición y validación del contrato público.
 - `candidates.py`: pistas verdaderas derivadas de una solución sobre una escena fija.
 - `selection.py`: selección incremental mediante contraejemplos del oráculo exacto.
+- `generation.py`: objetivos por seed y ensamblado de variantes aceptadas.
 - `clue_catalog.py`: contrato lógico de los tipos de pista.
 - `solvers/ortools_solver.py`: solución exacta, unicidad y necesidad.
 - `render.py`: documento público autocontenido.

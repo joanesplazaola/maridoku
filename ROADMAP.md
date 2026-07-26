@@ -27,6 +27,7 @@ editorial automatizado.
 - [x] Separar formalmente plantilla de escena, solución y pistas.
 - [x] Generar pools reproducibles de pistas verdaderas sobre una escena fija.
 - [x] Seleccionar una pista necesaria por sospechoso mediante contraejemplos CP-SAT.
+- [x] Generar soluciones y asesinos reproducibles sin una solución de entrada.
 - [ ] Corregir toda semántica espacial contra el glosario, incluida “al lado”.
 - [ ] Ampliar objetos solo cuando una escena aprobada los necesite.
 - [ ] Añadir pistas generales y mecánicas especiales al contrato CP-SAT.

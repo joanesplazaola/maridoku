@@ -197,6 +197,70 @@ def test_reference_case_selects_an_editorial_clue_set() -> None:
     assert audit_puzzle(selected_puzzle)["warnings"] == []
 
 
+def test_reference_scene_generates_a_complete_variant_without_a_solution_input() -> None:
+    from murdoku_v2.generation import generate_variant
+    from murdoku_v2.models import load_puzzle
+    from murdoku_v2.solvers.ortools_solver import ORToolsSolver
+
+    case_path = PROJECT / "examples/board_restaurant/case.json"
+    base = load_puzzle(case_path)
+    published_solution = json.loads(
+        (case_path.parent / "solution.json").read_text(encoding="utf-8")
+    )
+    result = generate_variant(base, 20260726)
+    generated = result["puzzle"]
+    target = {
+        character: (position["row"], position["column"])
+        for character, position in result["solution"]["positions"].items()
+    }
+
+    assert result == generate_variant(base, 20260726)
+    assert generated["board"] == base["board"]
+    assert target != {
+        character: (position["row"], position["column"])
+        for character, position in published_solution["positions"].items()
+    }
+    assert result["solution"]["murderer"] == "diego"
+    assert result["diagnostics"]["target_attempt"] <= 20
+    assert result["diagnostics"]["selector_iterations"] <= 40
+    assert result["diagnostics"]["directional"] <= 1
+    assert len(result["diagnostics"]["families"]) >= 4
+
+    solver = ORToolsSolver()
+    exact = solver.solve(generated, limit=2)
+    assert exact.unique and exact.solutions == [target]
+    assert all(
+        len(solver.solve(
+            generated,
+            limit=2,
+            exclude_statement_id=statement["id"],
+        ).solutions) > 1
+        for card in generated["cards"]
+        if card["role"] == "suspect"
+        for statement in card["statements"]
+    )
+
+
+def test_reference_scene_generation_smoke() -> None:
+    from murdoku_v2.generation import generate_variant
+    from murdoku_v2.models import load_puzzle
+
+    base = load_puzzle(PROJECT / "examples/board_restaurant/case.json")
+    variants = [generate_variant(base, seed) for seed in (1, 2, 3)]
+    targets = [
+        tuple(
+            (character, position["row"], position["column"])
+            for character, position in variant["solution"]["positions"].items()
+        )
+        for variant in variants
+    ]
+
+    assert len(set(targets)) == len(variants)
+    assert all(variant["puzzle"]["board"] == base["board"] for variant in variants)
+    assert all(variant["diagnostics"]["exact_unique"] for variant in variants)
+    assert all(variant["diagnostics"]["target_attempt"] <= 50 for variant in variants)
+
+
 def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     from murdoku_v2.scaling import generate_scaling_case
 
