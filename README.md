@@ -51,7 +51,16 @@ Smoke completo:
 uv run murdoku-v2 scale-benchmark --sizes 10 13 --solver ortools --repetitions 2
 ```
 
-Gate de generación real, unicidad, necesidad y presupuesto:
+Smoke para desarrollo:
+
+```bash
+uv run murdoku-v2 scale-regression \
+  --sizes 6 8 10 \
+  --count-per-size 3 \
+  --budget-seconds 30
+```
+
+Gate de release:
 
 ```bash
 uv run murdoku-v2 scale-regression \
@@ -98,19 +107,8 @@ uv run murdoku-v2 render --puzzle generated/puzzle.json --output generated/puzzl
 
 ## Objetivo inmediato
 
-La siguiente fase es ampliar la variedad editorial sobre consultas CP-SAT
-incrementales:
-
-```text
-solución objetivo
-→ pistas verdaderas
-→ combinación de tarjetas
-→ CP-SAT busca 0, 1 o 2 soluciones
-→ aceptar, modificar o rechazar
-```
-
-Así el generador completo podrá pasar de 6×6 a 8×8, 10×10 y 13×13 sin enumerar
-previamente `(n!)²` distribuciones.
+La siguiente fase es calibrar dificultad y claridad con sesiones reales sobre
+el jugador publicado.
 
 Consulta `LOCAL_SETUP.md` para una secuencia detallada de ejecución y resolución
 de problemas.

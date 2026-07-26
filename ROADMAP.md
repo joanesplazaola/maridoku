@@ -65,7 +65,7 @@ Chrome, Firefox y Safari actuales, y la misma build está accesible en GitHub Pa
 
 Objetivo: que dificultad y claridad sean propiedades medidas, no etiquetas heurísticas.
 
-- [ ] Crear un propagador no enumerativo para explicaciones y pistas.
+- [x] Crear un propagador no enumerativo para explicaciones y pistas.
 - [ ] Versionar la redacción y traducciones fuera de la lógica.
 - [ ] Ejecutar pruebas ciegas y calibrar fácil, medio, difícil y experto.
 - [ ] Detectar ambigüedad lingüística, pistas dominantes y soluciones por descarte técnico.
@@ -78,11 +78,11 @@ una muestra de prueba definida.
 
 Objetivo: convertir generación, revisión y entrega en un flujo repetible.
 
-- [ ] Crear un manifiesto por puzle con versión, seed, solución y métricas editoriales.
-- [ ] Separar datos privados de solución de los datos enviados al jugador.
-- [ ] Añadir revisión editorial, aprobación y retirada de puzles.
-- [ ] Exigir tests y build correctos antes de desplegar GitHub Pages.
-- [ ] Promover a producción únicamente artefactos generados por un commit identificado.
+- [x] Crear un manifiesto por puzle con versión, seed, solución y métricas editoriales.
+- [x] Separar datos privados de solución de los datos enviados al jugador.
+- [x] Añadir revisión editorial, aprobación y retirada de puzles.
+- [x] Exigir tests y build correctos antes de desplegar GitHub Pages.
+- [x] Promover a producción únicamente artefactos generados por un commit identificado.
 - [ ] Definir analítica, privacidad, backups y respuesta ante errores de contenido.
 
 Criterio de salida: un puzle aprobado pasa de seed a producción y puede retirarse
