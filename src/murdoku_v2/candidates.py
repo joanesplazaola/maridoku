@@ -90,12 +90,22 @@ def candidate_pools(
             ("exact_row", {"row": row}, f"{name} estaba en la fila {row + 1}."),
             ("exact_column", {"column": column}, f"{name} estaba en la columna {column + 1}."),
             ("room", {"room": room_id}, f"{name} estaba en {room_names[room_id]}."),
+            ("not_adjacent_to_wall", {}, f"{name} no estaba junto a ninguna pared de su habitación."),
+            ("in_room_corner", {}, f"{name} estaba en una esquina de su habitación."),
             (
                 "room_population",
                 {"count": len(room_occupants)},
                 f"{name} estaba en una habitación con {len(room_occupants)} personas en total.",
             ),
         ]
+        for other_room_id, other_room_name in room_names.items():
+            if other_room_id == room_id:
+                continue
+            candidates.append((
+                "room_disjunction",
+                {"rooms": sorted((room_id, other_room_id))},
+                f"{name} estaba en {room_names[room_id]} o en {other_room_name}.",
+            ))
         if len(room_occupants) == 1:
             candidates.append((
                 "alone_in_room",

@@ -85,6 +85,10 @@ def test_scaling_candidate_pools_are_true_and_diverse() -> None:
         for pool in pools.values()
         for statement in pool
     )
+    generated_types = {
+        statement["type"] for pool in pools.values() for statement in pool
+    }
+    assert {"not_adjacent_to_wall", "in_room_corner", "room_disjunction"} <= generated_types
     assert all(
         len(pool) == len({
             (statement["type"], json.dumps(statement["args"], sort_keys=True))
