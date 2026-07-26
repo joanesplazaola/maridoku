@@ -91,6 +91,8 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     assert len(objects["counter"]["cells"]) == 3
     assert result["diagnostics"]["exact_validation"]["unique"]
     assert result["diagnostics"]["all_suspect_clues_necessary"]
+    assert result["diagnostics"]["editorial_audit"]["accepted"]
+    assert result["diagnostics"]["editorial_audit"]["warnings"] == []
     assert result["explanation"]["method"] == "incremental_cp_sat"
     assert result["explanation"]["unique"]
     assert result["manifest"]["editorial_status"] == "draft"

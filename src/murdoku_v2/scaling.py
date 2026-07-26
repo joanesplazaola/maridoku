@@ -10,6 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
+from .editorial import audit_puzzle
 from .explainer import explain_puzzle
 from .object_catalog import OBJECT_CATALOG
 from .solvers.registry import get_solver
@@ -757,6 +758,9 @@ def generate_scaling_case(
         "murderer": "person_02",
         "murderer_name": puzzle["characters"][1]["name"],
     }
+    editorial_audit = audit_puzzle(puzzle)
+    if not editorial_audit["accepted"]:
+        raise RuntimeError(f"El audit editorial rechazó el puzle: {editorial_audit['errors']}")
     diagnostics = {
         "puzzle_id": puzzle["id"],
         "generator": "scaling_editorial",
@@ -773,6 +777,7 @@ def generate_scaling_case(
         },
         "generation_ms": round(elapsed_ms, 3),
         "exact_explanation_available": True,
+        "editorial_audit": editorial_audit,
         "all_suspect_clues_necessary": True,
         "removed_implied_clues": removed_clues,
     }
@@ -825,6 +830,7 @@ def generate_scaling_case(
                 for card in puzzle["cards"]
                 for statement in card["statements"]
             }),
+            "editorial_audit": editorial_audit,
         },
     }
     output.mkdir(parents=True, exist_ok=True)
