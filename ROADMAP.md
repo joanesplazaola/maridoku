@@ -40,7 +40,7 @@ Objetivo: producir 8x8 y 10x10 variados sin enumerar `(n!)²`.
 5. [x] Comprobar necesidad de cada tarjeta y afirmación de sospechoso con CP-SAT.
 6. [ ] Sustituir las cadenas sintéticas por familias variadas del catálogo formal.
 7. [x] Añadir un gate reproducible de unicidad, necesidad y presupuesto para 6x6, 8x8 y 10x10.
-8. [ ] Superar 100 seeds consecutivas por tamaño y conservar fixtures de regresión.
+8. [x] Superar 100 seeds consecutivas por tamaño y conservar fixtures de regresión.
 9. [ ] Mover `generate` a la ruta escalable y retirar selector, máscaras y universo antiguos.
 
 Criterio de salida: 100 casos consecutivos por tamaño, todos únicos, sin pistas

@@ -60,6 +60,9 @@ uv run murdoku-v2 scale-regression \
   --budget-seconds 30
 ```
 
+El último gate aceptado se conserva en
+`docs/regressions/scaling-100-seeds.json`.
+
 ## Validar un caso con CP-SAT
 
 ```bash
