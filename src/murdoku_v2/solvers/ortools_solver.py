@@ -426,6 +426,25 @@ class ORToolsSolver:
                 statement["id"],
             )
             return
+        if typ == "next_to_sequence_item":
+            sequence = next(
+                sequence for sequence in ctx.puzzle["board"].get("sequences", [])
+                if sequence["id"] == args["sequence"]
+            )
+            item = int(args["item"])
+            cells = sequence["cells"]
+            self._restrict_subject_cells(
+                ctx,
+                subject,
+                (
+                    row * ctx.n + column
+                    for index in (item - 1, item + 1)
+                    if 0 <= index < len(cells)
+                    for row, column in (cells[index],)
+                ),
+                statement["id"],
+            )
+            return
         if typ in {"unique_on_object", "unique_adjacent_object"}:
             valid = (
                 self._object_cells_of_type(ctx.puzzle, args["object_type"], occupiable_only=True)

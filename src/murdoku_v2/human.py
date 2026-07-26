@@ -23,6 +23,7 @@ UNARY_TYPES = {
     "not_adjacent_to_wall",
     "in_room_corner",
     "beside_not_in_zone",
+    "next_to_sequence_item",
 }
 COUNT_TYPES = {
     "room_population",
@@ -151,6 +152,14 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
                     + abs(cell % ctx.n - zone_cell % ctx.n) == 1
                     for zone_cell in zone
                 )
+            }
+        if typ == "next_to_sequence_item":
+            sequence = ctx.sequences[args["sequence"]]
+            item = int(args["item"])
+            return {
+                sequence[index]
+                for index in (item - 1, item + 1)
+                if 0 <= index < len(sequence)
             }
         if typ == "unique_on_object":
             return set(ctx.occupiable_cells_by_type.get(args["object_type"], set()))

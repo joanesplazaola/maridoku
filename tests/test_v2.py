@@ -16,7 +16,7 @@ PROJECT = Path(__file__).resolve().parents[1]
 def test_catalogs_define_the_public_contract() -> None:
     from murdoku_v2.text_catalog import text_catalog
 
-    assert len(CLUE_SPECS) == len(catalog_json()) == 27
+    assert len(CLUE_SPECS) == len(catalog_json()) == 28
     assert len(OBJECT_CATALOG) == len(object_catalog_json()) == 11
     assert OBJECT_CATALOG["table"].footprints == ("1x1", "1x2")
     assert OBJECT_CATALOG["dining_table"].footprints == ("1x2",)
@@ -734,6 +734,7 @@ def test_pydantic_contract_rejects_invalid_content() -> None:
 
 
 def test_rectangular_board_is_solved_and_rendered() -> None:
+    from murdoku_v2.candidates import candidate_pools
     from murdoku_v2.human import solve_human
     from murdoku_v2.models import validate_puzzle
     from murdoku_v2.render import render_html
@@ -759,6 +760,12 @@ def test_rectangular_board_is_solved_and_rendered() -> None:
                 "clue_label": "el agua",
                 "cells": [[0, 1], [0, 2]],
             }],
+            "sequences": [{
+                "id": "holes",
+                "name": "Hoyos",
+                "item_label": "Hoyo",
+                "cells": [[0, 0], [0, 1], [0, 2]],
+            }],
             "objects": [],
         },
         "characters": [
@@ -778,7 +785,12 @@ def test_rectangular_board_is_solved_and_rendered() -> None:
                         "family": "zone_relation",
                         "args": {"character": "ana", "zone": "water"},
                     },
-                    {"id": "ana-column", "type": "exact_column", "family": "coordinate", "args": {"character": "ana", "column": 0}},
+                    {
+                        "id": "ana-hole",
+                        "type": "next_to_sequence_item",
+                        "family": "sequence_relation",
+                        "args": {"character": "ana", "sequence": "holes", "item": 1},
+                    },
                 ],
             },
             {
@@ -802,6 +814,11 @@ def test_rectangular_board_is_solved_and_rendered() -> None:
     assert human["solved"] and human["positions"] == expected
     assert "--cols:3;--rows:2" in html
     assert "zone-cell zone-0" in html
+    assert "Hoyo 1" in html
+    assert any(
+        statement["type"] == "next_to_sequence_item"
+        for statement in candidate_pools(puzzle, expected)["ana"]
+    )
 
 
 def test_solver_registry_uses_cpsat() -> None:

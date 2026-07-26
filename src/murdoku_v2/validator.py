@@ -101,6 +101,17 @@ def matches_statement(
             abs(row - zone_row) + abs(column - zone_column) == 1
             for zone_row, zone_column in zone_cells
         )
+    if statement_type == "next_to_sequence_item":
+        sequence = next(
+            sequence for sequence in board.get("sequences", [])
+            if sequence["id"] == args["sequence"]
+        )
+        cells = [tuple(cell) for cell in sequence["cells"]]
+        item = int(args["item"])
+        return any(
+            0 <= index < len(cells) and (row, column) == cells[index]
+            for index in (item - 1, item + 1)
+        )
     if statement_type == "unique_on_object":
         object_cells = {
             cell

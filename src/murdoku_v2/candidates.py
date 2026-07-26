@@ -281,6 +281,19 @@ def candidate_pools(
                     {"zone": zone["id"]},
                     f"{name} no estaba en {label}, pero sí a su lado.",
                 ))
+        for sequence in board.get("sequences", []):
+            cells = [tuple(cell) for cell in sequence["cells"]]
+            if (row, column) not in cells:
+                continue
+            own_index = cells.index((row, column))
+            for item in (own_index - 1, own_index + 1):
+                if 0 <= item < len(cells):
+                    candidates.append((
+                        "next_to_sequence_item",
+                        {"sequence": sequence["id"], "item": item},
+                        f"{name} estaba inmediatamente antes o después de "
+                        f"{sequence['item_label']} {item + 1}.",
+                    ))
 
         pool = []
         for index, (type_, args, text) in enumerate(candidates, start=1):

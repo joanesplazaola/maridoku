@@ -121,6 +121,11 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
     for index, zone in enumerate(board.get("zones", [])):
         for cell in zone["cells"]:
             zones_at.setdefault(tuple(cell), []).append(index)
+    sequence_at = {
+        tuple(cell): (sequence["item_label"], index + 1)
+        for sequence in board.get("sequences", [])
+        for index, cell in enumerate(sequence["cells"])
+    }
     rows = []
     for row in range(board["rows"]):
         cells = []
@@ -142,11 +147,16 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
             ]
             label = html.escape(room["name"]) if room_labels[room["id"]] == (row, column) else ""
             label_html = f'<span class="room-name">{label}</span>' if label else ""
+            sequence = sequence_at.get((row, column))
+            sequence_html = (
+                f'<span class="sequence-label">{html.escape(sequence[0])} {sequence[1]}</span>'
+                if sequence else ""
+            )
             cells.append(
                 f"<td class=\"{room_classes[room['id']]} {' '.join(wall_classes)} {zone_classes}\" "
                 f"data-row=\"{row}\" data-column=\"{column}\" tabindex=\"0\" "
                 f"aria-label=\"Fila {row + 1}, columna {column + 1}\">"
-                f"{label_html}</td>"
+                f"{label_html}{sequence_html}</td>"
             )
         rows.append(f"<tr>{''.join(cells)}</tr>")
     furniture = "".join(

@@ -29,6 +29,7 @@ class SolverContext:
     room_cells: dict[str, set[int]]
     groups: dict[str, set[str]]
     zones: dict[str, set[int]]
+    sequences: dict[str, list[int]]
     blocked_cells: set[int]
     all_cells: set[int]
     object_cells_by_type: dict[str, set[int]]
@@ -88,6 +89,10 @@ def build_context(
         zone["id"]: {row * n + column for row, column in zone["cells"]}
         for zone in board.get("zones", [])
     }
+    sequences = {
+        sequence["id"]: [row * n + column for row, column in sequence["cells"]]
+        for sequence in board.get("sequences", [])
+    }
     blocked = {
         row * n + column
         for obj in board.get("objects", [])
@@ -129,6 +134,7 @@ def build_context(
         room_cells=room_cells,
         groups=groups,
         zones=zones,
+        sequences=sequences,
         blocked_cells=blocked,
         all_cells=set(range(rows * n)) - blocked,
         object_cells_by_type=object_cells_by_type,

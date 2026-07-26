@@ -41,6 +41,14 @@ class ZoneModel(BaseModel):
     cells: list[tuple[int, int]]
 
 
+class SequenceModel(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    id: str
+    name: str
+    item_label: str
+    cells: list[tuple[int, int]]
+
+
 class ObjectModel(BaseModel):
     model_config = ConfigDict(extra="allow")
     id: str
@@ -71,6 +79,7 @@ class BoardModel(BaseModel):
     rooms: list[RoomModel]
     room_groups: list[RoomGroupModel] = Field(default_factory=list)
     zones: list[ZoneModel] = Field(default_factory=list)
+    sequences: list[SequenceModel] = Field(default_factory=list)
     objects: list[ObjectModel] = Field(default_factory=list)
 
     @model_validator(mode="after")
@@ -94,6 +103,14 @@ class BoardModel(BaseModel):
                 raise ValueError(f"La zona {zone.id} está vacía o repite casillas.")
             if any(cell not in expected for cell in zone.cells):
                 raise ValueError(f"La zona {zone.id} sale del tablero.")
+        sequence_ids = {sequence.id for sequence in self.sequences}
+        if len(sequence_ids) != len(self.sequences):
+            raise ValueError("Hay identificadores de secuencia repetidos.")
+        for sequence in self.sequences:
+            if len(sequence.cells) < 2 or len(set(sequence.cells)) != len(sequence.cells):
+                raise ValueError(f"La secuencia {sequence.id} debe tener al menos dos casillas distintas.")
+            if any(cell not in expected for cell in sequence.cells):
+                raise ValueError(f"La secuencia {sequence.id} sale del tablero.")
         room_at = {cell: room.id for room in self.rooms for cell in room.cells}
         for obj in self.objects:
             if any(cell not in expected for cell in obj.cells):

@@ -150,6 +150,13 @@
         && zone.cells.some(([row, column]) =>
           Math.abs(own[0] - row) + Math.abs(own[1] - column) === 1);
     }
+    if (statement.type === "next_to_sequence_item") {
+      const sequence = (puzzle.board.sequences || []).find((item) => item.id === args.sequence);
+      if (!sequence) return false;
+      return [args.item - 1, args.item + 1].some((index) =>
+        index >= 0 && index < sequence.cells.length
+        && sequence.cells[index][0] === own[0] && sequence.cells[index][1] === own[1]);
+    }
     if (statement.type === "unique_on_object") {
       if (!allPlaced) return null;
       const cells = new Set(objectCells(args.object_type, true).map((cell) => key(...cell)));

@@ -45,6 +45,7 @@ SPECS: tuple[ClueSpec, ...] = (
         subject_centred=False,
     ),
     ClueSpec("beside_not_in_zone", "zone_relation", "Está fuera de una zona pero ortogonalmente junto a ella."),
+    ClueSpec("next_to_sequence_item", "sequence_relation", "Está inmediatamente antes o después de un elemento numerado."),
 )
 
 CLUE_SPECS = {spec.type: spec for spec in SPECS}
