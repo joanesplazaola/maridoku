@@ -3,13 +3,13 @@
 ## Estado actual
 
 - [x] CP-SAT es el único motor exacto y valida solución y unicidad.
-- [x] Hay generación editorial 6x6 y generación escalable sintética 8x8+.
+- [x] Hay generación editorial escalable validada en 6x6, 8x8 y 10x10.
 - [x] El catálogo formal cubre 22 familias de pistas.
 - [x] El catálogo visual cubre 11 objetos con huellas `1x1`, `1x2`, `2x2` y `L3`.
 - [x] Los tableros, objetos y puzles se validan con Pydantic.
 - [x] Existe una hoja HTML autocontenida para revisión editorial.
-- [ ] El generador editorial escala más allá de 6 personajes.
-- [ ] Existe un jugador interactivo usable.
+- [x] El generador editorial escala más allá de 6 personajes.
+- [x] Existe un jugador interactivo usable.
 - [ ] La dificultad está calibrada con personas.
 - [ ] Existe un flujo reproducible de publicación y regresión de contenido.
 
@@ -38,7 +38,7 @@ Objetivo: producir 8x8 y 10x10 variados sin enumerar `(n!)²`.
 3. [x] Generar pools editoriales verdaderos sin `enumerate_base_solutions()`.
 4. [x] Construir pistas y demostrar unicidad exclusivamente mediante CP-SAT.
 5. [x] Comprobar necesidad de cada tarjeta y afirmación de sospechoso con CP-SAT.
-6. [ ] Sustituir las cadenas sintéticas por familias variadas del catálogo formal.
+6. [x] Sustituir las cadenas sintéticas por familias variadas del catálogo formal.
 7. [x] Añadir un gate reproducible de unicidad, necesidad y presupuesto para 6x6, 8x8 y 10x10.
 8. [x] Superar 100 seeds consecutivas por tamaño y conservar fixtures de regresión.
 9. [ ] Mover `generate` a la ruta escalable y retirar selector, máscaras y universo antiguos.
@@ -51,12 +51,12 @@ registrar fallback al generador enumerativo.
 
 Objetivo: probar puzles completos sin herramientas de desarrollo.
 
-- [ ] Seleccionar sospechoso y colocarlo, moverlo o retirarlo del tablero.
-- [ ] Mostrar restricciones de fila, columna y ocupación mientras se juega.
-- [ ] Añadir deshacer, reiniciar, comprobación y persistencia local.
-- [ ] Adaptar tablero y tarjetas a escritorio, tableta y móvil.
-- [ ] Cubrir navegación por teclado, foco visible, contraste y lectores de pantalla.
-- [ ] Registrar finalización, errores, ayudas y tiempo de resolución sin datos personales.
+- [x] Seleccionar sospechoso y colocarlo, moverlo o retirarlo del tablero.
+- [x] Mostrar restricciones de fila, columna y ocupación mientras se juega.
+- [x] Añadir deshacer, reiniciar, comprobación y persistencia local.
+- [x] Adaptar tablero y tarjetas a escritorio, tableta y móvil.
+- [x] Cubrir navegación por teclado, foco visible, contraste y lectores de pantalla.
+- [x] Registrar finalización, errores, ayudas y tiempo de resolución sin datos personales.
 - [x] Publicar una preview estática en GitHub Pages mediante GitHub Actions.
 
 Criterio de salida: una sesión completa funciona con ratón, táctil y teclado en

@@ -37,7 +37,10 @@ jobs:
           uv run murdoku-v2 render \
             --puzzle /tmp/murdoku-pages/puzzle.json \
             --output _site/index.html
+          test ! -e _site/solution.json
           touch _site/.nojekyll
+        env:
+          MURDOKU_COMMIT: ${{ github.sha }}
       - uses: actions/configure-pages@v5
         with:
           enablement: true

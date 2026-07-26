@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import os
 import random
 import tempfile
 import time
@@ -788,21 +790,55 @@ def generate_scaling_case(
             "editorial_clues": editorial_clues,
         },
     }
+    artifacts = {
+        "puzzle": puzzle,
+        "solution": solution,
+        "diagnostics": diagnostics,
+        "explanation": explanation,
+        "generation_report": generation_report,
+    }
+    encoded = {
+        name: json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8")
+        for name, data in artifacts.items()
+    }
+    manifest = {
+        "schema_version": 1,
+        "puzzle_id": puzzle["id"],
+        "puzzle_schema_version": puzzle["schema_version"],
+        "generator": "scaling_editorial",
+        "generator_commit": os.environ.get("MURDOKU_COMMIT", "local"),
+        "requested_seed": seed,
+        "effective_seed": effective_seed,
+        "editorial_status": "draft",
+        "private_solution": {
+            "path": "solution.json",
+            "sha256": hashlib.sha256(encoded["solution"]).hexdigest(),
+        },
+        "public_puzzle": {
+            "path": "puzzle.json",
+            "sha256": hashlib.sha256(encoded["puzzle"]).hexdigest(),
+        },
+        "metrics": {
+            "size": size,
+            "generation_ms": diagnostics["generation_ms"],
+            "unique": True,
+            "all_suspect_clues_necessary": True,
+            "families": sorted({
+                statement["family"]
+                for card in puzzle["cards"]
+                for statement in card["statements"]
+            }),
+        },
+    }
     output.mkdir(parents=True, exist_ok=True)
-    for name, data in {
-        "puzzle": puzzle,
-        "solution": solution,
-        "diagnostics": diagnostics,
-        "explanation": explanation,
-        "generation_report": generation_report,
-    }.items():
-        (output / f"{name}.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    for name, data in encoded.items():
+        (output / f"{name}.json").write_bytes(data)
+    (output / "manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     return {
-        "puzzle": puzzle,
-        "solution": solution,
-        "diagnostics": diagnostics,
-        "explanation": explanation,
-        "generation_report": generation_report,
+        **artifacts,
+        "manifest": manifest,
     }
 
 

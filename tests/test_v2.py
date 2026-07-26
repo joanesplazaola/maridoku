@@ -479,6 +479,9 @@ def test_generate_scale_writes_a_valid_large_case(tmp_path: Path) -> None:
     assert result["solution"]["murderer"] == "person_02"
     assert (tmp_path / "puzzle.json").exists()
     assert (tmp_path / "generation_report.json").exists()
+    assert result["manifest"]["private_solution"]["path"] == "solution.json"
+    assert result["manifest"]["editorial_status"] == "draft"
+    assert (tmp_path / "manifest.json").exists()
 
 
 def test_scaling_generator_retries_unplaceable_furniture(tmp_path: Path) -> None:
