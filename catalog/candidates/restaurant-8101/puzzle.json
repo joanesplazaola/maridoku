@@ -1,0 +1,617 @@
+{
+  "schema_version": 8,
+  "id": "ultimo-servicio-8101",
+  "title": "Después del cierre",
+  "story": "Una copa seguía servida cuando encontraron a Bruno. Reconstruye la última hora del equipo y descubre quién se quedó a solas con él.",
+  "seed": 8101,
+  "selection_profile": "any",
+  "characters": [
+    {
+      "id": "alicia",
+      "name": "Alicia",
+      "gender": "woman",
+      "role": "suspect"
+    },
+    {
+      "id": "bruno",
+      "name": "Bruno",
+      "gender": "man",
+      "role": "victim"
+    },
+    {
+      "id": "carla",
+      "name": "Carla",
+      "gender": "woman",
+      "role": "suspect"
+    },
+    {
+      "id": "diego",
+      "name": "Diego",
+      "gender": "man",
+      "role": "suspect"
+    },
+    {
+      "id": "elena",
+      "name": "Elena",
+      "gender": "woman",
+      "role": "suspect"
+    },
+    {
+      "id": "fabio",
+      "name": "Fabio",
+      "gender": "man",
+      "role": "suspect"
+    }
+  ],
+  "victim": "bruno",
+  "rules": {
+    "one_character_per_row": true,
+    "one_character_per_column": true,
+    "one_card_per_character": true
+  },
+  "cards": [
+    {
+      "id": "card-alicia",
+      "character": "alicia",
+      "character_name": "Alicia",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-alicia-statement-1",
+          "type": "room",
+          "family": "room_exact",
+          "args": {
+            "character": "alicia",
+            "room": "dining"
+          },
+          "text": "Alicia estaba en el comedor."
+        }
+      ]
+    },
+    {
+      "id": "card-bruno",
+      "character": "bruno",
+      "character_name": "Bruno",
+      "role": "victim",
+      "statements": [
+        {
+          "id": "card-bruno-statement-1",
+          "type": "victim_rule",
+          "family": "murder_rule",
+          "args": {
+            "character": "bruno"
+          },
+          "text": "Bruno estaba a solas con otra persona. Esa persona es el asesino."
+        }
+      ]
+    },
+    {
+      "id": "card-carla",
+      "character": "carla",
+      "character_name": "Carla",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-carla-statement-1",
+          "type": "relative_row_distance",
+          "family": "relative_distance",
+          "args": {
+            "character": "carla",
+            "reference": "fabio",
+            "delta": -4
+          },
+          "text": "Carla estaba 4 filas al norte de Fabio."
+        }
+      ]
+    },
+    {
+      "id": "card-diego",
+      "character": "diego",
+      "character_name": "Diego",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-diego-statement-1",
+          "type": "adjacent_object",
+          "family": "object_adjacency",
+          "args": {
+            "character": "diego",
+            "object_type": "table"
+          },
+          "text": "Diego estaba al lado de una mesa."
+        }
+      ]
+    },
+    {
+      "id": "card-elena",
+      "character": "elena",
+      "character_name": "Elena",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-elena-statement-1",
+          "type": "object_same_row_in_room",
+          "family": "object_line",
+          "args": {
+            "character": "elena",
+            "object_type": "plant"
+          },
+          "text": "Elena estaba en la misma fila y habitación que una planta."
+        }
+      ]
+    },
+    {
+      "id": "card-fabio",
+      "character": "fabio",
+      "character_name": "Fabio",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-fabio-statement-1",
+          "type": "adjacent_object",
+          "family": "object_adjacency",
+          "args": {
+            "character": "fabio",
+            "object_type": "plant"
+          },
+          "text": "Fabio estaba al lado de una planta."
+        }
+      ]
+    }
+  ],
+  "board": {
+    "id": "board_restaurant",
+    "name": "Restaurante y terraza",
+    "rows": 6,
+    "columns": 6,
+    "room_groups": [
+      {
+        "id": "restaurant_staff",
+        "name": "Zonas de trabajo",
+        "clue_label": "una zona de trabajo del restaurante",
+        "rooms": [
+          "kitchen",
+          "prep",
+          "pantry"
+        ]
+      },
+      {
+        "id": "restaurant_guests",
+        "name": "Zonas para clientes",
+        "clue_label": "una zona para clientes",
+        "rooms": [
+          "bar",
+          "dining",
+          "entry",
+          "restroom",
+          "terrace",
+          "garden"
+        ]
+      }
+    ],
+    "rooms": [
+      {
+        "id": "kitchen",
+        "name": "Cocina",
+        "clue_label": "la cocina",
+        "label_anchor": [
+          2,
+          0
+        ],
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ]
+        ]
+      },
+      {
+        "id": "pantry",
+        "name": "Despensa",
+        "clue_label": "la despensa",
+        "label_anchor": [
+          0,
+          2
+        ],
+        "cells": [
+          [
+            0,
+            2
+          ]
+        ]
+      },
+      {
+        "id": "bar",
+        "name": "Barra",
+        "clue_label": "la barra",
+        "label_anchor": [
+          1,
+          5
+        ],
+        "cells": [
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            5
+          ]
+        ]
+      },
+      {
+        "id": "prep",
+        "name": "Zona de preparación",
+        "clue_label": "la zona de preparación",
+        "label_anchor": [
+          2,
+          1
+        ],
+        "cells": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      },
+      {
+        "id": "dining",
+        "name": "Comedor",
+        "clue_label": "el comedor",
+        "label_anchor": [
+          3,
+          4
+        ],
+        "cells": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      {
+        "id": "entry",
+        "name": "Entrada",
+        "clue_label": "la entrada",
+        "label_anchor": [
+          3,
+          0
+        ],
+        "cells": [
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ]
+        ]
+      },
+      {
+        "id": "restroom",
+        "name": "Aseos",
+        "clue_label": "los aseos",
+        "label_anchor": [
+          3,
+          5
+        ],
+        "cells": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ]
+        ]
+      },
+      {
+        "id": "terrace",
+        "name": "Terraza",
+        "clue_label": "la terraza",
+        "label_anchor": [
+          4,
+          2
+        ],
+        "cells": [
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ]
+        ]
+      },
+      {
+        "id": "garden",
+        "name": "Jardín",
+        "clue_label": "el jardín",
+        "label_anchor": [
+          5,
+          5
+        ],
+        "cells": [
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ]
+      }
+    ],
+    "objects": [
+      {
+        "id": "table-kitchen",
+        "type": "table",
+        "name": "Mesa",
+        "cells": [
+          [
+            0,
+            0
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": false,
+        "blocks_character": true
+      },
+      {
+        "id": "plant-kitchen",
+        "type": "plant",
+        "name": "Planta",
+        "cells": [
+          [
+            1,
+            0
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": false,
+        "blocks_character": true
+      },
+      {
+        "id": "rug-bar",
+        "type": "rug",
+        "name": "Alfombra",
+        "cells": [
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "layer": "floor",
+        "occupiable": true,
+        "blocks_character": false,
+        "shape": "1x2"
+      },
+      {
+        "id": "chair-bar",
+        "type": "chair",
+        "name": "Silla",
+        "cells": [
+          [
+            0,
+            4
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false
+      },
+      {
+        "id": "sofa-bar",
+        "type": "sofa",
+        "name": "Sofá",
+        "cells": [
+          [
+            0,
+            5
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false
+      },
+      {
+        "id": "table-dining",
+        "type": "table",
+        "name": "Mesa",
+        "cells": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": false,
+        "blocks_character": true
+      },
+      {
+        "id": "chair-dining-a",
+        "type": "chair",
+        "name": "Silla",
+        "cells": [
+          [
+            1,
+            4
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false
+      },
+      {
+        "id": "chair-dining-b",
+        "type": "chair",
+        "name": "Silla",
+        "cells": [
+          [
+            3,
+            2
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false
+      },
+      {
+        "id": "rug-terrace",
+        "type": "rug",
+        "name": "Alfombra",
+        "cells": [
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ]
+        ],
+        "layer": "floor",
+        "occupiable": true,
+        "blocks_character": false,
+        "shape": "2x2"
+      },
+      {
+        "id": "chair-terrace",
+        "type": "chair",
+        "name": "Silla",
+        "cells": [
+          [
+            4,
+            1
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": true,
+        "blocks_character": false
+      },
+      {
+        "id": "plant-garden",
+        "type": "plant",
+        "name": "Planta",
+        "cells": [
+          [
+            4,
+            5
+          ]
+        ],
+        "layer": "furniture",
+        "occupiable": false,
+        "blocks_character": true
+      }
+    ]
+  },
+  "general_clues": []
+}

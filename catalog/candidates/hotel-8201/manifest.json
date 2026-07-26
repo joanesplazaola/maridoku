@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "puzzle_id": "hotel-de-medianoche-8201",
+  "puzzle_schema_version": 8,
+  "generator": "fixed_scene",
+  "generator_commit": "local",
+  "text_locale": "es",
+  "text_version": 1,
+  "seed": 8201,
+  "source_case": "examples/board_hotel/case.json",
+  "editorial_status": "approved",
+  "private_solution": {
+    "path": "solution.json",
+    "sha256": "c7ba7a350bc12da880728209ee0b7e9becb9286fdb166c69674872ef34f9845e"
+  },
+  "public_puzzle": {
+    "path": "puzzle.json",
+    "sha256": "51e67efdab9931cad64081922e31bbc149612c356a1acb09c3c643bb14154745"
+  },
+  "metrics": {
+    "rows": 8,
+    "columns": 8,
+    "unique": true,
+    "families": {
+      "object_adjacency": 2,
+      "room_exact": 2,
+      "relative_distance": 1,
+      "object_occupancy": 2
+    },
+    "human_complexity": {
+      "deduction_steps": 34,
+      "propagation_rounds": 3,
+      "branching_points": 0,
+      "hardest_technique": "row_matching",
+      "hardest_level": 3,
+      "technique_counts": {
+        "clue_anchor": 6,
+        "unique_object": 9,
+        "binary_relation": 2,
+        "victim_companion": 2,
+        "row_matching": 7,
+        "column_matching": 8
+      },
+      "calibrated": false
+    }
+  },
+  "review": {
+    "exact_unique": true,
+    "human_solved": true,
+    "difficulty": {
+      "label": "medium",
+      "score": 58,
+      "calibration": "technical_estimate_not_human_calibrated"
+    },
+    "editorial_audit": {
+      "accepted": true,
+      "errors": [],
+      "warnings": [],
+      "duplicate_texts": [],
+      "unsupported_player_types": [],
+      "family_distribution": {
+        "object_adjacency": 2,
+        "murder_rule": 1,
+        "room_exact": 2,
+        "relative_distance": 1,
+        "object_occupancy": 2
+      },
+      "type_distribution": {
+        "adjacent_object": 2,
+        "victim_rule": 1,
+        "room": 2,
+        "relative_column_distance": 1,
+        "unique_on_object": 2
+      },
+      "dominant_family": "object_adjacency",
+      "dominant_family_ratio": 0.25
+    }
+  },
+  "editorial_commit": "local"
+}

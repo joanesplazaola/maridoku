@@ -1,0 +1,215 @@
+{
+  "puzzle_id": "ultimo-servicio-8103",
+  "available": true,
+  "method": "human_propagation",
+  "solved_without_guessing": true,
+  "steps": [
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-alicia-statement-1",
+      "character": "alicia",
+      "removed": 29,
+      "remaining": 2,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-carla-statement-1",
+      "character": "carla",
+      "removed": 28,
+      "remaining": 3,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-diego-statement-1",
+      "character": "diego",
+      "removed": 25,
+      "remaining": 6,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-diego-statement-1",
+      "character": "bruno",
+      "removed": 6,
+      "remaining": 25,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-diego-statement-1",
+      "character": "elena",
+      "removed": 6,
+      "remaining": 25,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-diego-statement-1",
+      "character": "fabio",
+      "removed": 6,
+      "remaining": 25,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-elena-statement-1",
+      "character": "elena",
+      "removed": 20,
+      "remaining": 5,
+      "round": 0
+    },
+    {
+      "technique": "binary_relation",
+      "statement_id": "card-fabio-statement-1",
+      "character": "fabio",
+      "removed": 20,
+      "remaining": 5,
+      "round": 1
+    },
+    {
+      "technique": "binary_relation",
+      "statement_id": "card-fabio-statement-1",
+      "character": "carla",
+      "removed": 2,
+      "remaining": 1,
+      "round": 1
+    },
+    {
+      "technique": "victim_companion",
+      "statement_id": "card-bruno-statement-1",
+      "character": "bruno",
+      "removed": 11,
+      "remaining": 14,
+      "round": 1
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "bruno",
+      "removed": 6,
+      "remaining": 8,
+      "round": 1
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "elena",
+      "removed": 3,
+      "remaining": 2,
+      "round": 1
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "fabio",
+      "removed": 2,
+      "remaining": 3,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "alicia",
+      "removed": 1,
+      "remaining": 1,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "bruno",
+      "removed": 4,
+      "remaining": 4,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "diego",
+      "removed": 5,
+      "remaining": 1,
+      "round": 1
+    },
+    {
+      "technique": "victim_companion",
+      "statement_id": "card-bruno-statement-1",
+      "character": "bruno",
+      "removed": 1,
+      "remaining": 3,
+      "round": 2
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "elena",
+      "removed": 1,
+      "remaining": 1,
+      "round": 2
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "fabio",
+      "removed": 1,
+      "remaining": 2,
+      "round": 2
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "bruno",
+      "removed": 1,
+      "remaining": 2,
+      "round": 2
+    },
+    {
+      "technique": "victim_companion",
+      "statement_id": "card-bruno-statement-1",
+      "character": "bruno",
+      "removed": 1,
+      "remaining": 1,
+      "round": 3
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "fabio",
+      "removed": 1,
+      "remaining": 1,
+      "round": 3
+    }
+  ],
+  "step_count": 22,
+  "techniques": [
+    "binary_relation",
+    "clue_anchor",
+    "column_matching",
+    "row_matching",
+    "unique_object",
+    "victim_companion"
+  ],
+  "complexity": {
+    "deduction_steps": 22,
+    "propagation_rounds": 3,
+    "branching_points": 0,
+    "hardest_technique": "row_matching",
+    "hardest_level": 3,
+    "technique_counts": {
+      "clue_anchor": 4,
+      "unique_object": 3,
+      "binary_relation": 2,
+      "victim_companion": 3,
+      "row_matching": 6,
+      "column_matching": 4
+    },
+    "calibrated": false
+  },
+  "unique": true,
+  "difficulty": {
+    "label": "medium",
+    "score": 46,
+    "calibration": "technical_estimate_not_human_calibrated"
+  }
+}

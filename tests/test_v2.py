@@ -43,6 +43,32 @@ def test_visual_assets_have_tracked_provenance() -> None:
         assert entry["source"]
 
 
+def test_approved_catalog_passes_the_release_contract() -> None:
+    from murdoku_v2.editorial import audit_puzzle
+    from murdoku_v2.human import solve_human
+    from murdoku_v2.models import load_puzzle
+    from murdoku_v2.solvers.ortools_solver import ORToolsSolver
+
+    manifests = sorted((PROJECT / "catalog/candidates").glob("*/manifest.json"))
+    assert len(manifests) == 12
+    for manifest_path in manifests:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        assert manifest["editorial_status"] == "approved"
+        puzzle_path = manifest_path.parent / manifest["public_puzzle"]["path"]
+        solution_path = manifest_path.parent / manifest["private_solution"]["path"]
+        puzzle = load_puzzle(puzzle_path)
+        solution = json.loads(solution_path.read_text(encoding="utf-8"))
+        expected = {
+            character: (position["row"], position["column"])
+            for character, position in solution["positions"].items()
+        }
+        assert hashlib.sha256(puzzle_path.read_bytes()).hexdigest() == manifest["public_puzzle"]["sha256"]
+        assert hashlib.sha256(solution_path.read_bytes()).hexdigest() == manifest["private_solution"]["sha256"]
+        assert audit_puzzle(puzzle)["warnings"] == []
+        assert ORToolsSolver().solve(puzzle, limit=2).solutions == [expected]
+        assert solve_human(puzzle)["positions"] == expected
+
+
 def test_ortools_matches_all_reference_cases() -> None:
     from murdoku_v2.models import load_puzzle
     from murdoku_v2.solvers.ortools_solver import ORToolsSolver
@@ -694,12 +720,14 @@ def test_site_builder_publishes_only_reference_cases_without_solutions(tmp_path:
     result = build_site(tmp_path)
     index = (tmp_path / "index.html").read_text(encoding="utf-8")
     level = (tmp_path / "levels/001.html").read_text(encoding="utf-8")
-    assert result["levels"] == 3
+    assert result["levels"] == 15
     assert "Dificultad" in index
     assert "Fácil" in index
     assert "Último servicio" in index
     assert "Hotel de medianoche" in index
     assert "La última ronda" in index
+    assert "Después del cierre" in index
+    assert "El último putt" in index
     assert "Medio" in index
     assert "Difícil" in index
     assert "V · VÍCTIMA" in level

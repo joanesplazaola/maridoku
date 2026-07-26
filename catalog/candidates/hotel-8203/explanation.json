@@ -1,0 +1,303 @@
+{
+  "puzzle_id": "hotel-de-medianoche-8203",
+  "available": true,
+  "method": "human_propagation",
+  "solved_without_guessing": true,
+  "steps": [
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-ines-statement-1",
+      "character": "ines",
+      "removed": 47,
+      "remaining": 1,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-nicolas-statement-1",
+      "character": "nicolas",
+      "removed": 41,
+      "remaining": 7,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-olivia-statement-1",
+      "character": "olivia",
+      "removed": 42,
+      "remaining": 6,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-pablo-statement-1",
+      "character": "pablo",
+      "removed": 46,
+      "remaining": 2,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-raquel-statement-1",
+      "character": "raquel",
+      "removed": 43,
+      "remaining": 5,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-raquel-statement-1",
+      "character": "lucas",
+      "removed": 5,
+      "remaining": 43,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-raquel-statement-1",
+      "character": "marta",
+      "removed": 5,
+      "remaining": 43,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-raquel-statement-1",
+      "character": "olivia",
+      "removed": 2,
+      "remaining": 4,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-raquel-statement-1",
+      "character": "sergio",
+      "removed": 5,
+      "remaining": 43,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-sergio-statement-1",
+      "character": "sergio",
+      "removed": 21,
+      "remaining": 22,
+      "round": 0
+    },
+    {
+      "technique": "binary_relation",
+      "statement_id": "card-marta-statement-1",
+      "character": "marta",
+      "removed": 24,
+      "remaining": 19,
+      "round": 1
+    },
+    {
+      "technique": "binary_relation",
+      "statement_id": "card-marta-statement-1",
+      "character": "sergio",
+      "removed": 11,
+      "remaining": 11,
+      "round": 1
+    },
+    {
+      "technique": "victim_companion",
+      "statement_id": "card-lucas-statement-1",
+      "character": "lucas",
+      "removed": 14,
+      "remaining": 29,
+      "round": 1
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "lucas",
+      "removed": 5,
+      "remaining": 24,
+      "round": 1
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "marta",
+      "removed": 3,
+      "remaining": 16,
+      "round": 1
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "sergio",
+      "removed": 1,
+      "remaining": 10,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "lucas",
+      "removed": 10,
+      "remaining": 14,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "marta",
+      "removed": 8,
+      "remaining": 8,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "nicolas",
+      "removed": 3,
+      "remaining": 4,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "olivia",
+      "removed": 2,
+      "remaining": 2,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "raquel",
+      "removed": 3,
+      "remaining": 2,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "sergio",
+      "removed": 3,
+      "remaining": 7,
+      "round": 1
+    },
+    {
+      "technique": "binary_relation",
+      "statement_id": "card-marta-statement-1",
+      "character": "marta",
+      "removed": 4,
+      "remaining": 4,
+      "round": 2
+    },
+    {
+      "technique": "binary_relation",
+      "statement_id": "card-marta-statement-1",
+      "character": "sergio",
+      "removed": 2,
+      "remaining": 5,
+      "round": 2
+    },
+    {
+      "technique": "victim_companion",
+      "statement_id": "card-lucas-statement-1",
+      "character": "lucas",
+      "removed": 4,
+      "remaining": 10,
+      "round": 2
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "lucas",
+      "removed": 9,
+      "remaining": 1,
+      "round": 2
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "marta",
+      "removed": 3,
+      "remaining": 1,
+      "round": 2
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "nicolas",
+      "removed": 2,
+      "remaining": 2,
+      "round": 2
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "pablo",
+      "removed": 1,
+      "remaining": 1,
+      "round": 2
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "sergio",
+      "removed": 4,
+      "remaining": 1,
+      "round": 2
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "nicolas",
+      "removed": 1,
+      "remaining": 1,
+      "round": 2
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "olivia",
+      "removed": 1,
+      "remaining": 1,
+      "round": 2
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "raquel",
+      "removed": 1,
+      "remaining": 1,
+      "round": 2
+    }
+  ],
+  "step_count": 33,
+  "techniques": [
+    "binary_relation",
+    "clue_anchor",
+    "column_matching",
+    "row_matching",
+    "unique_object",
+    "victim_companion"
+  ],
+  "complexity": {
+    "deduction_steps": 33,
+    "propagation_rounds": 2,
+    "branching_points": 0,
+    "hardest_technique": "row_matching",
+    "hardest_level": 3,
+    "technique_counts": {
+      "clue_anchor": 6,
+      "unique_object": 4,
+      "binary_relation": 4,
+      "victim_companion": 2,
+      "row_matching": 8,
+      "column_matching": 9
+    },
+    "calibrated": false
+  },
+  "unique": true,
+  "difficulty": {
+    "label": "medium",
+    "score": 54,
+    "calibration": "technical_estimate_not_human_calibrated"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "puzzle_id": "la-ultima-ronda-8301",
+  "puzzle_schema_version": 8,
+  "generator": "fixed_scene",
+  "generator_commit": "local",
+  "text_locale": "es",
+  "text_version": 1,
+  "seed": 8301,
+  "source_case": "examples/board_golf/case.json",
+  "editorial_status": "approved",
+  "private_solution": {
+    "path": "solution.json",
+    "sha256": "df505e59fd7c9181e06418cda1e078f173716bdab179a6087b7aa28f9b4c7cd1"
+  },
+  "public_puzzle": {
+    "path": "puzzle.json",
+    "sha256": "1ac7f1fbd2a3623f21a2363c5505306aeac957b35831de0d0a37348beb6a825a"
+  },
+  "metrics": {
+    "rows": 9,
+    "columns": 9,
+    "unique": true,
+    "families": {
+      "room_exact": 2,
+      "object_line": 1,
+      "room_group": 2,
+      "object_occupancy": 1,
+      "sequence_relation": 1,
+      "object_adjacency": 2,
+      "relative_distance": 1
+    },
+    "human_complexity": {
+      "deduction_steps": 48,
+      "propagation_rounds": 4,
+      "branching_points": 0,
+      "hardest_technique": "row_matching",
+      "hardest_level": 3,
+      "technique_counts": {
+        "clue_anchor": 9,
+        "unique_object": 16,
+        "binary_relation": 4,
+        "victim_companion": 2,
+        "row_matching": 10,
+        "column_matching": 7
+      },
+      "calibrated": false
+    }
+  },
+  "review": {
+    "exact_unique": true,
+    "human_solved": true,
+    "difficulty": {
+      "label": "hard",
+      "score": 75,
+      "calibration": "technical_estimate_not_human_calibrated"
+    },
+    "editorial_audit": {
+      "accepted": true,
+      "errors": [],
+      "warnings": [],
+      "duplicate_texts": [],
+      "unsupported_player_types": [],
+      "family_distribution": {
+        "room_exact": 2,
+        "object_line": 1,
+        "room_group": 2,
+        "object_occupancy": 1,
+        "sequence_relation": 1,
+        "object_adjacency": 2,
+        "relative_distance": 1,
+        "murder_rule": 1
+      },
+      "type_distribution": {
+        "room": 2,
+        "object_same_row_in_room": 1,
+        "in_room_group": 2,
+        "unique_on_object": 1,
+        "next_to_sequence_item": 1,
+        "unique_adjacent_object": 2,
+        "relative_column_distance": 1,
+        "victim_rule": 1
+      },
+      "dominant_family": "room_exact",
+      "dominant_family_ratio": 0.182
+    }
+  },
+  "editorial_commit": "local"
+}

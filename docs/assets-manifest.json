@@ -1,6 +1,7 @@
 [
   {"path":"src/murdoku_v2/assets/case-paper.webp","sha256":"3459819e997c8f25fc49f30045e63ff875d49ba5deeef01fcb8281ace381bfe2","origin_commit":"d59f65a","source":"OpenAI image generation"},
   {"path":"src/murdoku_v2/assets/portraits.webp","sha256":"20593b490980a5dbeaccfc85148f4b1b13ebbb0139be026c8e95026c39177424","origin_commit":"97631ef","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/portrait-irene.webp","sha256":"76539c367f9b1aabeaa2803cd8851cd0f8875667412928e25cc64b801bbdcaf0","origin_commit":"27b5d13","source":"OpenAI image generation"},
   {"path":"src/murdoku_v2/assets/furniture/bed-horizontal.webp","sha256":"3f1bc00e12a189c75858a88447e743151103ef444c828de3ee67e9e25cffbd6f","origin_commit":"78e361d","source":"Project-local generated asset or derivative"},
   {"path":"src/murdoku_v2/assets/furniture/bed.webp","sha256":"d2b619cbd90f5f57aab8576d1055600eacaa264450b6ca6c60dbe89672efeb82","origin_commit":"43be684","source":"OpenAI image generation"},
   {"path":"src/murdoku_v2/assets/furniture/bookshelf-horizontal.webp","sha256":"0275f413358f7f0541cba5bc6951889b3f1f62c32a8792b34477120953261b4b","origin_commit":"78e361d","source":"Project-local generated asset or derivative"},

@@ -1,0 +1,49 @@
+{
+  "puzzle_id": "hotel-de-medianoche-8204",
+  "victim": "lucas",
+  "victim_name": "Lucas",
+  "positions": {
+    "ines": {
+      "row": 3,
+      "column": 7,
+      "room": "corridor"
+    },
+    "lucas": {
+      "row": 6,
+      "column": 5,
+      "room": "dining"
+    },
+    "marta": {
+      "row": 0,
+      "column": 1,
+      "room": "suite"
+    },
+    "nicolas": {
+      "row": 7,
+      "column": 4,
+      "room": "dining"
+    },
+    "olivia": {
+      "row": 4,
+      "column": 2,
+      "room": "lobby"
+    },
+    "pablo": {
+      "row": 2,
+      "column": 6,
+      "room": "office"
+    },
+    "raquel": {
+      "row": 5,
+      "column": 3,
+      "room": "lobby"
+    },
+    "sergio": {
+      "row": 1,
+      "column": 0,
+      "room": "suite"
+    }
+  },
+  "murderer": "nicolas",
+  "murderer_name": "Nicolás"
+}

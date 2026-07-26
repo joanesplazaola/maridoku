@@ -1,0 +1,63 @@
+{
+  "seed": 8102,
+  "target_attempt": 1,
+  "selector_iterations": 10,
+  "selector_witnesses": 3,
+  "families": {
+    "relative_distance": 1,
+    "object_occupancy": 1,
+    "object_adjacency": 2,
+    "room_exact": 1
+  },
+  "directional": 1,
+  "human_steps": 28,
+  "human_techniques": [
+    "binary_relation",
+    "clue_anchor",
+    "column_matching",
+    "row_matching",
+    "unique_object",
+    "victim_companion"
+  ],
+  "human_complexity": {
+    "deduction_steps": 28,
+    "propagation_rounds": 3,
+    "branching_points": 0,
+    "hardest_technique": "row_matching",
+    "hardest_level": 3,
+    "technique_counts": {
+      "clue_anchor": 4,
+      "unique_object": 8,
+      "binary_relation": 4,
+      "victim_companion": 3,
+      "row_matching": 5,
+      "column_matching": 4
+    },
+    "calibrated": false
+  },
+  "editorial_audit": {
+    "accepted": true,
+    "errors": [],
+    "warnings": [],
+    "duplicate_texts": [],
+    "unsupported_player_types": [],
+    "family_distribution": {
+      "relative_distance": 1,
+      "murder_rule": 1,
+      "object_occupancy": 1,
+      "object_adjacency": 2,
+      "room_exact": 1
+    },
+    "type_distribution": {
+      "relative_row_distance": 1,
+      "victim_rule": 1,
+      "unique_on_object": 1,
+      "adjacent_object": 1,
+      "unique_adjacent_object": 1,
+      "room": 1
+    },
+    "dominant_family": "object_adjacency",
+    "dominant_family_ratio": 0.333
+  },
+  "exact_unique": true
+}

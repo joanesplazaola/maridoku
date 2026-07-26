@@ -23,7 +23,7 @@
     {"id": "water", "name": "Agua", "clue_label": "el agua", "cells": [[4,4],[4,5],[5,4],[5,5],[6,5],[6,6]]}
   ],
   "sequences": [
-    {"id": "holes", "name": "Recorrido", "item_label": "Hoyo", "cells": [[0,1],[1,5],[2,8],[3,7],[4,6],[5,3],[6,2],[7,6],[8,8]]}
+    {"id": "holes", "name": "Recorrido", "item_label": "Hoyo", "clue_label": "el hoyo", "cells": [[0,1],[1,5],[2,8],[3,7],[4,6],[5,3],[6,2],[7,6],[8,8]]}
   ],
   "objects": [
     {"id": "table-club", "type": "table", "name": "Mesa", "cells": [[0,1],[0,2]], "occupiable": false, "blocks_character": true},

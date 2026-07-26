@@ -62,8 +62,8 @@ deductiva y por datos de personas.
 
 ## P3: catálogo comercial
 
-- [ ] Generar candidatos sobre plantillas aprobadas y enviarlos a revisión.
-- [ ] Publicar 15 casos autorados antes de volver a plantear un catálogo de 50.
+- [x] Generar candidatos sobre plantillas aprobadas y enviarlos a revisión.
+- [x] Publicar 15 casos autorados antes de volver a plantear un catálogo de 50.
 - [x] Revisar licencia y procedencia de todos los recursos visuales.
 - [x] Automatizar QA en Chromium, Firefox y WebKit, escritorio y móvil.
 - [x] Desplegar builds verificadas en GitHub Pages.

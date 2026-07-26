@@ -81,6 +81,7 @@ def _stylesheet() -> str:
     replacements = {
         "__CASE_PAPER__": assets.joinpath("case-paper.webp"),
         "__PORTRAITS__": assets.joinpath("portraits.webp"),
+        "__PORTRAIT_IRENE__": assets.joinpath("portrait-irene.webp"),
         "__PLANT__": assets.joinpath("furniture/plant.webp"),
         "__TABLE__": assets.joinpath("furniture/table.webp"),
         "__RUG__": assets.joinpath("furniture/rug.webp"),

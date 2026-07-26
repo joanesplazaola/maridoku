@@ -1,0 +1,1003 @@
+{
+  "schema_version": 8,
+  "id": "la-ultima-ronda-8304",
+  "title": "El último putt",
+  "story": "La competición terminó con un golpe sin registrar y la muerte de Irene. Sitúa a cada persona y descubre quién se quedó a solas con ella.",
+  "seed": 8304,
+  "selection_profile": "special_sequence",
+  "characters": [
+    {
+      "id": "alicia",
+      "name": "Alicia",
+      "gender": "woman",
+      "role": "suspect"
+    },
+    {
+      "id": "bruno",
+      "name": "Bruno",
+      "gender": "man",
+      "role": "suspect"
+    },
+    {
+      "id": "carla",
+      "name": "Carla",
+      "gender": "woman",
+      "role": "suspect"
+    },
+    {
+      "id": "diego",
+      "name": "Diego",
+      "gender": "man",
+      "role": "suspect"
+    },
+    {
+      "id": "elena",
+      "name": "Elena",
+      "gender": "woman",
+      "role": "suspect"
+    },
+    {
+      "id": "fabio",
+      "name": "Fabio",
+      "gender": "man",
+      "role": "suspect"
+    },
+    {
+      "id": "gabriela",
+      "name": "Gabriela",
+      "gender": "woman",
+      "role": "suspect"
+    },
+    {
+      "id": "hugo",
+      "name": "Hugo",
+      "gender": "man",
+      "role": "suspect"
+    },
+    {
+      "id": "irene",
+      "name": "Irene",
+      "gender": "woman",
+      "role": "victim"
+    }
+  ],
+  "victim": "irene",
+  "rules": {
+    "one_character_per_row": true,
+    "one_character_per_column": true,
+    "one_card_per_character": true
+  },
+  "cards": [
+    {
+      "id": "card-alicia",
+      "character": "alicia",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-alicia-statement-1",
+          "type": "room",
+          "family": "room_exact",
+          "args": {
+            "character": "alicia",
+            "room": "maintenance"
+          },
+          "text": "Alicia estaba en mantenimiento."
+        },
+        {
+          "id": "card-alicia-statement-2",
+          "type": "next_to_sequence_item",
+          "family": "sequence_relation",
+          "args": {
+            "character": "alicia",
+            "sequence": "holes",
+            "item": 6
+          },
+          "text": "Alicia estaba inmediatamente antes o después del hoyo 7."
+        }
+      ]
+    },
+    {
+      "id": "card-bruno",
+      "character": "bruno",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-bruno-statement-1",
+          "type": "in_room_group",
+          "family": "room_group",
+          "args": {
+            "character": "bruno",
+            "group": "club"
+          },
+          "text": "Bruno estaba en la casa club."
+        },
+        {
+          "id": "card-bruno-statement-2",
+          "type": "relative_column_distance",
+          "family": "relative_distance",
+          "args": {
+            "character": "bruno",
+            "reference": "irene",
+            "delta": -4
+          },
+          "text": "Bruno estaba 4 columnas al oeste de Irene."
+        }
+      ]
+    },
+    {
+      "id": "card-carla",
+      "character": "carla",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-carla-statement-1",
+          "type": "unique_on_object",
+          "family": "object_occupancy",
+          "args": {
+            "character": "carla",
+            "object_type": "flag"
+          },
+          "text": "Carla era la única persona sobre una bandera."
+        }
+      ]
+    },
+    {
+      "id": "card-diego",
+      "character": "diego",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-diego-statement-1",
+          "type": "adjacent_object",
+          "family": "object_adjacency",
+          "args": {
+            "character": "diego",
+            "object_type": "chair"
+          },
+          "text": "Diego estaba al lado de una silla."
+        }
+      ]
+    },
+    {
+      "id": "card-elena",
+      "character": "elena",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-elena-statement-1",
+          "type": "room",
+          "family": "room_exact",
+          "args": {
+            "character": "elena",
+            "room": "east_course"
+          },
+          "text": "Elena estaba en la calle este."
+        }
+      ]
+    },
+    {
+      "id": "card-fabio",
+      "character": "fabio",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-fabio-statement-1",
+          "type": "in_room_group",
+          "family": "room_group",
+          "args": {
+            "character": "fabio",
+            "group": "service"
+          },
+          "text": "Fabio estaba en una zona de servicio."
+        }
+      ]
+    },
+    {
+      "id": "card-gabriela",
+      "character": "gabriela",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-gabriela-statement-1",
+          "type": "unique_on_object",
+          "family": "object_occupancy",
+          "args": {
+            "character": "gabriela",
+            "object_type": "sofa"
+          },
+          "text": "Gabriela era la única persona sobre un banco."
+        }
+      ]
+    },
+    {
+      "id": "card-hugo",
+      "character": "hugo",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-hugo-statement-1",
+          "type": "object_same_row_in_room",
+          "family": "object_line",
+          "args": {
+            "character": "hugo",
+            "object_type": "plant"
+          },
+          "text": "Hugo estaba en la misma fila y habitación que una planta."
+        }
+      ]
+    },
+    {
+      "id": "card-irene",
+      "character": "irene",
+      "role": "victim",
+      "statements": [
+        {
+          "id": "card-irene-statement-1",
+          "type": "victim_rule",
+          "family": "murder_rule",
+          "args": {
+            "character": "irene"
+          },
+          "text": "Irene estaba a solas con otra persona. Esa persona es el asesino."
+        }
+      ]
+    }
+  ],
+  "general_clues": [],
+  "board": {
+    "id": "board_golf",
+    "name": "Club de golf",
+    "rows": 9,
+    "columns": 9,
+    "room_groups": [
+      {
+        "id": "club",
+        "name": "Casa club",
+        "clue_label": "la casa club",
+        "rooms": [
+          "clubhouse",
+          "terrace",
+          "practice"
+        ]
+      },
+      {
+        "id": "course",
+        "name": "Campo",
+        "clue_label": "el campo",
+        "rooms": [
+          "west_course",
+          "lake_course",
+          "east_course",
+          "green"
+        ]
+      },
+      {
+        "id": "service",
+        "name": "Servicio",
+        "clue_label": "una zona de servicio",
+        "rooms": [
+          "pavilion",
+          "maintenance"
+        ]
+      }
+    ],
+    "rooms": [
+      {
+        "id": "clubhouse",
+        "name": "Casa club",
+        "clue_label": "la casa club",
+        "label_anchor": [
+          2,
+          0
+        ],
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ]
+        ]
+      },
+      {
+        "id": "terrace",
+        "name": "Terraza",
+        "clue_label": "la terraza",
+        "label_anchor": [
+          2,
+          3
+        ],
+        "cells": [
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ]
+        ]
+      },
+      {
+        "id": "practice",
+        "name": "Prácticas",
+        "clue_label": "la zona de prácticas",
+        "label_anchor": [
+          2,
+          6
+        ],
+        "cells": [
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            1,
+            8
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            2,
+            8
+          ]
+        ]
+      },
+      {
+        "id": "west_course",
+        "name": "Calle oeste",
+        "clue_label": "la calle oeste",
+        "label_anchor": [
+          3,
+          0
+        ],
+        "cells": [
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ]
+        ]
+      },
+      {
+        "id": "lake_course",
+        "name": "Lago",
+        "clue_label": "la zona del lago",
+        "label_anchor": [
+          3,
+          3
+        ],
+        "cells": [
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ]
+      },
+      {
+        "id": "east_course",
+        "name": "Calle este",
+        "clue_label": "la calle este",
+        "label_anchor": [
+          3,
+          6
+        ],
+        "cells": [
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            3,
+            8
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            4,
+            8
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            5,
+            8
+          ]
+        ]
+      },
+      {
+        "id": "green",
+        "name": "Green",
+        "clue_label": "el green",
+        "label_anchor": [
+          8,
+          0
+        ],
+        "cells": [
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            8,
+            1
+          ],
+          [
+            8,
+            2
+          ]
+        ]
+      },
+      {
+        "id": "pavilion",
+        "name": "Pabellón",
+        "clue_label": "el pabellón",
+        "label_anchor": [
+          8,
+          3
+        ],
+        "cells": [
+          [
+            6,
+            3
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            7,
+            5
+          ],
+          [
+            8,
+            3
+          ],
+          [
+            8,
+            4
+          ],
+          [
+            8,
+            5
+          ]
+        ]
+      },
+      {
+        "id": "maintenance",
+        "name": "Mantenimiento",
+        "clue_label": "mantenimiento",
+        "label_anchor": [
+          8,
+          6
+        ],
+        "cells": [
+          [
+            6,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            6,
+            8
+          ],
+          [
+            7,
+            6
+          ],
+          [
+            7,
+            7
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            8,
+            6
+          ],
+          [
+            8,
+            7
+          ],
+          [
+            8,
+            8
+          ]
+        ]
+      }
+    ],
+    "zones": [
+      {
+        "id": "water",
+        "name": "Agua",
+        "clue_label": "el agua",
+        "cells": [
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            6,
+            6
+          ]
+        ]
+      }
+    ],
+    "sequences": [
+      {
+        "id": "holes",
+        "name": "Recorrido",
+        "item_label": "Hoyo",
+        "cells": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            8
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            7,
+            6
+          ],
+          [
+            8,
+            8
+          ]
+        ]
+      }
+    ],
+    "objects": [
+      {
+        "id": "table-club",
+        "type": "table",
+        "name": "Mesa",
+        "cells": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ]
+        ],
+        "occupiable": false,
+        "blocks_character": true
+      },
+      {
+        "id": "chair-club-a",
+        "type": "chair",
+        "name": "Silla",
+        "cells": [
+          [
+            1,
+            2
+          ]
+        ],
+        "occupiable": true,
+        "blocks_character": false,
+        "rotation": 180
+      },
+      {
+        "id": "chair-club-b",
+        "type": "chair",
+        "name": "Silla",
+        "cells": [
+          [
+            1,
+            3
+          ]
+        ],
+        "occupiable": true,
+        "blocks_character": false,
+        "rotation": 180
+      },
+      {
+        "id": "counter-club",
+        "type": "counter",
+        "name": "Mostrador",
+        "cells": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        "occupiable": false,
+        "blocks_character": true
+      },
+      {
+        "id": "rug-terrace",
+        "type": "rug",
+        "name": "Alfombra exterior",
+        "cells": [
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        "layer": "floor",
+        "occupiable": true,
+        "blocks_character": false
+      },
+      {
+        "id": "sofa-terrace",
+        "type": "sofa",
+        "name": "Banco",
+        "cells": [
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ]
+        ],
+        "occupiable": true,
+        "blocks_character": false
+      },
+      {
+        "id": "plant-practice",
+        "type": "plant",
+        "name": "Planta",
+        "cells": [
+          [
+            0,
+            8
+          ]
+        ],
+        "occupiable": false,
+        "blocks_character": true
+      },
+      {
+        "id": "flag-hole-3",
+        "type": "flag",
+        "name": "Bandera",
+        "cells": [
+          [
+            2,
+            8
+          ]
+        ],
+        "occupiable": true,
+        "blocks_character": false
+      },
+      {
+        "id": "plant-fairway-a",
+        "type": "plant",
+        "name": "Planta",
+        "cells": [
+          [
+            3,
+            2
+          ]
+        ],
+        "occupiable": false,
+        "blocks_character": true
+      },
+      {
+        "id": "plant-fairway-b",
+        "type": "plant",
+        "name": "Planta",
+        "cells": [
+          [
+            5,
+            8
+          ]
+        ],
+        "occupiable": false,
+        "blocks_character": true
+      },
+      {
+        "id": "flag-hole-5",
+        "type": "flag",
+        "name": "Bandera",
+        "cells": [
+          [
+            4,
+            6
+          ]
+        ],
+        "occupiable": true,
+        "blocks_character": false
+      },
+      {
+        "id": "flag-hole-7",
+        "type": "flag",
+        "name": "Bandera",
+        "cells": [
+          [
+            6,
+            2
+          ]
+        ],
+        "occupiable": true,
+        "blocks_character": false
+      },
+      {
+        "id": "sofa-lake",
+        "type": "sofa",
+        "name": "Banco",
+        "cells": [
+          [
+            8,
+            4
+          ],
+          [
+            8,
+            5
+          ]
+        ],
+        "occupiable": true,
+        "blocks_character": false
+      },
+      {
+        "id": "flag-hole-9",
+        "type": "flag",
+        "name": "Bandera",
+        "cells": [
+          [
+            8,
+            8
+          ]
+        ],
+        "occupiable": true,
+        "blocks_character": false
+      }
+    ]
+  }
+}

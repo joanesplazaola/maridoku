@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "puzzle_id": "hotel-de-medianoche-8203",
+  "puzzle_schema_version": 8,
+  "generator": "fixed_scene",
+  "generator_commit": "local",
+  "text_locale": "es",
+  "text_version": 1,
+  "seed": 8203,
+  "source_case": "examples/board_hotel/case.json",
+  "editorial_status": "approved",
+  "private_solution": {
+    "path": "solution.json",
+    "sha256": "50d926e7d70495bfb59f9d04f958e1e749a2b51a4ddc1fe41cc35cb20f834dd4"
+  },
+  "public_puzzle": {
+    "path": "puzzle.json",
+    "sha256": "1ada96ea1aa849405c40b61ec89afe5c48406077bf910d09a6a385ba3bce28e1"
+  },
+  "metrics": {
+    "rows": 8,
+    "columns": 8,
+    "unique": true,
+    "families": {
+      "object_line": 2,
+      "relative_distance": 1,
+      "object_adjacency": 1,
+      "room_exact": 1,
+      "object_occupancy": 1,
+      "room_geometry": 1
+    },
+    "human_complexity": {
+      "deduction_steps": 33,
+      "propagation_rounds": 2,
+      "branching_points": 0,
+      "hardest_technique": "row_matching",
+      "hardest_level": 3,
+      "technique_counts": {
+        "clue_anchor": 6,
+        "unique_object": 4,
+        "binary_relation": 4,
+        "victim_companion": 2,
+        "row_matching": 8,
+        "column_matching": 9
+      },
+      "calibrated": false
+    }
+  },
+  "review": {
+    "exact_unique": true,
+    "human_solved": true,
+    "difficulty": {
+      "label": "medium",
+      "score": 54,
+      "calibration": "technical_estimate_not_human_calibrated"
+    },
+    "editorial_audit": {
+      "accepted": true,
+      "errors": [],
+      "warnings": [],
+      "duplicate_texts": [],
+      "unsupported_player_types": [],
+      "family_distribution": {
+        "object_line": 2,
+        "murder_rule": 1,
+        "relative_distance": 1,
+        "object_adjacency": 1,
+        "room_exact": 1,
+        "object_occupancy": 1,
+        "room_geometry": 1
+      },
+      "type_distribution": {
+        "object_same_row_in_room": 2,
+        "victim_rule": 1,
+        "relative_column_distance": 1,
+        "adjacent_object": 1,
+        "room": 1,
+        "unique_on_object": 1,
+        "in_room_corner": 1
+      },
+      "dominant_family": "object_line",
+      "dominant_family_ratio": 0.25
+    }
+  },
+  "editorial_commit": "local"
+}

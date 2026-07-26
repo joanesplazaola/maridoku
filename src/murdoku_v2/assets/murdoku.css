@@ -654,6 +654,12 @@ main {
   box-shadow: 3px 4px 0 rgb(41 44 39 / 18%);
 }
 
+.person-select[data-character="irene"] .portrait {
+  background-image: url("__PORTRAIT_IRENE__");
+  background-position: center;
+  background-size: cover;
+}
+
 .card h2 {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;

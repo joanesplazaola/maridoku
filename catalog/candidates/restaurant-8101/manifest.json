@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "puzzle_id": "ultimo-servicio-8101",
+  "puzzle_schema_version": 8,
+  "generator": "fixed_scene",
+  "generator_commit": "local",
+  "text_locale": "es",
+  "text_version": 1,
+  "seed": 8101,
+  "source_case": "examples/board_restaurant/case.json",
+  "editorial_status": "approved",
+  "private_solution": {
+    "path": "solution.json",
+    "sha256": "3b413f84c9c5615a25597c4f92b2591af96f6062f46b0b8f02de69418eedfe12"
+  },
+  "public_puzzle": {
+    "path": "puzzle.json",
+    "sha256": "4fd7d2ab035e8f56654c44a90a3cb78853e4dadb7b088be4604520eb68bd7764"
+  },
+  "metrics": {
+    "rows": 6,
+    "columns": 6,
+    "unique": true,
+    "families": {
+      "room_exact": 1,
+      "relative_distance": 1,
+      "object_adjacency": 2,
+      "object_line": 1
+    },
+    "human_complexity": {
+      "deduction_steps": 17,
+      "propagation_rounds": 2,
+      "branching_points": 0,
+      "hardest_technique": "row_matching",
+      "hardest_level": 3,
+      "technique_counts": {
+        "clue_anchor": 4,
+        "binary_relation": 3,
+        "victim_companion": 2,
+        "row_matching": 3,
+        "column_matching": 5
+      },
+      "calibrated": false
+    }
+  },
+  "review": {
+    "exact_unique": true,
+    "human_solved": true,
+    "difficulty": {
+      "label": "easy",
+      "score": 38,
+      "calibration": "technical_estimate_not_human_calibrated"
+    },
+    "editorial_audit": {
+      "accepted": true,
+      "errors": [],
+      "warnings": [],
+      "duplicate_texts": [],
+      "unsupported_player_types": [],
+      "family_distribution": {
+        "room_exact": 1,
+        "murder_rule": 1,
+        "relative_distance": 1,
+        "object_adjacency": 2,
+        "object_line": 1
+      },
+      "type_distribution": {
+        "room": 1,
+        "victim_rule": 1,
+        "relative_row_distance": 1,
+        "adjacent_object": 2,
+        "object_same_row_in_room": 1
+      },
+      "dominant_family": "object_adjacency",
+      "dominant_family_ratio": 0.333
+    }
+  },
+  "editorial_commit": "local"
+}

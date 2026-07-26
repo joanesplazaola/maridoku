@@ -1,0 +1,39 @@
+{
+  "puzzle_id": "ultimo-servicio-8101",
+  "victim": "bruno",
+  "victim_name": "Bruno",
+  "positions": {
+    "alicia": {
+      "row": 3,
+      "column": 2,
+      "room": "dining"
+    },
+    "bruno": {
+      "row": 2,
+      "column": 0,
+      "room": "kitchen"
+    },
+    "carla": {
+      "row": 1,
+      "column": 4,
+      "room": "dining"
+    },
+    "diego": {
+      "row": 0,
+      "column": 1,
+      "room": "kitchen"
+    },
+    "elena": {
+      "row": 4,
+      "column": 3,
+      "room": "garden"
+    },
+    "fabio": {
+      "row": 5,
+      "column": 5,
+      "room": "garden"
+    }
+  },
+  "murderer": "diego",
+  "murderer_name": "Diego"
+}

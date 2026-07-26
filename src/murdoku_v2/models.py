@@ -46,6 +46,7 @@ class SequenceModel(BaseModel):
     id: str
     name: str
     item_label: str
+    clue_label: str | None = None
     cells: list[tuple[int, int]]
 
 

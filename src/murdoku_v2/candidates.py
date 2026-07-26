@@ -182,9 +182,11 @@ def candidate_pools(
                 (
                     "same_room" if room_id == room_at[(reference_row, reference_column)] else "different_room",
                     {"reference": reference["id"]},
-                    f"{name} estaba en una habitación "
-                    f"{'igual' if room_id == room_at[(reference_row, reference_column)] else 'distinta'} "
-                    f"a {reference['name']}.",
+                    (
+                        f"{name} estaba en la misma habitación que {reference['name']}."
+                        if room_id == room_at[(reference_row, reference_column)]
+                        else f"{name} estaba en una habitación distinta de {reference['name']}."
+                    ),
                 ),
             ))
             if abs(row_delta) == abs(column_delta):
@@ -288,11 +290,12 @@ def candidate_pools(
             own_index = cells.index((row, column))
             for item in (own_index - 1, own_index + 1):
                 if 0 <= item < len(cells):
+                    label = sequence.get("clue_label") or sequence["item_label"]
+                    reference = f"del {label[3:]}" if label.startswith("el ") else f"de {label}"
                     candidates.append((
                         "next_to_sequence_item",
                         {"sequence": sequence["id"], "item": item},
-                        f"{name} estaba inmediatamente antes o después de "
-                        f"{sequence['item_label']} {item + 1}.",
+                        f"{name} estaba inmediatamente antes o después {reference} {item + 1}.",
                     ))
 
         pool = []

@@ -1,0 +1,439 @@
+{
+  "puzzle_id": "la-ultima-ronda-8302",
+  "available": true,
+  "method": "human_propagation",
+  "solved_without_guessing": true,
+  "steps": [
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-alicia-statement-1",
+      "character": "alicia",
+      "removed": 65,
+      "remaining": 9,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-alicia-statement-2",
+      "character": "alicia",
+      "removed": 8,
+      "remaining": 1,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-bruno-statement-1",
+      "character": "bruno",
+      "removed": 66,
+      "remaining": 8,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-bruno-statement-2",
+      "character": "bruno",
+      "removed": 6,
+      "remaining": 2,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-bruno-statement-2",
+      "character": "carla",
+      "removed": 6,
+      "remaining": 68,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-bruno-statement-2",
+      "character": "diego",
+      "removed": 6,
+      "remaining": 68,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-bruno-statement-2",
+      "character": "elena",
+      "removed": 6,
+      "remaining": 68,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-bruno-statement-2",
+      "character": "fabio",
+      "removed": 6,
+      "remaining": 68,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-bruno-statement-2",
+      "character": "gabriela",
+      "removed": 6,
+      "remaining": 68,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-bruno-statement-2",
+      "character": "hugo",
+      "removed": 6,
+      "remaining": 68,
+      "round": 0
+    },
+    {
+      "technique": "unique_object",
+      "statement_id": "card-bruno-statement-2",
+      "character": "irene",
+      "removed": 6,
+      "remaining": 68,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-carla-statement-1",
+      "character": "carla",
+      "removed": 57,
+      "remaining": 11,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-diego-statement-1",
+      "character": "diego",
+      "removed": 38,
+      "remaining": 30,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-fabio-statement-1",
+      "character": "fabio",
+      "removed": 65,
+      "remaining": 3,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-gabriela-statement-1",
+      "character": "gabriela",
+      "removed": 65,
+      "remaining": 3,
+      "round": 0
+    },
+    {
+      "technique": "clue_anchor",
+      "statement_id": "card-hugo-statement-1",
+      "character": "hugo",
+      "removed": 37,
+      "remaining": 31,
+      "round": 0
+    },
+    {
+      "technique": "binary_relation",
+      "statement_id": "card-elena-statement-1",
+      "character": "elena",
+      "removed": 39,
+      "remaining": 29,
+      "round": 1
+    },
+    {
+      "technique": "binary_relation",
+      "statement_id": "card-elena-statement-1",
+      "character": "diego",
+      "removed": 21,
+      "remaining": 9,
+      "round": 1
+    },
+    {
+      "technique": "victim_companion",
+      "statement_id": "card-irene-statement-1",
+      "character": "irene",
+      "removed": 1,
+      "remaining": 67,
+      "round": 1
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "carla",
+      "removed": 3,
+      "remaining": 8,
+      "round": 1
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "elena",
+      "removed": 4,
+      "remaining": 25,
+      "round": 1
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "hugo",
+      "removed": 6,
+      "remaining": 25,
+      "round": 1
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "irene",
+      "removed": 9,
+      "remaining": 58,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "bruno",
+      "removed": 1,
+      "remaining": 1,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "carla",
+      "removed": 3,
+      "remaining": 5,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "diego",
+      "removed": 3,
+      "remaining": 6,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "hugo",
+      "removed": 3,
+      "remaining": 22,
+      "round": 1
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "irene",
+      "removed": 50,
+      "remaining": 8,
+      "round": 1
+    },
+    {
+      "technique": "binary_relation",
+      "statement_id": "card-elena-statement-1",
+      "character": "elena",
+      "removed": 13,
+      "remaining": 12,
+      "round": 2
+    },
+    {
+      "technique": "victim_companion",
+      "statement_id": "card-irene-statement-1",
+      "character": "irene",
+      "removed": 1,
+      "remaining": 7,
+      "round": 2
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "diego",
+      "removed": 2,
+      "remaining": 4,
+      "round": 2
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "elena",
+      "removed": 2,
+      "remaining": 10,
+      "round": 2
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "hugo",
+      "removed": 5,
+      "remaining": 17,
+      "round": 2
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "irene",
+      "removed": 1,
+      "remaining": 6,
+      "round": 2
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "carla",
+      "removed": 3,
+      "remaining": 2,
+      "round": 2
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "diego",
+      "removed": 2,
+      "remaining": 2,
+      "round": 2
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "hugo",
+      "removed": 13,
+      "remaining": 4,
+      "round": 2
+    },
+    {
+      "technique": "binary_relation",
+      "statement_id": "card-elena-statement-1",
+      "character": "elena",
+      "removed": 4,
+      "remaining": 6,
+      "round": 3
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "fabio",
+      "removed": 1,
+      "remaining": 2,
+      "round": 3
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "gabriela",
+      "removed": 1,
+      "remaining": 2,
+      "round": 3
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "carla",
+      "removed": 1,
+      "remaining": 1,
+      "round": 4
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "diego",
+      "removed": 1,
+      "remaining": 1,
+      "round": 4
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "elena",
+      "removed": 3,
+      "remaining": 3,
+      "round": 4
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "fabio",
+      "removed": 1,
+      "remaining": 1,
+      "round": 4
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "hugo",
+      "removed": 2,
+      "remaining": 2,
+      "round": 4
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "irene",
+      "removed": 4,
+      "remaining": 2,
+      "round": 4
+    },
+    {
+      "technique": "column_matching",
+      "statement_id": null,
+      "character": "gabriela",
+      "removed": 1,
+      "remaining": 1,
+      "round": 4
+    },
+    {
+      "technique": "victim_companion",
+      "statement_id": "card-irene-statement-1",
+      "character": "irene",
+      "removed": 1,
+      "remaining": 1,
+      "round": 5
+    },
+    {
+      "technique": "victim_companion",
+      "statement_id": "card-irene-statement-1",
+      "character": "hugo",
+      "removed": 1,
+      "remaining": 1,
+      "round": 5
+    },
+    {
+      "technique": "row_matching",
+      "statement_id": null,
+      "character": "elena",
+      "removed": 2,
+      "remaining": 1,
+      "round": 5
+    }
+  ],
+  "step_count": 50,
+  "techniques": [
+    "binary_relation",
+    "clue_anchor",
+    "column_matching",
+    "row_matching",
+    "unique_object",
+    "victim_companion"
+  ],
+  "complexity": {
+    "deduction_steps": 50,
+    "propagation_rounds": 5,
+    "branching_points": 0,
+    "hardest_technique": "row_matching",
+    "hardest_level": 3,
+    "technique_counts": {
+      "clue_anchor": 9,
+      "unique_object": 7,
+      "binary_relation": 4,
+      "victim_companion": 4,
+      "row_matching": 15,
+      "column_matching": 11
+    },
+    "calibrated": false
+  },
+  "unique": true,
+  "difficulty": {
+    "label": "hard",
+    "score": 80,
+    "calibration": "technical_estimate_not_human_calibrated"
+  }
+}

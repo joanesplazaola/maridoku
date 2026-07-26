@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import tempfile
 import threading
 from functools import partial
@@ -23,11 +24,19 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--browsers",
+        nargs="+",
+        choices=("chromium", "firefox", "webkit"),
+        default=("chromium", "firefox", "webkit"),
+    )
+    args = parser.parse_args()
     artifacts = Path("qa-artifacts")
     artifacts.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="maridoku-qa-") as temp:
         site = Path(temp)
-        build_site(site)
+        level_count = build_site(site)["levels"]
         server = ThreadingHTTPServer(
             ("127.0.0.1", 0),
             partial(QuietHandler, directory=site),
@@ -37,7 +46,7 @@ def main() -> None:
         base_url = f"http://127.0.0.1:{server.server_port}"
         try:
             with sync_playwright() as playwright:
-                for browser_name in ("chromium", "firefox", "webkit"):
+                for browser_name in args.browsers:
                     browser = getattr(playwright, browser_name).launch()
                     try:
                         for viewport_name, viewport in VIEWPORTS.items():
@@ -49,7 +58,7 @@ def main() -> None:
                                 lambda message: errors.append(message.text)
                                 if message.type == "error" else None,
                             )
-                            for level in range(1, 4):
+                            for level in range(1, int(level_count) + 1):
                                 page.goto(f"{base_url}/levels/{level:03d}.html")
                                 page.wait_for_load_state("networkidle")
                                 assert page.locator("table[aria-label='Tablero']").is_visible()

@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "puzzle_id": "ultimo-servicio-8102",
+  "puzzle_schema_version": 8,
+  "generator": "fixed_scene",
+  "generator_commit": "local",
+  "text_locale": "es",
+  "text_version": 1,
+  "seed": 8102,
+  "source_case": "examples/board_restaurant/case.json",
+  "editorial_status": "approved",
+  "private_solution": {
+    "path": "solution.json",
+    "sha256": "8e40ff806e14c244c23b172189992ce1e645192405060fa8a226f7575cf531c3"
+  },
+  "public_puzzle": {
+    "path": "puzzle.json",
+    "sha256": "6201e0a01b4971c8dd2ef0d86fd6f113cf9df2c8aece6792e274b486cb05e60c"
+  },
+  "metrics": {
+    "rows": 6,
+    "columns": 6,
+    "unique": true,
+    "families": {
+      "relative_distance": 1,
+      "object_occupancy": 1,
+      "object_adjacency": 2,
+      "room_exact": 1
+    },
+    "human_complexity": {
+      "deduction_steps": 28,
+      "propagation_rounds": 3,
+      "branching_points": 0,
+      "hardest_technique": "row_matching",
+      "hardest_level": 3,
+      "technique_counts": {
+        "clue_anchor": 4,
+        "unique_object": 8,
+        "binary_relation": 4,
+        "victim_companion": 3,
+        "row_matching": 5,
+        "column_matching": 4
+      },
+      "calibrated": false
+    }
+  },
+  "review": {
+    "exact_unique": true,
+    "human_solved": true,
+    "difficulty": {
+      "label": "medium",
+      "score": 52,
+      "calibration": "technical_estimate_not_human_calibrated"
+    },
+    "editorial_audit": {
+      "accepted": true,
+      "errors": [],
+      "warnings": [],
+      "duplicate_texts": [],
+      "unsupported_player_types": [],
+      "family_distribution": {
+        "relative_distance": 1,
+        "murder_rule": 1,
+        "object_occupancy": 1,
+        "object_adjacency": 2,
+        "room_exact": 1
+      },
+      "type_distribution": {
+        "relative_row_distance": 1,
+        "victim_rule": 1,
+        "unique_on_object": 1,
+        "adjacent_object": 1,
+        "unique_adjacent_object": 1,
+        "room": 1
+      },
+      "dominant_family": "object_adjacency",
+      "dominant_family_ratio": 0.333
+    }
+  },
+  "editorial_commit": "local"
+}

@@ -108,12 +108,33 @@ def build_site(output: Path) -> dict[str, object]:
     output.mkdir(parents=True, exist_ok=True)
     levels_dir = output / "levels"
     levels_dir.mkdir(exist_ok=True)
-    catalog = []
     project = Path(__file__).resolve().parents[2]
-    for index, spec in enumerate(REFERENCE_CASES):
+    specs = [{**spec, "reference": True} for spec in REFERENCE_CASES]
+    difficulty_labels = {"easy": "Fácil", "medium": "Medio", "hard": "Difícil", "expert": "Experto"}
+    for manifest_path in sorted((project / "catalog/candidates").glob("*/manifest.json")):
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if manifest.get("editorial_status") != "approved":
+            continue
+        difficulty = manifest["review"]["difficulty"]["label"]
+        specs.append({
+            "difficulty": difficulty,
+            "difficulty_label": difficulty_labels[difficulty],
+            "path": manifest_path.parent / manifest["public_puzzle"]["path"],
+            "reference": False,
+        })
+    difficulty_rank = {"easy": 0, "medium": 1, "hard": 2, "expert": 3}
+    specs.sort(key=lambda spec: (
+        difficulty_rank[spec["difficulty"]],
+        not spec["reference"],
+        str(spec["path"]),
+    ))
+
+    catalog = []
+    for index, source_spec in enumerate(specs):
+        spec = {**source_spec, "number": index + 1}
         puzzle = load_puzzle(project / spec["path"])
         level = {
-            **{key: value for key, value in spec.items() if key != "path"},
+            **{key: value for key, value in spec.items() if key not in {"path", "reference"}},
             "puzzle_id": puzzle["id"],
             "title": puzzle.get("title", puzzle["board"]["name"]),
             "rows": puzzle["board"]["rows"],
@@ -123,7 +144,7 @@ def build_site(output: Path) -> dict[str, object]:
         navigation = {
             "number": spec["number"],
             "previous": f"{int(spec['number']) - 1:03d}.html" if index else None,
-            "next": f"{int(spec['number']) + 1:03d}.html" if index + 1 < len(REFERENCE_CASES) else None,
+            "next": f"{int(spec['number']) + 1:03d}.html" if index + 1 < len(specs) else None,
         }
         (levels_dir / f"{int(spec['number']):03d}.html").write_text(
             render_html(puzzle, navigation=navigation), encoding="utf-8"

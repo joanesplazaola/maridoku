@@ -1,0 +1,54 @@
+{
+  "puzzle_id": "la-ultima-ronda-8301",
+  "victim": "irene",
+  "victim_name": "Irene",
+  "positions": {
+    "alicia": {
+      "row": 0,
+      "column": 6,
+      "room": "practice"
+    },
+    "bruno": {
+      "row": 7,
+      "column": 1,
+      "room": "green"
+    },
+    "carla": {
+      "row": 2,
+      "column": 4,
+      "room": "terrace"
+    },
+    "diego": {
+      "row": 3,
+      "column": 0,
+      "room": "west_course"
+    },
+    "elena": {
+      "row": 5,
+      "column": 3,
+      "room": "lake_course"
+    },
+    "fabio": {
+      "row": 4,
+      "column": 2,
+      "room": "west_course"
+    },
+    "gabriela": {
+      "row": 8,
+      "column": 7,
+      "room": "maintenance"
+    },
+    "hugo": {
+      "row": 6,
+      "column": 8,
+      "room": "maintenance"
+    },
+    "irene": {
+      "row": 1,
+      "column": 5,
+      "room": "terrace"
+    }
+  },
+  "murderer": "carla",
+  "murderer_name": "Carla"
+}
