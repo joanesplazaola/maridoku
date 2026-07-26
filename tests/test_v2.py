@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -26,6 +27,20 @@ def test_catalogs_define_the_public_contract() -> None:
     assert footprint_kind([(0, 0), (0, 1), (1, 0)]) == "L3"
     assert footprint_kind([(0, 0), (0, 2)]) == "custom"
     assert set(text_catalog("es")) == set(text_catalog("en"))
+
+
+def test_visual_assets_have_tracked_provenance() -> None:
+    manifest = json.loads((PROJECT / "docs/assets-manifest.json").read_text(encoding="utf-8"))
+    tracked = {entry["path"]: entry for entry in manifest}
+    actual = {
+        str(path.relative_to(PROJECT))
+        for path in (PROJECT / "src/murdoku_v2/assets").rglob("*.webp")
+    }
+    assert set(tracked) == actual
+    for relative_path, entry in tracked.items():
+        assert hashlib.sha256((PROJECT / relative_path).read_bytes()).hexdigest() == entry["sha256"]
+        assert entry["origin_commit"]
+        assert entry["source"]
 
 
 def test_ortools_matches_all_reference_cases() -> None:

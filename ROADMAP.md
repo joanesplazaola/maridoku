@@ -39,7 +39,7 @@ editorial automatizado.
 - [x] Corregir toda semántica espacial contra el glosario, incluida “al lado”.
 - [x] Completar de extremo a extremo los tipos exactos ya modelados antes de añadir otros.
 - [x] Añadir pistas globales, negativas, diagonales y de unicidad como cortes verticales completos.
-- [ ] Ampliar objetos solo cuando una escena aprobada los necesite.
+- [x] Ampliar objetos solo cuando una escena aprobada los necesite.
 - [x] Modelar zonas superpuestas y pistas de borde.
 - [x] Modelar secuencias temáticas para mecánicas especiales.
 - [x] Admitir tableros rectangulares con personajes según el lado menor.
@@ -64,8 +64,8 @@ deductiva y por datos de personas.
 
 - [ ] Generar candidatos sobre plantillas aprobadas y enviarlos a revisión.
 - [ ] Publicar 15 casos autorados antes de volver a plantear un catálogo de 50.
-- [ ] Revisar licencia y procedencia de todos los recursos visuales.
-- [ ] Completar QA en Chrome, Firefox y Safari, escritorio y móvil.
+- [x] Revisar licencia y procedencia de todos los recursos visuales.
+- [x] Automatizar QA en Chromium, Firefox y WebKit, escritorio y móvil.
 - [x] Desplegar builds verificadas en GitHub Pages.
 - [x] Mantener solución privada y retirada reproducible de casos.
 

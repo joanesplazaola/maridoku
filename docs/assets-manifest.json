@@ -1,0 +1,22 @@
+[
+  {"path":"src/murdoku_v2/assets/case-paper.webp","sha256":"3459819e997c8f25fc49f30045e63ff875d49ba5deeef01fcb8281ace381bfe2","origin_commit":"d59f65a","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/portraits.webp","sha256":"20593b490980a5dbeaccfc85148f4b1b13ebbb0139be026c8e95026c39177424","origin_commit":"97631ef","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/bed-horizontal.webp","sha256":"3f1bc00e12a189c75858a88447e743151103ef444c828de3ee67e9e25cffbd6f","origin_commit":"78e361d","source":"Project-local generated asset or derivative"},
+  {"path":"src/murdoku_v2/assets/furniture/bed.webp","sha256":"d2b619cbd90f5f57aab8576d1055600eacaa264450b6ca6c60dbe89672efeb82","origin_commit":"43be684","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/bookshelf-horizontal.webp","sha256":"0275f413358f7f0541cba5bc6951889b3f1f62c32a8792b34477120953261b4b","origin_commit":"78e361d","source":"Project-local generated asset or derivative"},
+  {"path":"src/murdoku_v2/assets/furniture/bookshelf.webp","sha256":"d3b14414d9d93692fa9ff1fc4c441dbb1f38a5c95afb6e28b25aa3a284b45629","origin_commit":"78e361d","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/chair.webp","sha256":"904267b12b255874ef4b11127d8f5a355cf6d7be1df2afdbd9e477d9c4a226df","origin_commit":"43be684","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/counter-l.webp","sha256":"820cd9877810445ae790dc40740850249029c997ca4bae2f1f2ea91f473e99e2","origin_commit":"78e361d","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/counter-straight.webp","sha256":"ec719d89652b8b30b457c508e05b0b499431b437157418ff8a19690f178d3154","origin_commit":"5818b97","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/dining-table-horizontal.webp","sha256":"85874c10f82be3c879eca26c984b8db958da14add35ce0313ad41a9d203c8605","origin_commit":"78e361d","source":"Project-local generated asset or derivative"},
+  {"path":"src/murdoku_v2/assets/furniture/dining-table.webp","sha256":"1151574ec3c597a9d0713c27fd80b30a24d3eec1d456478b6571821413525964","origin_commit":"78e361d","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/flag.webp","sha256":"74c62b9c2b13a0abf04184d526023feec7c6e8ade91f99113986f0bd3c6c157b","origin_commit":"b8b1bbe","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/plant.webp","sha256":"fc01b5ad5c4d535c39457f3610397ebf3f7c6f72cc715ee48c1d3b10cd7d9a38","origin_commit":"97631ef","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/rug-l.webp","sha256":"9a1efbd9fcd0e5b0473c95a7dc53fbc560e8c8770077f044c4b418495951ce26","origin_commit":"30f44eb","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/rug.webp","sha256":"fd71c53702253cc9c28edb53625b66256f9e7f6bbe3664e7324c9aca360d7c87","origin_commit":"97631ef","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/sofa.webp","sha256":"44d612c8612cb4a67d49f532b9d469a6ade6bec2fbcac04e67b242f38789ffef","origin_commit":"97631ef","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/table.webp","sha256":"75cee5965a3e0650abad010f8f560a9006fb8cd0582d21047b445ebddc076fb8","origin_commit":"97631ef","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/tv.webp","sha256":"bca5595ddc81fe17232fdf767662623bdb6cd09e62d4d51996de44825e9cff3e","origin_commit":"43be684","source":"OpenAI image generation"},
+  {"path":"src/murdoku_v2/assets/furniture/wardrobe-horizontal.webp","sha256":"c5a5ba12e5a4c30f879d0b0cf9d3383b27e0a144963d34b098a23738c9704bfa","origin_commit":"78e361d","source":"Project-local generated asset or derivative"},
+  {"path":"src/murdoku_v2/assets/furniture/wardrobe.webp","sha256":"7341f613304f989239f4a05fa14937ba6f40a3fad665c4790438f4f6f42f6b5f","origin_commit":"78e361d","source":"OpenAI image generation"}
+]
