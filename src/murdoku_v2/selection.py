@@ -18,6 +18,7 @@ FAMILY_PENALTY = {
     "object_occupancy": 0,
     "object_adjacency": 1,
     "object_line": 2,
+    "object_negative": 28,
     "room_exact": 3,
     "room_group": 4,
     "room_population": 5,

@@ -439,6 +439,15 @@ class ORToolsSolver:
             valid = self._adjacent_object_cells(ctx.puzzle, args["object_type"])
             self._restrict_subject_cells(ctx, subject, valid, statement["id"])
             return
+        if typ == "not_adjacent_object":
+            adjacent = self._adjacent_object_cells(ctx.puzzle, args["object_type"])
+            self._restrict_subject_cells(
+                ctx,
+                subject,
+                set(ctx.allowed_cells) - adjacent,
+                statement["id"],
+            )
+            return
         if typ == "relative_row_order":
             reference = args["reference"]
             if args["relation"] == "north":

@@ -241,6 +241,12 @@ def candidate_pools(
                         {"object_type": object_type},
                         f"{name} era la única persona al lado de {phrase}.",
                     ))
+            else:
+                candidates.append((
+                    "not_adjacent_object",
+                    {"object_type": object_type},
+                    f"{name} no estaba al lado de {phrase}.",
+                ))
             if any(obj_row == row and room_at[(obj_row, obj_column)] == room_id for obj_row, obj_column in cells):
                 candidates.append((
                     "object_same_row_in_room",

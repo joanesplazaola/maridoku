@@ -16,7 +16,7 @@ PROJECT = Path(__file__).resolve().parents[1]
 def test_catalogs_define_the_public_contract() -> None:
     from murdoku_v2.text_catalog import text_catalog
 
-    assert len(CLUE_SPECS) == len(catalog_json()) == 25
+    assert len(CLUE_SPECS) == len(catalog_json()) == 26
     assert len(OBJECT_CATALOG) == len(object_catalog_json()) == 11
     assert OBJECT_CATALOG["table"].footprints == ("1x1", "1x2")
     assert OBJECT_CATALOG["dining_table"].footprints == ("1x2",)
@@ -431,6 +431,39 @@ def test_selector_can_require_a_necessary_global_clue() -> None:
             *(statement for card in selected["cards"] if card["role"] == "suspect" for statement in card["statements"]),
         )
     )
+
+
+def test_negative_object_adjacency_is_solved_end_to_end() -> None:
+    import copy
+
+    from murdoku_v2.candidates import candidate_pools
+    from murdoku_v2.human import solve_human
+    from murdoku_v2.models import load_puzzle
+    from murdoku_v2.solvers.ortools_solver import ORToolsSolver
+
+    case_path = PROJECT / "examples/board_restaurant/case.json"
+    puzzle = load_puzzle(case_path)
+    solution = json.loads((case_path.parent / "solution.json").read_text(encoding="utf-8"))
+    expected = {
+        character: (position["row"], position["column"])
+        for character, position in solution["positions"].items()
+    }
+    statement = next(
+        statement
+        for statement in candidate_pools(puzzle, expected)["elena"]
+        if statement["type"] == "not_adjacent_object"
+        and statement["args"]["object_type"] == "plant"
+    )
+    candidate = copy.deepcopy(puzzle)
+    card = next(card for card in candidate["cards"] if card["character"] == "elena")
+    statement["id"] = card["statements"][0]["id"]
+    card["statements"] = [statement]
+
+    exact = ORToolsSolver().solve(candidate, limit=2)
+    human = solve_human(candidate)
+    assert exact.unique and exact.solutions == [expected]
+    assert human["solved"] and human["positions"] == expected
+    assert "clue_anchor" in human["techniques"]
 
 
 def test_reference_scene_generates_a_complete_variant_without_a_solution_input() -> None:

@@ -19,6 +19,7 @@ UNARY_TYPES = {
     "object_same_row_in_room",
     "object_same_column_in_room",
     "adjacent_object",
+    "not_adjacent_object",
     "not_adjacent_to_wall",
     "in_room_corner",
 }
@@ -156,7 +157,7 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
         for cell in ctx.all_cells:
             row, column = divmod(cell, ctx.n)
             room = ctx.room_at[(row, column)]
-            if typ in {"adjacent_object", "unique_adjacent_object"} and any(
+            if typ in {"adjacent_object", "unique_adjacent_object", "not_adjacent_object"} and any(
                 abs(row - object_cell // ctx.n) + abs(column - object_cell % ctx.n) == 1
                 and ctx.room_at[divmod(object_cell, ctx.n)] == room
                 for object_cell in object_cells
@@ -174,6 +175,8 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
                 for object_cell in object_cells
             ):
                 result.add(cell)
+        if typ == "not_adjacent_object":
+            return ctx.all_cells - result
         return result
 
     def binary_holds(statement: dict[str, Any], subject_cell: int, reference_cell: int) -> bool:

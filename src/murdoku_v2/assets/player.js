@@ -160,6 +160,11 @@
       }
       return adjacent(own);
     }
+    if (statement.type === "not_adjacent_object") {
+      return !objectCells(args.object_type).some(([row, column]) =>
+        Math.abs(own[0] - row) + Math.abs(own[1] - column) === 1
+        && roomAt.get(key(row, column)) === ownRoom);
+    }
     if (statement.type === "object_same_row_in_room") {
       return objectCells(args.object_type).some(([row, column]) =>
         row === own[0] && roomAt.get(key(row, column)) === ownRoom,
