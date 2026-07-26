@@ -29,6 +29,7 @@ SPECS: tuple[ClueSpec, ...] = (
     ClueSpec("object_same_row_in_room", "object_line", "Comparte fila y habitación con un tipo de objeto."),
     ClueSpec("object_same_column_in_room", "object_line", "Comparte columna y habitación con un tipo de objeto."),
     ClueSpec("adjacent_object", "object_adjacency", "Está ortogonalmente junto a un tipo de objeto."),
+    ClueSpec("unique_adjacent_object", "object_adjacency", "Es la única persona ortogonalmente junto a un tipo de objeto."),
     ClueSpec("relative_row_order", "relative_order", "Está al norte o al sur de otra persona."),
     ClueSpec("relative_column_order", "relative_order", "Está al este o al oeste de otra persona."),
     ClueSpec("relative_row_distance", "relative_distance", "Distancia vertical exacta respecto a otra persona."),

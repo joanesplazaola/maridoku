@@ -405,10 +405,14 @@ class ORToolsSolver:
             allowed_rooms = [ctx.room_index[room_id] for room_id in args["rooms"]]
             self._restrict_int_values(ctx, ctx.room[subject], allowed_rooms, statement["id"])
             return
-        if typ == "unique_on_object":
-            object_cells = self._object_cells_of_type(ctx.puzzle, args["object_type"], occupiable_only=True)
-            self._restrict_subject_cells(ctx, subject, object_cells, statement["id"] + "_subject")
-            outside = set(ctx.allowed_cells) - object_cells
+        if typ in {"unique_on_object", "unique_adjacent_object"}:
+            valid = (
+                self._object_cells_of_type(ctx.puzzle, args["object_type"], occupiable_only=True)
+                if typ == "unique_on_object"
+                else self._adjacent_object_cells(ctx.puzzle, args["object_type"])
+            )
+            self._restrict_subject_cells(ctx, subject, valid, statement["id"] + "_subject")
+            outside = set(ctx.allowed_cells) - valid
             for other in ctx.character_ids:
                 if other != subject:
                     self._restrict_subject_cells(ctx, other, outside, statement["id"] + "_other")

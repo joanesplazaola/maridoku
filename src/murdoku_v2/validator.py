@@ -110,14 +110,22 @@ def matches_statement(
             cell_column == column and room_at[(cell_row, cell_column)] == own_room
             for obj in objects for cell_row, cell_column in _object_cells(obj)
         )
-    if statement_type == "adjacent_object":
-        return any(
-            obj["type"] == args["object_type"]
-            and abs(row - cell_row) + abs(column - cell_column) == 1
-            and room_at[(cell_row, cell_column)] == own_room
-            for obj in board.get("objects", [])
-            for cell_row, cell_column in _object_cells(obj)
-        )
+    if statement_type in {"adjacent_object", "unique_adjacent_object"}:
+        adjacent = {
+            position
+            for position in positions.values()
+            if any(
+                obj["type"] == args["object_type"]
+                and abs(position[0] - cell_row) + abs(position[1] - cell_column) == 1
+                and room_at[(cell_row, cell_column)] == room_at[position]
+                for obj in board.get("objects", [])
+                for cell_row, cell_column in _object_cells(obj)
+            )
+        }
+        own_adjacent = (row, column) in adjacent
+        if statement_type == "unique_adjacent_object":
+            return own_adjacent and len(adjacent) == 1
+        return own_adjacent
     if statement_type == "relative_row_order":
         reference_row, _ = positions[args["reference"]]
         return row < reference_row if args["relation"] == "north" else row > reference_row

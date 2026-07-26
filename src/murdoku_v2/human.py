@@ -15,6 +15,7 @@ UNARY_TYPES = {
     "room_disjunction",
     "alone_in_room",
     "unique_on_object",
+    "unique_adjacent_object",
     "object_same_row_in_room",
     "object_same_column_in_room",
     "adjacent_object",
@@ -152,7 +153,7 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
         for cell in ctx.all_cells:
             row, column = divmod(cell, ctx.n)
             room = ctx.room_at[(row, column)]
-            if typ == "adjacent_object" and any(
+            if typ in {"adjacent_object", "unique_adjacent_object"} and any(
                 abs(row - object_cell // ctx.n) + abs(column - object_cell % ctx.n) == 1
                 and ctx.room_at[divmod(object_cell, ctx.n)] == room
                 for object_cell in object_cells
@@ -194,8 +195,8 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
                 continue
             subject = statement["args"]["character"]
             restrict(subject, unary_cells(statement), "clue_anchor", statement["id"])
-            if statement["type"] == "unique_on_object":
-                occupied = ctx.occupiable_cells_by_type.get(statement["args"]["object_type"], set())
+            if statement["type"] in {"unique_on_object", "unique_adjacent_object"}:
+                occupied = unary_cells(statement)
                 for other in ctx.character_ids:
                     if other != subject:
                         restrict(other, ctx.all_cells - occupied, "unique_object", statement["id"])

@@ -31,6 +31,7 @@ editorial automatizado.
 - [x] Generar soluciones y asesinos reproducibles sin una solución de entrada.
 - [x] Exigir variedad entre objetos, habitaciones y relaciones, no solo entre subfamilias técnicas.
 - [x] Completar pistas de ocupación y género en generación, CP-SAT y deducción humana.
+- [x] Añadir unicidad junto a objetos y agrupar candidatos por tipo de mobiliario.
 - [ ] Corregir toda semántica espacial contra el glosario, incluida “al lado”.
 - [ ] Completar de extremo a extremo los tipos exactos ya modelados antes de añadir otros.
 - [ ] Añadir pistas globales, negativas, diagonales y de unicidad como cortes verticales completos.

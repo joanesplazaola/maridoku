@@ -166,35 +166,59 @@ def candidate_pools(
                     f"{name} estaba {'al oeste' if relation == 'west' else 'al este'} de {reference['name']}.",
                 ))
 
+        objects_by_type: dict[str, list[dict[str, Any]]] = {}
         for obj in board.get("objects", []):
-            cells = {tuple(cell) for cell in obj["cells"]}
-            phrase = _object_phrase(obj["type"], obj["name"])
-            if (row, column) in cells and obj.get("occupiable", False):
+            objects_by_type.setdefault(obj["type"], []).append(obj)
+        for object_type, objects in objects_by_type.items():
+            cells = {
+                tuple(cell)
+                for obj in objects
+                for cell in obj["cells"]
+            }
+            occupiable = {
+                tuple(cell)
+                for obj in objects
+                if obj.get("occupiable", False)
+                for cell in obj["cells"]
+            }
+            phrase = _object_phrase(object_type, objects[0]["name"])
+            if (row, column) in occupiable:
                 candidates.append((
                     "unique_on_object",
-                    {"object_type": obj["type"]},
+                    {"object_type": object_type},
                     f"{name} era la única persona sobre {phrase}.",
                 ))
-            if any(
-                abs(row - obj_row) + abs(column - obj_column) == 1
-                and room_at[(obj_row, obj_column)] == room_id
-                for obj_row, obj_column in cells
-            ):
+            adjacent = {
+                position
+                for position in room_at
+                if any(
+                    abs(position[0] - obj_row) + abs(position[1] - obj_column) == 1
+                    and room_at[(obj_row, obj_column)] == room_at[position]
+                    for obj_row, obj_column in cells
+                )
+            }
+            if (row, column) in adjacent:
                 candidates.append((
                     "adjacent_object",
-                    {"object_type": obj["type"]},
+                    {"object_type": object_type},
                     f"{name} estaba al lado de {phrase}.",
                 ))
+                if sum(position in adjacent for position in target.values()) == 1:
+                    candidates.append((
+                        "unique_adjacent_object",
+                        {"object_type": object_type},
+                        f"{name} era la única persona al lado de {phrase}.",
+                    ))
             if any(obj_row == row and room_at[(obj_row, obj_column)] == room_id for obj_row, obj_column in cells):
                 candidates.append((
                     "object_same_row_in_room",
-                    {"object_type": obj["type"]},
+                    {"object_type": object_type},
                     f"{name} estaba en la misma fila y habitación que {phrase}.",
                 ))
             if any(obj_column == column and room_at[(obj_row, obj_column)] == room_id for obj_row, obj_column in cells):
                 candidates.append((
                     "object_same_column_in_room",
-                    {"object_type": obj["type"]},
+                    {"object_type": object_type},
                     f"{name} estaba en la misma columna y habitación que {phrase}.",
                 ))
 

@@ -144,11 +144,16 @@
       return cells.has(key(...own))
         && Object.values(positions).filter((position) => cells.has(key(...position))).length === 1;
     }
-    if (statement.type === "adjacent_object") {
-      return objectCells(args.object_type).some(([row, column]) =>
-        Math.abs(own[0] - row) + Math.abs(own[1] - column) === 1
-        && roomAt.get(key(row, column)) === ownRoom,
-      );
+    if (statement.type === "adjacent_object" || statement.type === "unique_adjacent_object") {
+      const adjacent = ([ownRow, ownColumn]) => objectCells(args.object_type).some(([row, column]) =>
+        Math.abs(ownRow - row) + Math.abs(ownColumn - column) === 1
+        && roomAt.get(key(row, column)) === roomAt.get(key(ownRow, ownColumn)));
+      if (statement.type === "unique_adjacent_object") {
+        if (!allPlaced) return null;
+        return adjacent(own)
+          && Object.values(positions).filter(adjacent).length === 1;
+      }
+      return adjacent(own);
     }
     if (statement.type === "object_same_row_in_room") {
       return objectCells(args.object_type).some(([row, column]) =>
