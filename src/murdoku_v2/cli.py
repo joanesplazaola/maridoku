@@ -6,7 +6,6 @@ from pathlib import Path
 
 from .benchmark import run_benchmark, run_benchmark_suite
 from .clue_catalog import catalog_json
-from .engine import generate
 from .human_solver import analyze_puzzle
 from .object_catalog import catalog_json as object_catalog_json
 from .render import render_file
@@ -21,6 +20,17 @@ from .targeted import generate_targeted
 
 def _json(data) -> None:
     print(json.dumps(data, ensure_ascii=False, indent=2))
+
+
+def _generation_summary(result: dict) -> dict:
+    return {
+        "puzzle": result["puzzle"]["id"],
+        "seed": result["puzzle"]["seed"],
+        "size": result["puzzle"]["board"]["rows"],
+        "victim": result["solution"]["victim_name"],
+        "murderer": result["solution"]["murderer_name"],
+        "exact": result["diagnostics"]["exact_validation"],
+    }
 
 
 def _validate_with_solver(puzzle_path: Path, solution_path: Path, solver_name: str) -> dict:
@@ -58,14 +68,9 @@ def main() -> None:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     generate_parser = subparsers.add_parser("generate", help="Genera un caso JSON")
-    generate_parser.add_argument("--board", type=Path, default=Path("boards/board_two_houses.json"))
+    generate_parser.add_argument("--size", type=int, default=8)
     generate_parser.add_argument("--seed", type=int, default=12345)
     generate_parser.add_argument("--output", type=Path, default=Path("generated"))
-    generate_parser.add_argument("--difficulty", choices=["any", "easy", "medium", "hard", "expert"], default="any")
-    generate_parser.add_argument("--max-attempts", type=int, default=16)
-    generate_parser.add_argument("--strict", action="store_true")
-    generate_parser.add_argument("--target-attempts", type=int, default=24)
-    generate_parser.add_argument("--cpsat-selector", action="store_true")
 
     generate_scale_parser = subparsers.add_parser("generate-scale", help="Genera un caso escalable CP-SAT")
     generate_scale_parser.add_argument("--size", type=int, default=10)
@@ -122,39 +127,11 @@ def main() -> None:
 
     args = parser.parse_args()
     if args.command == "generate":
-        if args.difficulty == "any":
-            result = generate(
-                args.board,
-                args.seed,
-                args.output,
-                max_target_attempts=args.target_attempts,
-                use_cpsat_selector=args.cpsat_selector,
-            )
-        else:
-            result = generate_targeted(
-                args.board, args.seed, args.output, difficulty=args.difficulty,
-                max_attempts=args.max_attempts, require_exact=args.strict,
-            )
-        diagnostics = result["diagnostics"]
-        _json({
-            "puzzle": result["puzzle"]["id"],
-            "seed": result["puzzle"]["seed"],
-            "victim": result["solution"]["victim_name"],
-            "murderer": result["solution"]["murderer_name"],
-            "final_solutions": diagnostics["final_solution_count"],
-            "difficulty": diagnostics["human_difficulty"]["label"],
-            "exact": diagnostics["exact_validation"],
-        })
+        result = generate_scaling_case(args.size, args.seed, args.output)
+        _json(_generation_summary(result))
     elif args.command == "generate-scale":
         result = generate_scaling_case(args.size, args.seed, args.output)
-        _json({
-            "puzzle": result["puzzle"]["id"],
-            "seed": result["puzzle"]["seed"],
-            "size": args.size,
-            "victim": result["solution"]["victim_name"],
-            "murderer": result["solution"]["murderer_name"],
-            "exact": result["diagnostics"]["exact_validation"],
-        })
+        _json(_generation_summary(result))
     elif args.command == "validate":
         _json(_validate_with_solver(args.puzzle, args.solution, args.solver))
     elif args.command == "explain":

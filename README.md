@@ -74,17 +74,17 @@ uv run murdoku-v2 validate \
 
 ## Generar un caso
 
-El generador completo continúa usando temporalmente el selector exhaustivo de
-6×6. La validación final sí puede ejecutarse con CP-SAT.
+El generador principal construye y valida el caso con CP-SAT sin enumerar
+previamente el universo de soluciones.
 
 ```bash
 uv run murdoku-v2 generate \
-  --board boards/board_restaurant.json \
+  --size 8 \
   --seed 6201 \
   --output generated_local
 ```
 
-Para generar un caso escalable sintético validado con CP-SAT:
+`generate-scale` se mantiene como alias compatible:
 
 ```bash
 uv run murdoku-v2 generate-scale --size 10 --seed 6201 --output generated_scale
@@ -96,16 +96,10 @@ Para generar una hoja HTML imprimible:
 uv run murdoku-v2 render --puzzle generated/puzzle.json --output generated/puzzle.html
 ```
 
-Para probar la ruta experimental del selector por conteos CP-SAT:
-
-```bash
-uv run murdoku-v2 generate --board boards/board_mansion.json --seed 5002 --output generated_cpsat_selector --cpsat-selector --target-attempts 1
-```
-
 ## Objetivo inmediato
 
-La siguiente fase es sustituir el universo exhaustivo y las máscaras NumPy por
-consultas CP-SAT incrementales:
+La siguiente fase es ampliar la variedad editorial sobre consultas CP-SAT
+incrementales:
 
 ```text
 solución objetivo
