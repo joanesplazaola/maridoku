@@ -1,0 +1,54 @@
+{
+  "puzzle_id": "la-ultima-ronda",
+  "victim": "irene",
+  "victim_name": "Irene",
+  "positions": {
+    "alicia": {
+      "row": 8,
+      "column": 8,
+      "room": "maintenance"
+    },
+    "bruno": {
+      "row": 5,
+      "column": 7,
+      "room": "east_course"
+    },
+    "carla": {
+      "row": 4,
+      "column": 6,
+      "room": "east_course"
+    },
+    "diego": {
+      "row": 3,
+      "column": 5,
+      "room": "lake_course"
+    },
+    "elena": {
+      "row": 0,
+      "column": 0,
+      "room": "clubhouse"
+    },
+    "fabio": {
+      "row": 2,
+      "column": 2,
+      "room": "clubhouse"
+    },
+    "gabriela": {
+      "row": 1,
+      "column": 1,
+      "room": "clubhouse"
+    },
+    "hugo": {
+      "row": 6,
+      "column": 3,
+      "room": "pavilion"
+    },
+    "irene": {
+      "row": 7,
+      "column": 4,
+      "room": "pavilion"
+    }
+  },
+  "murderer": "hugo",
+  "murderer_name": "Hugo"
+}

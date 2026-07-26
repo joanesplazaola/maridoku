@@ -1,0 +1,247 @@
+{
+  "schema_version": 8,
+  "id": "la-ultima-ronda",
+  "title": "La última ronda",
+  "story": "La entrega de premios terminó cuando encontraron a Irene. Reconstruye el recorrido y descubre quién se quedó a solas con ella.",
+  "seed": 7301,
+  "selection_profile": "special_sequence",
+  "scene": "../../boards/board_golf.json",
+  "characters": [
+    {
+      "id": "alicia",
+      "name": "Alicia",
+      "gender": "woman",
+      "role": "suspect"
+    },
+    {
+      "id": "bruno",
+      "name": "Bruno",
+      "gender": "man",
+      "role": "suspect"
+    },
+    {
+      "id": "carla",
+      "name": "Carla",
+      "gender": "woman",
+      "role": "suspect"
+    },
+    {
+      "id": "diego",
+      "name": "Diego",
+      "gender": "man",
+      "role": "suspect"
+    },
+    {
+      "id": "elena",
+      "name": "Elena",
+      "gender": "woman",
+      "role": "suspect"
+    },
+    {
+      "id": "fabio",
+      "name": "Fabio",
+      "gender": "man",
+      "role": "suspect"
+    },
+    {
+      "id": "gabriela",
+      "name": "Gabriela",
+      "gender": "woman",
+      "role": "suspect"
+    },
+    {
+      "id": "hugo",
+      "name": "Hugo",
+      "gender": "man",
+      "role": "suspect"
+    },
+    {
+      "id": "irene",
+      "name": "Irene",
+      "gender": "woman",
+      "role": "victim"
+    }
+  ],
+  "victim": "irene",
+  "rules": {
+    "one_character_per_row": true,
+    "one_character_per_column": true,
+    "one_card_per_character": true
+  },
+  "cards": [
+    {
+      "id": "card-alicia",
+      "character": "alicia",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-alicia-statement-1",
+          "type": "room",
+          "family": "room_exact",
+          "args": {
+            "character": "alicia",
+            "room": "maintenance"
+          },
+          "text": "Alicia estaba en mantenimiento."
+        },
+        {
+          "id": "card-alicia-statement-2",
+          "type": "next_to_sequence_item",
+          "family": "sequence_relation",
+          "args": {
+            "character": "alicia",
+            "sequence": "holes",
+            "item": 7
+          },
+          "text": "Alicia estaba inmediatamente antes o después de Hoyo 8."
+        }
+      ]
+    },
+    {
+      "id": "card-bruno",
+      "character": "bruno",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-bruno-statement-1",
+          "type": "room",
+          "family": "room_exact",
+          "args": {
+            "character": "bruno",
+            "room": "east_course"
+          },
+          "text": "Bruno estaba en la calle este."
+        },
+        {
+          "id": "card-bruno-statement-2",
+          "type": "unique_adjacent_object",
+          "family": "object_adjacency",
+          "args": {
+            "character": "bruno",
+            "object_type": "plant"
+          },
+          "text": "Bruno era la única persona al lado de una planta."
+        }
+      ]
+    },
+    {
+      "id": "card-carla",
+      "character": "carla",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-carla-statement-1",
+          "type": "object_same_row_in_room",
+          "family": "object_line",
+          "args": {
+            "character": "carla",
+            "object_type": "flag"
+          },
+          "text": "Carla estaba en la misma fila y habitación que una bandera."
+        }
+      ]
+    },
+    {
+      "id": "card-diego",
+      "character": "diego",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-diego-statement-1",
+          "type": "in_room_group",
+          "family": "room_group",
+          "args": {
+            "character": "diego",
+            "group": "course"
+          },
+          "text": "Diego estaba en el campo."
+        }
+      ]
+    },
+    {
+      "id": "card-elena",
+      "character": "elena",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-elena-statement-1",
+          "type": "relative_column_distance",
+          "family": "relative_distance",
+          "args": {
+            "character": "elena",
+            "reference": "diego",
+            "delta": -5
+          },
+          "text": "Elena estaba 5 columnas al oeste de Diego."
+        }
+      ]
+    },
+    {
+      "id": "card-fabio",
+      "character": "fabio",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-fabio-statement-1",
+          "type": "adjacent_object",
+          "family": "object_adjacency",
+          "args": {
+            "character": "fabio",
+            "object_type": "counter"
+          },
+          "text": "Fabio estaba al lado de un mostrador."
+        }
+      ]
+    },
+    {
+      "id": "card-gabriela",
+      "character": "gabriela",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-gabriela-statement-1",
+          "type": "adjacent_object",
+          "family": "object_adjacency",
+          "args": {
+            "character": "gabriela",
+            "object_type": "table"
+          },
+          "text": "Gabriela estaba al lado de una mesa."
+        }
+      ]
+    },
+    {
+      "id": "card-hugo",
+      "character": "hugo",
+      "role": "suspect",
+      "statements": [
+        {
+          "id": "card-hugo-statement-1",
+          "type": "in_room_corner",
+          "family": "room_geometry",
+          "args": {
+            "character": "hugo"
+          },
+          "text": "Hugo estaba en una esquina de su habitación."
+        }
+      ]
+    },
+    {
+      "id": "card-irene",
+      "character": "irene",
+      "role": "victim",
+      "statements": [
+        {
+          "id": "card-irene-statement-1",
+          "type": "victim_rule",
+          "family": "murder_rule",
+          "args": {
+            "character": "irene"
+          },
+          "text": "Irene estaba a solas con otra persona. Esa persona es el asesino."
+        }
+      ]
+    }
+  ],
+  "general_clues": []
+}

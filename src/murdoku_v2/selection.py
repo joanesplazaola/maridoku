@@ -37,17 +37,18 @@ def apply_clues(
     statements: list[dict[str, Any]],
 ) -> dict[str, Any]:
     selected = copy.deepcopy(puzzle)
-    by_character = {
-        statement["args"]["character"]: statement
-        for statement in statements
-        if "character" in statement["args"]
-    }
+    by_character: dict[str, list[dict[str, Any]]] = {}
+    for statement in statements:
+        if "character" in statement["args"]:
+            by_character.setdefault(statement["args"]["character"], []).append(statement)
     for card in selected["cards"]:
         if card["role"] == "victim":
             continue
-        statement = copy.deepcopy(by_character[card["character"]])
-        statement["id"] = f"{card['id']}-statement-1"
-        card["statements"] = [statement]
+        card["statements"] = []
+        for index, candidate in enumerate(by_character[card["character"]], start=1):
+            statement = copy.deepcopy(candidate)
+            statement["id"] = f"{card['id']}-statement-{index}"
+            card["statements"].append(statement)
     selected["general_clues"] = [
         {
             **copy.deepcopy(statement),
@@ -75,8 +76,20 @@ def _choose(
         for statement in pool
     }
     ordered = [statement for pool in (*pools.values(), global_pool) for statement in pool]
+    special_sequence = puzzle.get("selection_profile") == "special_sequence"
     for pool in pools.values():
-        model.add_exactly_one(variables[statement["id"]] for statement in pool)
+        selected_count = sum(variables[statement["id"]] for statement in pool)
+        if special_sequence:
+            model.add(selected_count >= 1)
+            model.add(selected_count <= 2)
+        else:
+            model.add(selected_count == 1)
+    if special_sequence:
+        model.add(sum(
+            variables[statement["id"]]
+            for pool in pools.values()
+            for statement in pool
+        ) == len(pools) + 2)
     if global_pool:
         model.add_exactly_one(variables[statement["id"]] for statement in global_pool)
 
@@ -113,6 +126,12 @@ def _choose(
         for statement in ordered
         if statement["family"].startswith("object_")
     ) <= (len(pools) + 1) // 2)
+    if special_sequence:
+        model.add(sum(
+            variables[statement["id"]]
+            for statement in ordered
+            if statement["family"] == "sequence_relation"
+        ) >= 1)
     for type_ in {statement["type"] for statement in ordered}:
         model.add(sum(
             variables[statement["id"]]

@@ -299,6 +299,15 @@ td.zone-2::before {
   inset: auto 4px 4px auto;
   font: 800 10px/1 Inter, sans-serif;
   color: rgb(31 48 42 / 70%);
+  white-space: nowrap;
+}
+
+.zone-label {
+  position: absolute;
+  z-index: 2;
+  inset: 4px auto auto 4px;
+  font: 800 9px/1 Inter, sans-serif;
+  color: rgb(25 84 107 / 78%);
 }
 
 td.duplicate-row,
@@ -486,6 +495,7 @@ td.crossed::after {
 .object-bookshelf { background-image: url("__BOOKSHELF__"); }
 .object-wardrobe { background-image: url("__WARDROBE__"); }
 .object-counter { background-image: url("__COUNTER_STRAIGHT__"); }
+.object-flag { background-image: url("__FLAG__"); }
 
 .object-placement.vertical .object {
   transform: rotate(calc(90deg + var(--object-rotation, 0deg)));

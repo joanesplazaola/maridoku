@@ -45,7 +45,7 @@ editorial automatizado.
 - [x] Admitir tableros rectangulares con personajes según el lado menor.
 - [x] Verificar motor y render en tamaños de 5×5 a 16×16.
 - [x] Sustituir la generación editorial de `scaling.py` por variantes sobre una escena fija.
-- [ ] Crear tres casos de referencia: fácil, medio y difícil.
+- [x] Crear tres casos de referencia: fácil, medio y difícil.
 
 Criterio de salida: tres casos distintos, cada uno con mapa, objetos y técnica
 central propios; ninguno deriva su geometría de la solución.

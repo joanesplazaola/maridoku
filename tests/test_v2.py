@@ -17,11 +17,12 @@ def test_catalogs_define_the_public_contract() -> None:
     from murdoku_v2.text_catalog import text_catalog
 
     assert len(CLUE_SPECS) == len(catalog_json()) == 28
-    assert len(OBJECT_CATALOG) == len(object_catalog_json()) == 11
+    assert len(OBJECT_CATALOG) == len(object_catalog_json()) == 12
     assert OBJECT_CATALOG["table"].footprints == ("1x1", "1x2")
     assert OBJECT_CATALOG["dining_table"].footprints == ("1x2",)
     assert OBJECT_CATALOG["bed"].footprints == ("1x2",)
     assert OBJECT_CATALOG["counter"].footprints == ("1x2", "L3")
+    assert OBJECT_CATALOG["flag"].occupiable
     assert footprint_kind([(0, 0), (0, 1), (1, 0)]) == "L3"
     assert footprint_kind([(0, 0), (0, 2)]) == "custom"
     assert set(text_catalog("es")) == set(text_catalog("en"))
@@ -583,10 +584,18 @@ def test_difficulty_uses_the_human_deduction_route() -> None:
 
     restaurant = explain_puzzle(load_puzzle(PROJECT / "examples/board_restaurant/case.json"))
     hotel = explain_puzzle(load_puzzle(PROJECT / "examples/board_hotel/case.json"))
+    golf = explain_puzzle(load_puzzle(PROJECT / "examples/board_golf/case.json"))
     assert restaurant["method"] == hotel["method"] == "human_propagation"
     assert restaurant["difficulty"]["label"] == "easy"
     assert hotel["difficulty"]["label"] == "medium"
+    assert golf["difficulty"]["label"] == "hard"
     assert restaurant["step_count"] < hotel["step_count"]
+    assert hotel["step_count"] < golf["step_count"]
+    assert any(
+        statement["type"] == "next_to_sequence_item"
+        for card in load_puzzle(PROJECT / "examples/board_golf/case.json")["cards"]
+        for statement in card["statements"]
+    )
 
 
 def test_generate_writes_a_fixed_scene_draft(tmp_path: Path) -> None:
@@ -670,15 +679,20 @@ def test_site_builder_publishes_only_reference_cases_without_solutions(tmp_path:
     result = build_site(tmp_path)
     index = (tmp_path / "index.html").read_text(encoding="utf-8")
     level = (tmp_path / "levels/001.html").read_text(encoding="utf-8")
-    assert result["levels"] == 1
+    assert result["levels"] == 3
     assert "Dificultad" in index
     assert "Fácil" in index
     assert "Último servicio" in index
+    assert "Hotel de medianoche" in index
+    assert "La última ronda" in index
+    assert "Medio" in index
+    assert "Difícil" in index
     assert "V · VÍCTIMA" in level
     assert 'data-tool="cross"' in level
     assert 'data-tool="candidate"' in level
     assert 'data-tool="erase"' in level
     assert (tmp_path / "levels/001.html").exists()
+    assert (tmp_path / "levels/003.html").exists()
     assert not list(tmp_path.rglob("solution.json"))
 
 

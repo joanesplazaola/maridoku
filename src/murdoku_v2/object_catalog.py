@@ -26,6 +26,7 @@ SPECS = (
     ObjectSpec("bookshelf", "Estantería", ("1x2",)),
     ObjectSpec("wardrobe", "Armario", ("1x2",)),
     ObjectSpec("counter", "Mostrador", ("1x2", "L3")),
+    ObjectSpec("flag", "Bandera", ("1x1",), occupiable=True, blocks_character=False),
 )
 
 OBJECT_CATALOG = {spec.type: spec for spec in SPECS}

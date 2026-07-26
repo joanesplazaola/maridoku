@@ -15,6 +15,18 @@ REFERENCE_CASES = (
         "difficulty_label": "Fácil",
         "path": Path("examples/board_restaurant/case.json"),
     },
+    {
+        "number": 2,
+        "difficulty": "medium",
+        "difficulty_label": "Medio",
+        "path": Path("examples/board_hotel/case.json"),
+    },
+    {
+        "number": 3,
+        "difficulty": "hard",
+        "difficulty_label": "Difícil",
+        "path": Path("examples/board_golf/case.json"),
+    },
 )
 
 
@@ -26,7 +38,7 @@ def _catalog_html(levels: list[dict[str, object]]) -> str:
         f'href="levels/{int(level["number"]):03d}.html">'
         f'<strong>{int(level["number"]):02d}</strong>'
         f'<b>{html.escape(str(level["title"]))}</b>'
-        f'<span>{html.escape(str(level["difficulty_label"]))} · {level["size"]}×{level["size"]}</span></a>'
+        f'<span>{html.escape(str(level["difficulty_label"]))} · {level["rows"]}×{level["columns"]}</span></a>'
         for level in levels
     )
     return f"""<!doctype html>
@@ -104,7 +116,8 @@ def build_site(output: Path) -> dict[str, object]:
             **{key: value for key, value in spec.items() if key != "path"},
             "puzzle_id": puzzle["id"],
             "title": puzzle.get("title", puzzle["board"]["name"]),
-            "size": puzzle["board"]["rows"],
+            "rows": puzzle["board"]["rows"],
+            "columns": puzzle["board"]["columns"],
         }
         catalog.append(level)
         navigation = {

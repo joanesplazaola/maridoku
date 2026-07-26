@@ -98,6 +98,7 @@ def _stylesheet() -> str:
         "__WARDROBE_HORIZONTAL__": assets.joinpath("furniture/wardrobe-horizontal.webp"),
         "__COUNTER_L__": assets.joinpath("furniture/counter-l.webp"),
         "__COUNTER_STRAIGHT__": assets.joinpath("furniture/counter-straight.webp"),
+        "__FLAG__": assets.joinpath("furniture/flag.webp"),
     }
     for marker, asset in replacements.items():
         data = base64.b64encode(asset.read_bytes()).decode("ascii")
@@ -118,9 +119,11 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
         for room in board["rooms"]
     }
     zones_at: dict[tuple[int, int], list[int]] = {}
+    zone_labels = {}
     for index, zone in enumerate(board.get("zones", [])):
         for cell in zone["cells"]:
             zones_at.setdefault(tuple(cell), []).append(index)
+        zone_labels[tuple(zone["cells"][0])] = zone["name"]
     sequence_at = {
         tuple(cell): (sequence["item_label"], index + 1)
         for sequence in board.get("sequences", [])
@@ -149,14 +152,20 @@ def render_html(puzzle: dict[str, Any], *, navigation: dict[str, Any] | None = N
             label_html = f'<span class="room-name">{label}</span>' if label else ""
             sequence = sequence_at.get((row, column))
             sequence_html = (
-                f'<span class="sequence-label">{html.escape(sequence[0])} {sequence[1]}</span>'
+                f'<span class="sequence-label" title="{html.escape(sequence[0])} {sequence[1]}">'
+                f'{html.escape(sequence[0][:1].upper())}{sequence[1]}</span>'
                 if sequence else ""
+            )
+            zone_label = zone_labels.get((row, column))
+            zone_label_html = (
+                f'<span class="zone-label">{html.escape(zone_label).upper()}</span>'
+                if zone_label else ""
             )
             cells.append(
                 f"<td class=\"{room_classes[room['id']]} {' '.join(wall_classes)} {zone_classes}\" "
                 f"data-row=\"{row}\" data-column=\"{column}\" tabindex=\"0\" "
                 f"aria-label=\"Fila {row + 1}, columna {column + 1}\">"
-                f"{label_html}{sequence_html}</td>"
+                f"{label_html}{zone_label_html}{sequence_html}</td>"
             )
         rows.append(f"<tr>{''.join(cells)}</tr>")
     furniture = "".join(
