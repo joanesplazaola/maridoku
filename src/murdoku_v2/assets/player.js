@@ -6,6 +6,7 @@
   const selectors = [...document.querySelectorAll("[data-character]")];
   const status = document.querySelector(".game-status");
   const storageKey = `murdoku:${puzzle.id}`;
+  const metricsKey = `${storageKey}:metrics`;
   const names = Object.fromEntries(puzzle.characters.map((character) => [character.id, character.name]));
   const blocked = new Set(
     puzzle.board.objects
@@ -18,9 +19,23 @@
   let selected = puzzle.characters[0].id;
   let positions = {};
   let history = [];
+  const emptyMetrics = () => ({
+    startedAt: Date.now(),
+    checks: 0,
+    errors: 0,
+    hints: 0,
+    completedAt: null,
+  });
+  let metrics;
+  try {
+    metrics = JSON.parse(localStorage.getItem(metricsKey) || "null") || emptyMetrics();
+  } catch {
+    metrics = emptyMetrics();
+  }
 
   const key = (row, column) => `${row},${column}`;
   const save = () => localStorage.setItem(storageKey, JSON.stringify(positions));
+  const saveMetrics = () => localStorage.setItem(metricsKey, JSON.stringify(metrics));
   const snapshot = () => history.push(structuredClone(positions));
 
   function restore() {
@@ -146,8 +161,28 @@
     render();
     status.value = "Tablero reiniciado";
   });
+  document.querySelector('[data-action="hint"]').addEventListener("click", () => {
+    const pending = puzzle.cards
+      .flatMap((card) => card.statements)
+      .find((statement) => statementState(statement) !== true);
+    if (!pending) {
+      status.value = "Todas las declaraciones se cumplen";
+      return;
+    }
+    metrics.hints += 1;
+    saveMetrics();
+    const clue = document.querySelector(`[data-statement="${pending.id}"]`);
+    clue.closest(".card").scrollIntoView({ behavior: "smooth", block: "center" });
+    clue.classList.add("hinted");
+    setTimeout(() => clue.classList.remove("hinted"), 1800);
+    status.value = "Revisa la declaración destacada";
+  });
   document.querySelector('[data-action="check"]').addEventListener("click", () => {
     const result = evaluate();
+    metrics.checks += 1;
+    if (result.complete && !result.valid) metrics.errors += 1;
+    if (result.complete && result.valid && !metrics.completedAt) metrics.completedAt = Date.now();
+    saveMetrics();
     status.value = result.complete && result.valid
       ? "Caso resuelto"
       : result.complete ? "Hay pistas que no se cumplen" : "Faltan personajes por colocar";

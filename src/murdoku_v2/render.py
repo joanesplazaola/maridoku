@@ -186,6 +186,7 @@ def render_html(puzzle: dict[str, Any]) -> str:
         <div class="game-toolbar" aria-label="Controles del puzle">
           <button type="button" data-action="undo" title="Deshacer" aria-label="Deshacer">↶</button>
           <button type="button" data-action="reset" title="Reiniciar" aria-label="Reiniciar">↺</button>
+          <button type="button" data-action="hint">Pista</button>
           <button type="button" class="check-button" data-action="check">Comprobar</button>
           <output class="game-status" aria-live="polite">Coloca a los personajes</output>
         </div>
