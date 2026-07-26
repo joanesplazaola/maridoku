@@ -521,6 +521,9 @@ def test_render_writes_printable_html(tmp_path: Path) -> None:
     assert "<main>" in html
     assert "wall-n" in html
     assert 'class="card victim"' in html
+    assert 'class="game-toolbar"' in html
+    assert 'id="puzzle-data"' in html
+    assert "localStorage.setItem" in html
     assert 'class="portrait"' in html
     assert "Declaraciones" in html
     assert "data:image/webp;base64," in html

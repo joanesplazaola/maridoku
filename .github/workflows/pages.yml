@@ -30,8 +30,12 @@ jobs:
       - name: Build static preview
         run: |
           mkdir -p _site
+          uv run murdoku-v2 generate \
+            --size 8 \
+            --seed 42 \
+            --output /tmp/murdoku-pages
           uv run murdoku-v2 render \
-            --puzzle examples/board_restaurant/puzzle.json \
+            --puzzle /tmp/murdoku-pages/puzzle.json \
             --output _site/index.html
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5

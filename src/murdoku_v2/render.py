@@ -94,6 +94,10 @@ def _stylesheet() -> str:
     return css
 
 
+def _player_script() -> str:
+    return files("murdoku_v2").joinpath("assets/player.js").read_text(encoding="utf-8")
+
+
 def render_html(puzzle: dict[str, Any]) -> str:
     board = puzzle["board"]
     rooms = _room_lookup(board)
@@ -120,7 +124,9 @@ def render_html(puzzle: dict[str, Any]) -> str:
             label = html.escape(room["name"]) if room_labels[room["id"]] == (row, column) else ""
             label_html = f'<span class="room-name">{label}</span>' if label else ""
             cells.append(
-                f"<td class=\"{room_classes[room['id']]} {' '.join(wall_classes)}\">"
+                f"<td class=\"{room_classes[room['id']]} {' '.join(wall_classes)}\" "
+                f"data-row=\"{row}\" data-column=\"{column}\" tabindex=\"0\" "
+                f"aria-label=\"Fila {row + 1}, columna {column + 1}\">"
                 f"{label_html}</td>"
             )
         rows.append(f"<tr>{''.join(cells)}</tr>")
@@ -135,7 +141,8 @@ def render_html(puzzle: dict[str, Any]) -> str:
     for card in puzzle["cards"]:
         gender = gender_by_character.get(card["character"], "woman")
         statements = "".join(
-            f"<li>{html.escape(_display_statement(statement['text'], card['character_name'], gender))}</li>"
+            f"<li data-statement=\"{html.escape(statement['id'])}\">"
+            f"{html.escape(_display_statement(statement['text'], card['character_name'], gender))}</li>"
             for statement in card["statements"]
         )
         role = "Victima" if card["role"] == "victim" else "Sospechoso"
@@ -144,12 +151,17 @@ def render_html(puzzle: dict[str, Any]) -> str:
         portrait_x = (0, 33.333, 66.667, 100)[portrait_column]
         portrait_y = 100 if gender == "man" else 0
         cards.append(
-            f"<article class=\"card {html.escape(card['role'])}\">"
-            f"<header><div class=\"portrait\" style=\"--portrait-x:{portrait_x}%;--portrait-y:{portrait_y}%\" "
-            f"role=\"img\" aria-label=\"Retrato de {html.escape(card['character_name'])}\"></div>"
-            f"<div><h2>{html.escape(card['character_name'])}</h2><p>{role}</p></div></header>"
+            f"<article class=\"card {html.escape(card['role'])}\" data-card=\"{html.escape(card['character'])}\">"
+            f"<button class=\"person-select\" type=\"button\" data-character=\"{html.escape(card['character'])}\" "
+            f"aria-label=\"Seleccionar a {html.escape(card['character_name'])}\">"
+            f"<span class=\"portrait\" style=\"--portrait-x:{portrait_x}%;--portrait-y:{portrait_y}%\" "
+            f"role=\"img\" aria-label=\"Retrato de {html.escape(card['character_name'])}\"></span>"
+            f"<span><h2>{html.escape(card['character_name'])}</h2><p>{role}</p></span></button>"
             f"<ol>{statements}</ol></article>"
         )
+    puzzle_data = base64.b64encode(
+        json.dumps(puzzle, ensure_ascii=False).encode("utf-8")
+    ).decode("ascii")
     return f"""<!doctype html>
 <html lang="es">
 <head>
@@ -171,6 +183,12 @@ def render_html(puzzle: dict[str, Any]) -> str:
     <div class="layout">
       <aside class="board-wrap">
         <div class="board-heading"><span>Plano de la escena</span><i>N</i></div>
+        <div class="game-toolbar" aria-label="Controles del puzle">
+          <button type="button" data-action="undo" title="Deshacer" aria-label="Deshacer">↶</button>
+          <button type="button" data-action="reset" title="Reiniciar" aria-label="Reiniciar">↺</button>
+          <button type="button" class="check-button" data-action="check">Comprobar</button>
+          <output class="game-status" aria-live="polite">Coloca a los personajes</output>
+        </div>
         <div class="board-frame">
           <div class="board-stage" style="--cols: {int(board['columns'])}">
             <table aria-label="Tablero" style="--cols: {int(board['columns'])}">{''.join(rows)}</table>
@@ -181,6 +199,8 @@ def render_html(puzzle: dict[str, Any]) -> str:
       <main><div class="section-heading"><span>Declaraciones</span><small>{len(cards)} expedientes</small></div>{''.join(cards)}</main>
     </div>
   </div>
+  <script type="application/json" id="puzzle-data">{puzzle_data}</script>
+  <script>{_player_script()}</script>
 </body>
 </html>
 """
