@@ -237,8 +237,51 @@ def test_reference_case_has_a_human_deduction_route() -> None:
     assert not complexity["calibrated"]
 
     unsupported = copy.deepcopy(puzzle)
-    unsupported["cards"][0]["statements"][0]["type"] = "room_population"
+    unsupported["cards"][0]["statements"][0]["type"] = "diagonal"
     assert solve_human(unsupported)["reason"] == "unsupported_clues"
+
+
+def test_human_propagates_room_count_clues() -> None:
+    import copy
+
+    from murdoku_v2.candidates import candidate_pools
+    from murdoku_v2.clue_catalog import CLUE_SPECS
+    from murdoku_v2.human import solve_human
+    from murdoku_v2.models import load_puzzle
+
+    case_path = PROJECT / "examples/board_restaurant/case.json"
+    puzzle = load_puzzle(case_path)
+    solution = json.loads((case_path.parent / "solution.json").read_text(encoding="utf-8"))
+    expected = {
+        character: (position["row"], position["column"])
+        for character, position in solution["positions"].items()
+    }
+    variants = (
+        ("room_population", {"count": 2}),
+        ("room_gender_count", {"gender": "man", "count": 1}),
+        ("companion_gender_count", {"gender": "man", "count": 1}),
+        ("alone_with_gender", {"gender": "man"}),
+    )
+
+    alicia_types = {
+        statement["type"]
+        for statement in candidate_pools(puzzle, expected)["alicia"]
+    }
+    assert {type_ for type_, _ in variants} <= alicia_types
+
+    for type_, args in variants:
+        candidate = copy.deepcopy(puzzle)
+        card = next(card for card in candidate["cards"] if card["character"] == "alicia")
+        card["statements"].append({
+            "id": f"test-{type_}",
+            "type": type_,
+            "family": CLUE_SPECS[type_].family,
+            "args": {"character": "alicia", **args},
+            "text": "",
+        })
+        result = solve_human(candidate)
+        assert result["solved"] and result["positions"] == expected
+        assert result["complexity"]["technique_counts"]["room_count"] >= 1
 
 
 def test_reference_scene_generates_a_complete_variant_without_a_solution_input() -> None:

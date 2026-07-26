@@ -12,12 +12,20 @@ UNARY_TYPES = {
     "exact_row",
     "exact_column",
     "in_room_group",
+    "room_disjunction",
+    "alone_in_room",
     "unique_on_object",
     "object_same_row_in_room",
     "object_same_column_in_room",
     "adjacent_object",
     "not_adjacent_to_wall",
     "in_room_corner",
+}
+COUNT_TYPES = {
+    "room_population",
+    "room_gender_count",
+    "companion_gender_count",
+    "alone_with_gender",
 }
 BINARY_TYPES = {
     "relative_row_order",
@@ -27,11 +35,12 @@ BINARY_TYPES = {
     "same_room",
     "different_room",
 }
-SUPPORTED_TYPES = {"victim_rule", *UNARY_TYPES, *BINARY_TYPES}
+SUPPORTED_TYPES = {"victim_rule", *UNARY_TYPES, *BINARY_TYPES, *COUNT_TYPES}
 TECHNIQUE_LEVEL = {
     "clue_anchor": 1,
     "unique_object": 1,
     "binary_relation": 1,
+    "room_count": 2,
     "victim_companion": 2,
     "row_matching": 3,
     "column_matching": 3,
@@ -123,6 +132,10 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
                 cell for cell in ctx.all_cells
                 if ctx.room_at[divmod(cell, ctx.n)] in ctx.groups[args["group"]]
             }
+        if typ == "room_disjunction":
+            return set().union(*(ctx.room_cells[room] for room in args["rooms"]))
+        if typ == "alone_in_room":
+            return set(ctx.room_cells[args["room"]])
         if typ == "unique_on_object":
             return set(ctx.occupiable_cells_by_type.get(args["object_type"], set()))
         if typ == "not_adjacent_to_wall":
@@ -187,6 +200,49 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
                     if other != subject:
                         restrict(other, ctx.all_cells - occupied, "unique_object", statement["id"])
 
+        def count_feasible(
+            subject_cell: int,
+            eligible: set[str],
+            required: int,
+            fixed: tuple[str, int] | None = None,
+        ) -> bool:
+            if required < 0:
+                return False
+            room = ctx.room_at[divmod(subject_cell, ctx.n)]
+            mandatory = 0
+            possible = 0
+            for other in eligible:
+                other_domain = {fixed[1]} if fixed and fixed[0] == other else domains[other]
+                same_room = {
+                    cell for cell in other_domain
+                    if ctx.room_at[divmod(cell, ctx.n)] == room
+                    and cell // ctx.n != subject_cell // ctx.n
+                    and cell % ctx.n != subject_cell % ctx.n
+                }
+                mandatory += bool(same_room) and same_room == other_domain
+                possible += bool(same_room)
+            return mandatory <= required <= possible
+
+        def count_checks(statement: dict[str, Any]) -> list[tuple[set[str], int]]:
+            typ = statement["type"]
+            args = statement["args"]
+            subject = args["character"]
+            others = set(ctx.character_ids) - {subject}
+            if typ in {"victim_rule", "alone_in_room"}:
+                return [(others, 1 if typ == "victim_rule" else 0)]
+            if typ == "room_population":
+                return [(others, int(args["count"]) - 1)]
+            gender_others = {
+                other for other in others
+                if ctx.characters[other]["gender"] == args["gender"]
+            }
+            if typ == "room_gender_count":
+                own = int(ctx.characters[subject]["gender"] == args["gender"])
+                return [(gender_others, int(args["count"]) - own)]
+            if typ == "companion_gender_count":
+                return [(gender_others, int(args["count"]))]
+            return [(others, 1), (gender_others, 1)]
+
         for round_number in range(1, 101):
             current_round = round_number
             changed = False
@@ -216,49 +272,38 @@ def solve_human(puzzle: dict[str, Any]) -> dict[str, Any]:
                     statement["id"],
                 )
 
-            victim_statements = [
+            count_statements = [
                 statement for statement in ctx.statements
-                if statement["type"] == "victim_rule"
+                if statement["type"] in {"victim_rule", "alone_in_room", *COUNT_TYPES}
             ]
-            if victim_statements:
-                victim = victim_statements[0]["args"]["character"]
+            for statement in count_statements:
+                subject = statement["args"]["character"]
+                checks = count_checks(statement)
 
-                def victim_feasible(victim_cell: int, fixed: tuple[str, int] | None = None) -> bool:
-                    room = ctx.room_at[divmod(victim_cell, ctx.n)]
-                    mandatory = 0
-                    possible = 0
-                    for other in ctx.character_ids:
-                        if other == victim:
-                            continue
-                        other_domain = {fixed[1]} if fixed and fixed[0] == other else domains[other]
-                        same_room = {
-                            cell for cell in other_domain
-                            if ctx.room_at[divmod(cell, ctx.n)] == room
-                            and cell // ctx.n != victim_cell // ctx.n
-                            and cell % ctx.n != victim_cell % ctx.n
-                        }
-                        mandatory += bool(same_room) and same_room == other_domain
-                        possible += bool(same_room)
-                    return mandatory <= 1 <= possible
+                def feasible(subject_cell: int, fixed: tuple[str, int] | None = None) -> bool:
+                    return all(
+                        count_feasible(subject_cell, eligible, required, fixed)
+                        for eligible, required in checks
+                    )
 
-                victim_before = set(domains[victim])
+                subject_before = set(domains[subject])
                 changed |= restrict(
-                    victim,
-                    {cell for cell in victim_before if victim_feasible(cell)},
-                    "victim_companion",
-                    victim_statements[0]["id"],
+                    subject,
+                    {cell for cell in subject_before if feasible(cell)},
+                    "victim_companion" if statement["type"] == "victim_rule" else "room_count",
+                    statement["id"],
                 )
                 for other in ctx.character_ids:
-                    if other == victim:
+                    if other == subject:
                         continue
                     changed |= restrict(
                         other,
                         {
                             cell for cell in domains[other]
-                            if any(victim_feasible(victim_cell, (other, cell)) for victim_cell in domains[victim])
+                            if any(feasible(subject_cell, (other, cell)) for subject_cell in domains[subject])
                         },
-                        "victim_companion",
-                        victim_statements[0]["id"],
+                        "victim_companion" if statement["type"] == "victim_rule" else "room_count",
+                        statement["id"],
                     )
 
             for dimension, technique in ((0, "row_matching"), (1, "column_matching")):

@@ -67,26 +67,53 @@ def candidate_pools(
             (
                 "room_population",
                 {"count": len(room_occupants)},
-                f"Había {len(room_occupants)} personas en la habitación de {name}.",
+                f"{name} estaba en una habitación con {len(room_occupants)} personas en total.",
             ),
         ]
+        if len(room_occupants) == 1:
+            candidates.append((
+                "alone_in_room",
+                {"room": room_id},
+                f"{name} estaba {'sola' if character['gender'] == 'woman' else 'solo'} en {room_names[room_id]}.",
+            ))
 
         for gender in ("woman", "man"):
-            count = sum(
+            room_count = sum(
+                characters[other_id]["gender"] == gender
+                for other_id in room_occupants
+            )
+            companion_count = sum(
                 other_id != character_id and characters[other_id]["gender"] == gender
                 for other_id in room_occupants
             )
             noun = (
-                "mujer" if count == 1 and gender == "woman"
-                else "hombre" if count == 1
+                "mujer" if companion_count == 1 and gender == "woman"
+                else "hombre" if companion_count == 1
+                else "mujeres" if gender == "woman"
+                else "hombres"
+            )
+            room_noun = (
+                "mujer" if room_count == 1 and gender == "woman"
+                else "hombre" if room_count == 1
                 else "mujeres" if gender == "woman"
                 else "hombres"
             )
             candidates.append((
-                "companion_gender_count",
-                {"gender": gender, "count": count},
-                f"{name} compartía habitación con {count} {noun}.",
+                "room_gender_count",
+                {"gender": gender, "count": room_count},
+                f"{name} estaba en una habitación con {room_count} {room_noun} en total.",
             ))
+            candidates.append((
+                "companion_gender_count",
+                {"gender": gender, "count": companion_count},
+                f"{name} compartía habitación con {companion_count} {noun}.",
+            ))
+            if len(room_occupants) == 2 and companion_count == 1:
+                candidates.append((
+                    "alone_with_gender",
+                    {"gender": gender},
+                    f"{name} estaba a solas con {'una mujer' if gender == 'woman' else 'un hombre'}.",
+                ))
 
         for group_id, group in groups.items():
             if room_id in group["rooms"]:
