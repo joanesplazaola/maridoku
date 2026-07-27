@@ -74,6 +74,7 @@ def _catalog_html(levels: list[dict[str, object]]) -> str:
       <button data-filter="easy">Fácil</button>
       <button data-filter="medium">Medio</button>
       <button data-filter="hard">Difícil</button>
+      <button data-filter="expert">Experto</button>
     </nav>
     <section class="levels" aria-label="Tableros">{buttons}</section>
   </main>

@@ -35,6 +35,7 @@
   let tool = "person";
   let history = [];
   const emptyMetrics = () => ({
+    sessionId: crypto.randomUUID(),
     startedAt: Date.now(),
     checks: 0,
     errors: 0,
@@ -46,6 +47,7 @@
   } catch {
     metrics = emptyMetrics();
   }
+  metrics.sessionId ||= crypto.randomUUID();
 
   const key = (row, column) => `${row},${column}`;
   const save = () => localStorage.setItem(storageKey, JSON.stringify({
@@ -410,7 +412,8 @@
   });
   document.querySelector('[data-action="export"]').addEventListener("click", () => {
     const report = {
-      schemaVersion: 1,
+      schemaVersion: 2,
+      sessionId: metrics.sessionId,
       puzzleId: puzzle.id,
       size: puzzle.board.rows,
       durationSeconds: Math.round(((metrics.completedAt || Date.now()) - metrics.startedAt) / 1000),

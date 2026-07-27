@@ -8,7 +8,7 @@
   "text_version": 1,
   "seed": 8303,
   "source_case": "examples/board_golf/case.json",
-  "editorial_status": "approved",
+  "editorial_status": "retired",
   "private_solution": {
     "path": "solution.json",
     "sha256": "11be0b547f54df2135e5666e80d318ba63bb02364f05193a8034a2fe5f428072"
@@ -86,5 +86,5 @@
       "dominant_family_ratio": 0.273
     }
   },
-  "editorial_commit": "local"
+  "editorial_commit": "ab47420"
 }

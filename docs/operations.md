@@ -4,7 +4,8 @@
 
 El jugador guarda progreso y métricas en `localStorage`. No realiza peticiones de
 analítica. La exportación contiene únicamente identificador del puzle, tamaño,
-duración, comprobaciones, errores, ayudas y estado de finalización.
+identificador aleatorio de sesión, duración, comprobaciones, errores y estado
+de finalización.
 
 ## Respaldo
 

@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "puzzle_id": "la-ultima-ronda-8304-expert",
+  "puzzle_schema_version": 8,
+  "generator": "editorial_substitution",
+  "generator_commit": "ab47420",
+  "text_locale": "es",
+  "text_version": 1,
+  "seed": 8304,
+  "source_case": "examples/board_golf/case.json",
+  "editorial_status": "approved",
+  "private_solution": {
+    "path": "solution.json",
+    "sha256": "0c5a589955c20be2afc9e534fc8a45256689923009541c33594ac7f960418533"
+  },
+  "public_puzzle": {
+    "path": "puzzle.json",
+    "sha256": "dbf93766b00cf0c166709a4dc0fbb39a4b09631c8e65b6cfcb36972c3df84541"
+  },
+  "metrics": {
+    "rows": 9,
+    "columns": 9,
+    "unique": true,
+    "families": [
+      "murder_rule",
+      "object_adjacency",
+      "object_line",
+      "object_occupancy",
+      "relative_distance",
+      "relative_order",
+      "room_exact",
+      "room_group",
+      "sequence_relation"
+    ],
+    "human_complexity": {
+      "deduction_steps": 56,
+      "propagation_rounds": 5,
+      "branching_points": 0,
+      "hardest_technique": "row_matching",
+      "hardest_level": 3,
+      "technique_counts": {
+        "clue_anchor": 8,
+        "unique_object": 11,
+        "binary_relation": 7,
+        "row_matching": 13,
+        "column_matching": 13,
+        "victim_companion": 4
+      },
+      "calibrated": false
+    }
+  },
+  "source_puzzle": "catalog/candidates/golf-8304/puzzle.json",
+  "editorial_changes": [
+    {
+      "statement_id": "card-bruno-statement-1",
+      "replacement": {
+        "id": "card-bruno-statement-1",
+        "type": "relative_row_order",
+        "family": "relative_order",
+        "args": {
+          "character": "bruno",
+          "reference": "gabriela",
+          "relation": "north"
+        },
+        "text": "Bruno estaba al norte de Gabriela."
+      }
+    }
+  ],
+  "review": {
+    "exact_unique": true,
+    "human_solved": true,
+    "difficulty": {
+      "label": "expert",
+      "score": 86,
+      "calibration": "technical_estimate_not_human_calibrated"
+    },
+    "editorial_audit": {
+      "accepted": true,
+      "errors": [],
+      "warnings": [],
+      "duplicate_texts": [],
+      "unsupported_player_types": [],
+      "family_distribution": {
+        "room_exact": 2,
+        "sequence_relation": 1,
+        "relative_order": 1,
+        "relative_distance": 1,
+        "object_occupancy": 2,
+        "object_adjacency": 1,
+        "room_group": 1,
+        "object_line": 1,
+        "murder_rule": 1
+      },
+      "type_distribution": {
+        "room": 2,
+        "next_to_sequence_item": 1,
+        "relative_row_order": 1,
+        "relative_column_distance": 1,
+        "unique_on_object": 2,
+        "adjacent_object": 1,
+        "in_room_group": 1,
+        "object_same_row_in_room": 1,
+        "victim_rule": 1
+      },
+      "dominant_family": "room_exact",
+      "dominant_family_ratio": 0.182
+    }
+  },
+  "editorial_commit": "ab47420"
+}

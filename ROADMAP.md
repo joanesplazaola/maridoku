@@ -57,6 +57,9 @@ central propios; ninguno deriva su geometría de la solución.
 - [x] Medir pasos, profundidad, bifurcaciones y técnica más difícil.
 - [ ] Calibrar fácil, medio, difícil y experto con pruebas ciegas.
 
+Gate automatizado: `murdoku-v2 playtest-report`. El catálogo ya cubre los cuatro
+niveles; falta recoger diez sesiones completas por puzle.
+
 Criterio de salida: la etiqueta de dificultad está respaldada por una ruta
 deductiva y por datos de personas.
 

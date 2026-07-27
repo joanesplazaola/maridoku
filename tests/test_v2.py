@@ -43,17 +43,18 @@ def test_visual_assets_have_tracked_provenance() -> None:
         assert entry["source"]
 
 
-def test_approved_catalog_passes_the_release_contract() -> None:
+def test_versioned_catalog_passes_the_release_contract() -> None:
     from murdoku_v2.editorial import audit_puzzle
     from murdoku_v2.human import solve_human
     from murdoku_v2.models import load_puzzle
     from murdoku_v2.solvers.ortools_solver import ORToolsSolver
 
     manifests = sorted((PROJECT / "catalog/candidates").glob("*/manifest.json"))
-    assert len(manifests) == 12
+    assert len(manifests) == 13
+    statuses = []
     for manifest_path in manifests:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        assert manifest["editorial_status"] == "approved"
+        statuses.append(manifest["editorial_status"])
         puzzle_path = manifest_path.parent / manifest["public_puzzle"]["path"]
         solution_path = manifest_path.parent / manifest["private_solution"]["path"]
         puzzle = load_puzzle(puzzle_path)
@@ -67,6 +68,8 @@ def test_approved_catalog_passes_the_release_contract() -> None:
         assert audit_puzzle(puzzle)["warnings"] == []
         assert ORToolsSolver().solve(puzzle, limit=2).solutions == [expected]
         assert solve_human(puzzle)["positions"] == expected
+    assert statuses.count("approved") == 12
+    assert statuses.count("retired") == 1
 
 
 def test_ortools_matches_all_reference_cases() -> None:
@@ -712,6 +715,9 @@ def test_site_builder_publishes_only_reference_cases_without_solutions(tmp_path:
     assert "El último putt" in index
     assert "Medio" in index
     assert "Difícil" in index
+    assert "Experto" in index
+    assert "La línea decisiva" in index
+    assert "la-ultima-ronda-8303" not in index
     assert "V · VÍCTIMA" in level
     assert 'data-tool="cross"' in level
     assert 'data-tool="candidate"' in level
@@ -719,6 +725,50 @@ def test_site_builder_publishes_only_reference_cases_without_solutions(tmp_path:
     assert (tmp_path / "levels/001.html").exists()
     assert (tmp_path / "levels/003.html").exists()
     assert not list(tmp_path.rglob("solution.json"))
+
+
+def test_playtest_report_requires_unique_blind_sessions(tmp_path: Path) -> None:
+    from murdoku_v2.playtest import analyze_sessions
+
+    labels = ("easy", "medium", "hard", "expert")
+    catalog = [
+        {
+            "puzzle_id": label,
+            "difficulty": label,
+            "rows": 8,
+            "columns": 8,
+        }
+        for label in labels
+    ]
+    catalog_path = tmp_path / "catalog.json"
+    catalog_path.write_text(json.dumps(catalog), encoding="utf-8")
+    sessions = tmp_path / "sessions"
+    sessions.mkdir()
+    for label_index, label in enumerate(labels):
+        for index in range(10):
+            report = {
+                "schemaVersion": 2,
+                "sessionId": f"00000000-0000-4000-8000-{label_index:02d}{index:010d}",
+                "puzzleId": label,
+                "size": 8,
+                "durationSeconds": 100 + label_index * 100 + index,
+                "checks": 1,
+                "errors": 0,
+                "completed": True,
+            }
+            (sessions / f"{label}-{index}-session.json").write_text(
+                json.dumps(report), encoding="utf-8",
+            )
+
+    result = analyze_sessions(catalog_path, [sessions])
+    assert result["gate"]["ready_for_editorial_calibration"]
+    duplicate = sessions / "duplicate.json"
+    duplicate.write_text(
+        (sessions / "easy-0-session.json").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="duplicadas"):
+        analyze_sessions(catalog_path, [sessions])
 
 
 def test_reference_case_meets_editorial_acceptance() -> None:

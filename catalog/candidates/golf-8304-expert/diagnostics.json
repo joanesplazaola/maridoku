@@ -1,0 +1,63 @@
+{
+  "seed": 8304,
+  "method": "editorial_substitution",
+  "source_puzzle": "la-ultima-ronda-8304",
+  "replacement_statement": "card-bruno-statement-1",
+  "human_steps": 56,
+  "human_techniques": [
+    "binary_relation",
+    "clue_anchor",
+    "column_matching",
+    "row_matching",
+    "unique_object",
+    "victim_companion"
+  ],
+  "human_complexity": {
+    "deduction_steps": 56,
+    "propagation_rounds": 5,
+    "branching_points": 0,
+    "hardest_technique": "row_matching",
+    "hardest_level": 3,
+    "technique_counts": {
+      "clue_anchor": 8,
+      "unique_object": 11,
+      "binary_relation": 7,
+      "row_matching": 13,
+      "column_matching": 13,
+      "victim_companion": 4
+    },
+    "calibrated": false
+  },
+  "editorial_audit": {
+    "accepted": true,
+    "errors": [],
+    "warnings": [],
+    "duplicate_texts": [],
+    "unsupported_player_types": [],
+    "family_distribution": {
+      "room_exact": 2,
+      "sequence_relation": 1,
+      "relative_order": 1,
+      "relative_distance": 1,
+      "object_occupancy": 2,
+      "object_adjacency": 1,
+      "room_group": 1,
+      "object_line": 1,
+      "murder_rule": 1
+    },
+    "type_distribution": {
+      "room": 2,
+      "next_to_sequence_item": 1,
+      "relative_row_order": 1,
+      "relative_column_distance": 1,
+      "unique_on_object": 2,
+      "adjacent_object": 1,
+      "in_room_group": 1,
+      "object_same_row_in_room": 1,
+      "victim_rule": 1
+    },
+    "dominant_family": "room_exact",
+    "dominant_family_ratio": 0.182
+  },
+  "exact_unique": true
+}

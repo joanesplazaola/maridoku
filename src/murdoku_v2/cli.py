@@ -9,6 +9,7 @@ from .explainer import explain_puzzle
 from .generation import generate_case
 from .models import load_puzzle
 from .object_catalog import catalog_json as object_catalog_json
+from .playtest import analyze_sessions
 from .publication import set_editorial_status
 from .render import render_file
 from .scaling import (
@@ -105,6 +106,12 @@ def main() -> None:
     site_parser = subparsers.add_parser("build-site", help="Construye el catálogo web")
     site_parser.add_argument("--output", type=Path, default=Path("_site"))
 
+    playtest_parser = subparsers.add_parser("playtest-report", help="Resume sesiones ciegas")
+    playtest_parser.add_argument("--catalog", type=Path, default=Path("_site/catalog.json"))
+    playtest_parser.add_argument("--sessions", nargs="+", type=Path, required=True)
+    playtest_parser.add_argument("--min-completed", type=int, default=10)
+    playtest_parser.add_argument("--output", type=Path, default=Path("playtest-report.json"))
+
     subparsers.add_parser("solvers", help="Muestra motores y librerías disponibles")
     subparsers.add_parser("catalog", help="Muestra el catálogo formal de pistas")
     subparsers.add_parser("object-catalog", help="Muestra el catálogo de objetos y huellas")
@@ -133,6 +140,15 @@ def main() -> None:
         _json(set_editorial_status(args.manifest, args.status))
     elif args.command == "build-site":
         _json(build_site(args.output))
+    elif args.command == "playtest-report":
+        report = analyze_sessions(
+            args.catalog, args.sessions, min_completed=args.min_completed,
+        )
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(
+            json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8",
+        )
+        _json(report["gate"])
     elif args.command == "solvers":
         _json(availability())
     elif args.command == "object-catalog":
