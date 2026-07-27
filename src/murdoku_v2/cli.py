@@ -13,7 +13,6 @@ from .publication import set_editorial_status
 from .render import render_file
 from .scaling import (
     run_scaling_benchmark,
-    run_scaling_generation_regression,
 )
 from .site_builder import build_site
 from .solvers.registry import availability, get_solver
@@ -99,13 +98,6 @@ def main() -> None:
     scale_parser.add_argument("--repetitions", type=int, default=3)
     scale_parser.add_argument("--output", type=Path, default=Path("scaling_benchmark.json"))
 
-    regression_parser = subparsers.add_parser("scale-regression", help="Valida generación escalable por seeds")
-    regression_parser.add_argument("--sizes", nargs="+", type=int, default=[6, 8, 10])
-    regression_parser.add_argument("--start-seed", type=int, default=0)
-    regression_parser.add_argument("--count-per-size", type=int, default=100)
-    regression_parser.add_argument("--budget-seconds", type=float, default=30.0)
-    regression_parser.add_argument("--output", type=Path, default=Path("scaling_regression.json"))
-
     editorial_parser = subparsers.add_parser("editorial-status", help="Aprueba o retira un puzle")
     editorial_parser.add_argument("--manifest", type=Path, required=True)
     editorial_parser.add_argument("--status", choices=["approved", "retired"], required=True)
@@ -137,15 +129,6 @@ def main() -> None:
             args.sizes, solver_name=args.solver, repetitions=args.repetitions, output=args.output,
         )
         _json(report)
-    elif args.command == "scale-regression":
-        report = run_scaling_generation_regression(
-            args.sizes,
-            start_seed=args.start_seed,
-            count_per_size=args.count_per_size,
-            budget_seconds=args.budget_seconds,
-            output=args.output,
-        )
-        _json(report["summary"])
     elif args.command == "editorial-status":
         _json(set_editorial_status(args.manifest, args.status))
     elif args.command == "build-site":

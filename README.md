@@ -3,14 +3,14 @@
 Repositorio local del motor de generación y validación de puzles Murdoku.
 Esta rama usa **Google OR-Tools CP-SAT** como motor exacto principal.
 
-La web publica únicamente casos de referencia revisados. El primero,
-**Último servicio**, separa la escena de la solución, identifica a la víctima
-y usa objetos y habitaciones como evidencia.
+La web publica 15 casos revisados generados sobre escenas fijas. Cada caso
+separa la escena de la solución y usa objetos, habitaciones y relaciones
+espaciales como evidencia.
 
 ## Contenido
 
-- `ORToolsSolver`: modelo exacto CP-SAT para las 22 familias de pistas actuales.
-- Cinco tableros manuales y fixtures de regresión.
+- `ORToolsSolver`: modelo exacto CP-SAT para el catálogo formal de pistas.
+- Tres escenas fijas y un catálogo versionado de variantes revisadas.
 - Benchmark de construcción del modelo, primera solución y unicidad.
 
 ## Requisitos
@@ -55,28 +55,8 @@ Smoke completo:
 uv run murdoku-v2 scale-benchmark --sizes 5 8 12 16 --solver ortools --repetitions 2
 ```
 
-Smoke para desarrollo:
-
-```bash
-uv run murdoku-v2 scale-regression \
-  --sizes 6 8 10 \
-  --count-per-size 3 \
-  --budget-seconds 30
-```
-
-Gate de release:
-
-```bash
-uv run murdoku-v2 scale-regression \
-  --sizes 6 8 10 \
-  --count-per-size 100 \
-  --budget-seconds 30
-```
-
-El último gate aceptado se conserva en
-`docs/regressions/scaling-100-seeds.json`.
-El workflow manual `Release generation gate` ejecuta el mismo gate en GitHub y
-conserva el informe durante 90 días, sin bloquear el desarrollo local.
+El benchmark es sintético y solo mide el motor. El workflow manual
+`Release generation gate` valida el catálogo y ejecuta QA visual cruzada.
 
 ## Validar un caso con CP-SAT
 
@@ -111,10 +91,11 @@ uv run murdoku-v2 render --puzzle generated/puzzle.json --output generated/puzzl
 uv run murdoku-v2 build-site --output _site
 ```
 
-## Objetivo inmediato
+## Estado de producto
 
-Crear tres casos de referencia sobre escenas fijas y añadir las técnicas
-humanas que permitan medir dificultad antes de ampliar el catálogo.
+El catálogo publica 15 casos revisados sobre tres escenas fijas. Las etiquetas
+actuales son estimaciones técnicas; `docs/playtest.md` define la calibración
+ciega pendiente con personas.
 
 Consulta `LOCAL_SETUP.md` para una secuencia detallada de ejecución y resolución
 de problemas.

@@ -657,24 +657,6 @@ def test_generate_writes_a_fixed_scene_draft(tmp_path: Path) -> None:
     ))
 
 
-def test_scaling_generator_retries_unplaceable_furniture(tmp_path: Path) -> None:
-    from murdoku_v2.scaling import generate_scaling_case
-
-    result = generate_scaling_case(6, 7, tmp_path)
-    assert result["diagnostics"]["effective_seed"] > 7
-    assert 7 in result["diagnostics"]["rejected_target_seeds"]
-
-
-def test_scaling_regression_reports_acceptance(tmp_path: Path) -> None:
-    from murdoku_v2.scaling import run_scaling_generation_regression
-
-    report = run_scaling_generation_regression(
-        [6], start_seed=1, count_per_size=1, budget_seconds=30,
-        output=tmp_path / "report.json",
-    )
-    assert report["summary"]["accepted"]
-
-
 def test_editorial_manifest_can_be_approved_then_retired(tmp_path: Path) -> None:
     from murdoku_v2.generation import generate_case
     from murdoku_v2.publication import set_editorial_status
